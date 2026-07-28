@@ -1,0 +1,73 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "RMS.API/1.0.0": {
+        "dependencies": {
+          "RMS.Application": "1.0.0",
+          "RMS.Infrastructure": "1.0.0"
+        },
+        "runtime": {
+          "RMS.API.dll": {}
+        }
+      },
+      "RMS.Application/1.0.0": {
+        "dependencies": {
+          "RMS.Domain": "1.0.0"
+        },
+        "runtime": {
+          "RMS.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "RMS.Domain/1.0.0": {
+        "runtime": {
+          "RMS.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "RMS.Infrastructure/1.0.0": {
+        "dependencies": {
+          "RMS.Application": "1.0.0",
+          "RMS.Domain": "1.0.0"
+        },
+        "runtime": {
+          "RMS.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "RMS.API/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RMS.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RMS.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RMS.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
