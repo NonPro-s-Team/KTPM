@@ -204,3 +204,10 @@ H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\obj\Debug\net10.0\RMS.UnitTes
 H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\obj\Debug\net10.0\RMS.UnitTests.genruntimeconfig.cache
 H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\obj\Debug\net10.0\ref\RMS.UnitTests.dll
 H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\bin\Debug\net10.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\bin\Debug\net10.0\Castle.Core.dll
+H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\bin\Debug\net10.0\FluentAssertions.dll
+H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\bin\Debug\net10.0\Microsoft.Extensions.Logging.Abstractions.dll
+H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\bin\Debug\net10.0\Moq.dll
+H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\bin\Debug\net10.0\System.Diagnostics.EventLog.dll
+H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\bin\Debug\net10.0\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.Messages.dll
+H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\bin\Debug\net10.0\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.dll
