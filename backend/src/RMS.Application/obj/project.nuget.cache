@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "JdLzRYTEjcw=",
+  "dgSpecHash": "/Mi3wqP5MCM=",
   "success": true,
   "projectFilePath": "H:\\Project\\RMS\\backend\\src\\RMS.Application\\RMS.Application.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\hient\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.10\\microsoft.extensions.dependencyinjection.abstractions.10.0.10.nupkg.sha512"
+  ],
   "logs": []
 }

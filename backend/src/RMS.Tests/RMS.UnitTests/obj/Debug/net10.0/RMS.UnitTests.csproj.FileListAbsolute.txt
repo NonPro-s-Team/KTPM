@@ -203,3 +203,4 @@ H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\obj\Debug\net10.0\refint\RMS.
 H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\obj\Debug\net10.0\RMS.UnitTests.pdb
 H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\obj\Debug\net10.0\RMS.UnitTests.genruntimeconfig.cache
 H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\obj\Debug\net10.0\ref\RMS.UnitTests.dll
+H:\Project\RMS\backend\src\RMS.Tests\RMS.UnitTests\bin\Debug\net10.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
