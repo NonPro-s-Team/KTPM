@@ -3,9 +3,9 @@
 Tài liệu này phân định rõ rule nào được một entity/aggregate tự bảo vệ, rule nào cần
 Application Service điều phối, và rule nào cần database constraint ở task sau.
 
-> Nguồn đối chiếu: SRS 1.0 hiện có cục bộ tại
-> `docs/SRS/SRS_QuanLyPhongTro.pdf`. Đường dẫn được nêu trong task
-> (`docs/SRS_QuanLyPhongTro.pdf`) không tồn tại trong commit hiện tại.
+> Nguồn đối chiếu: SRS 1.0 được lưu tại
+> `docs/SRS/SRS_QuanLyPhongTro.pdf`. Đường dẫn ngắn hơn được nêu trong task
+> (`docs/SRS_QuanLyPhongTro.pdf`) không tồn tại.
 
 | Business Rule | Domain/Application | Thành phần dự kiến | Ghi chú |
 | --- | --- | --- | --- |
@@ -37,4 +37,3 @@ Application Service điều phối, và rule nào cần database constraint ở 
 - Application điều phối/ủy quyền: BR-01, BR-02, BR-03, BR-04, BR-06, BR-07,
   BR-08, BR-10, BR-11, BR-16, BR-17, BR-18.
 - Database constraint cần bổ sung sau: BR-04 và BR-10.
-

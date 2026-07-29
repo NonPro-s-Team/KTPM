@@ -28,8 +28,8 @@ biến thành yêu cầu SRS chính thức nếu nhóm chưa xác nhận.
     `BusinessRuleException` đang được Infrastructure/API tham chiếu. Task này giữ
     compatibility shell tối thiểu để solution build, còn migration sang tên mới sẽ
     được xử lý cùng DbContext/Fluent configuration ở task sau.
-16. File SRS có cục bộ tại `docs/SRS/SRS_QuanLyPhongTro.pdf` nhưng đang untracked và
-    không tồn tại ở đường dẫn `docs/SRS_QuanLyPhongTro.pdf` trên commit/GitHub hiện tại.
+16. File SRS được lưu trong repository tại `docs/SRS/SRS_QuanLyPhongTro.pdf`.
+    Đường dẫn ngắn hơn được nêu trong task (`docs/SRS_QuanLyPhongTro.pdf`) không tồn tại.
     Nội dung task chi tiết được dùng làm nguồn triển khai chính, SRS 1.0 dùng để đối chiếu.
 17. MaxLength tạm dùng trong Domain: username 100, password hash 512, họ tên 200,
     số điện thoại 20, CCCD 50, số phòng 50, mô tả phòng 1.000, tiêu đề bảo trì 200,
