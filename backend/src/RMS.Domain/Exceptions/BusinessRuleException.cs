@@ -2,10 +2,10 @@ namespace RMS.Domain.Exceptions;
 
 public class BusinessRuleException : DomainException
 {
-    public string RuleCode { get; }
+    public string RuleCode => Code;
 
-    public BusinessRuleException(string ruleCode, string message) : base(message)
+    public BusinessRuleException(string ruleCode, string message)
+        : base(ruleCode, message)
     {
-        RuleCode = ruleCode;
     }
 }
