@@ -1,4 +1,7 @@
-name: Build and deploy RMS API to Azure App Service
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core app to Azure Web App - rms-api-hientm-2026
 
 on:
   push:
@@ -6,97 +9,57 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  DOTNET_VERSION: "10.0.x"
-  API_PROJECT: "backend/src/RMS.API/RMS.API.csproj"
-  PUBLISH_DIRECTORY: "./publish"
-  AZURE_WEBAPP_NAME: "rms-api-hientm-2026"
-
 jobs:
   build:
-    name: Build RMS API
     runs-on: ubuntu-latest
-
     permissions:
-      contents: read
+      contents: read #This is required for actions/checkout
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up .NET
+      - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: '10.x'
 
-      - name: Display .NET information
-        run: dotnet --info
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
 
-      - name: Restore RMS API
-        run: dotnet restore "${{ env.API_PROJECT }}"
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Publish RMS API
-        run: >
-          dotnet publish
-          "${{ env.API_PROJECT }}"
-          --configuration Release
-          --output "${{ env.PUBLISH_DIRECTORY }}"
-          --no-restore
-
-      - name: Verify publish output
-        run: |
-          echo "Published files:"
-          ls -la "${{ env.PUBLISH_DIRECTORY }}"
-
-          if [ ! -f "${{ env.PUBLISH_DIRECTORY }}/RMS.API.dll" ]; then
-            echo "RMS.API.dll was not found in publish output."
-            exit 1
-          fi
-
-      - name: Upload artifact for deployment
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: rms-api
-          path: ${{ env.PUBLISH_DIRECTORY }}
-          if-no-files-found: error
-          retention-days: 1
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-    name: Deploy RMS API
     runs-on: ubuntu-latest
     needs: build
-
     permissions:
-      id-token: write
-      contents: read
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
 
     steps:
-      - name: Download published artifact
+      - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: rms-api
-          path: ./publish
-
-      - name: Verify downloaded artifact
-        run: |
-          echo "Downloaded files:"
-          ls -la ./publish
-
-          if [ ! -f "./publish/RMS.API.dll" ]; then
-            echo "RMS.API.dll was not found in downloaded artifact."
-            exit 1
-          fi
-
+          name: .net-app
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_87E641B5A5EE46C3829056C3414AB7C0 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_81F1F3DDABAC452CA434B133D194E8C4 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F6A36A15D92C47069BEF7D7F8B05085E }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_124060BFE2CC4019B91F4128E2941192 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C2BAC4EF3DA74F4E8A2AD28C062307C3 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8AB24C8099794CDCBE994AF28EBF924B }}
 
-      - name: Deploy to Azure App Service
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          slot-name: Production
-          package: ./publish
+          app-name: 'rms-api-hientm-2026'
+          slot-name: 'Production'
+          package: .
+          
