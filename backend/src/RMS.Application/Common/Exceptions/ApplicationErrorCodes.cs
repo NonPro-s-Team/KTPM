@@ -9,6 +9,9 @@ public static class ApplicationErrorCodes
     public const string Forbidden = "FORBIDDEN";
     public const string NotFound = "NOT_FOUND";
     public const string Conflict = "CONFLICT";
+    public const string ConcurrencyConflict = "CONCURRENCY_CONFLICT";
+    public const string UsernameAlreadyExists = "USERNAME_ALREADY_EXISTS";
+    public const string RoomNumberAlreadyExists = "ROOM_NUMBER_ALREADY_EXISTS";
     public const string Validation = "VALIDATION_ERROR";
     public const string ContractNotActive = "CONTRACT_NOT_ACTIVE";
 }
