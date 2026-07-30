@@ -5,7 +5,7 @@ using RMS.Domain.Enums;
 
 namespace RMS.Infrastructure.Services;
 
-public class CurrentUserService : ICurrentUserService
+public sealed class CurrentUserService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -27,11 +27,12 @@ public class CurrentUserService : ICurrentUserService
                 .FindFirstValue(ClaimTypes.Role);
 
             return Enum.TryParse<UserRole>(
-                roleClaim,
-                ignoreCase: true,
-                out var role)
-                ? role
-                : default;
+                    roleClaim,
+                    ignoreCase: true,
+                    out var role)
+                && Enum.IsDefined(role)
+                    ? role
+                    : default;
         }
     }
 

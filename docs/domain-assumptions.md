@@ -24,10 +24,10 @@ biến thành yêu cầu SRS chính thức nếu nhóm chưa xác nhận.
     Quy tắc nhận payment sau khi MarkOverdue cần nhóm xác nhận trong task Application.
 14. Invoice có thể bị cancel khi chưa có payment; không hỗ trợ cancel Invoice
     PartiallyPaid hoặc Paid.
-15. Các tên cũ `Contract`, `RepairRequest`, `RepairStatus`, `UtilityReading` và
-    `BusinessRuleException` đang được Infrastructure/API tham chiếu. Task này giữ
-    compatibility shell tối thiểu để solution build, còn migration sang tên mới sẽ
-    được xử lý cùng DbContext/Fluent configuration ở task sau.
+15. Các compatibility shell cũ `Contract`, `RepairRequest`, `RepairStatus` và
+    `UtilityReading` đã được loại bỏ sau khi Infrastructure chuyển hoàn toàn sang
+    `RentalContract`, `MaintenanceRequest` và dữ liệu chỉ số trên `Invoice`.
+    `BusinessRuleException` vẫn là base exception đang được Domain/API sử dụng.
 16. File SRS được lưu trong repository tại `docs/SRS/SRS_QuanLyPhongTro.pdf`.
     Đường dẫn ngắn hơn được nêu trong task (`docs/SRS_QuanLyPhongTro.pdf`) không tồn tại.
     Nội dung task chi tiết được dùng làm nguồn triển khai chính, SRS 1.0 dùng để đối chiếu.
