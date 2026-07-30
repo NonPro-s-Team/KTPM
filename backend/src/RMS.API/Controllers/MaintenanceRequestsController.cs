@@ -2,34 +2,34 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMS.API.Authorization;
 using RMS.Application.Common.Models;
-using RMS.Application.Contracts;
-using RMS.Application.Contracts.Models;
+using RMS.Application.MaintenanceRequests;
+using RMS.Application.MaintenanceRequests.Models;
 using RMS.Domain.Enums;
 
 namespace RMS.API.Controllers;
 
 [ApiController]
-[Route("api/contracts")]
+[Route("api/maintenance-requests")]
 [ProducesResponseType(
     typeof(ProblemDetails),
     StatusCodes.Status401Unauthorized)]
 [ProducesResponseType(
     typeof(ProblemDetails),
     StatusCodes.Status500InternalServerError)]
-public sealed class ContractsController : ControllerBase
+public sealed class MaintenanceRequestsController : ControllerBase
 {
-    private readonly IRentalContractService _contractService;
+    private readonly IMaintenanceRequestService _maintenanceRequestService;
 
-    public ContractsController(
-        IRentalContractService contractService)
+    public MaintenanceRequestsController(
+        IMaintenanceRequestService maintenanceRequestService)
     {
-        _contractService = contractService;
+        _maintenanceRequestService = maintenanceRequestService;
     }
 
-    /// <summary>Gets a paged contract list with tenant scoping.</summary>
+    /// <summary>Gets maintenance requests visible to the current user.</summary>
     [HttpGet]
     [ProducesResponseType(
-        typeof(PagedResult<RentalContractResponse>),
+        typeof(PagedResult<MaintenanceRequestResponse>),
         StatusCodes.Status200OK)]
     [ProducesResponseType(
         typeof(ProblemDetails),
@@ -37,24 +37,27 @@ public sealed class ContractsController : ControllerBase
     [ProducesResponseType(
         typeof(ProblemDetails),
         StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<PagedResult<RentalContractResponse>>>
-        GetContracts(
+    public async Task<ActionResult<PagedResult<MaintenanceRequestResponse>>>
+        GetRequests(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 20,
-            [FromQuery] ContractStatus? status = null,
+            [FromQuery] MaintenanceRequestStatus? status = null,
             CancellationToken cancellationToken = default)
     {
-        var result = await _contractService.GetContractsAsync(
-            new ContractFilterRequest(pageNumber, pageSize, status),
+        var result = await _maintenanceRequestService.GetPagedAsync(
+            new MaintenanceRequestFilterRequest(
+                pageNumber,
+                pageSize,
+                status),
             cancellationToken);
 
         return Ok(result);
     }
 
-    /// <summary>Gets one contract with tenant ownership enforcement.</summary>
-    [HttpGet("{contractId:guid}")]
+    /// <summary>Gets one maintenance request with ownership enforcement.</summary>
+    [HttpGet("{requestId:guid}")]
     [ProducesResponseType(
-        typeof(RentalContractResponse),
+        typeof(MaintenanceRequestResponse),
         StatusCodes.Status200OK)]
     [ProducesResponseType(
         typeof(ProblemDetails),
@@ -62,22 +65,22 @@ public sealed class ContractsController : ControllerBase
     [ProducesResponseType(
         typeof(ProblemDetails),
         StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<RentalContractResponse>> GetContract(
-        Guid contractId,
+    public async Task<ActionResult<MaintenanceRequestResponse>> GetRequest(
+        Guid requestId,
         CancellationToken cancellationToken)
     {
-        var result = await _contractService.GetContractAsync(
-            contractId,
+        var result = await _maintenanceRequestService.GetByIdAsync(
+            requestId,
             cancellationToken);
 
         return Ok(result);
     }
 
-    /// <summary>Creates a draft rental contract.</summary>
-    [Authorize(Policy = AuthorizationPolicies.AdminOrStaff)]
+    /// <summary>Creates a request for the current tenant's active room.</summary>
+    [Authorize(Policy = AuthorizationPolicies.TenantOnly)]
     [HttpPost]
     [ProducesResponseType(
-        typeof(RentalContractResponse),
+        typeof(MaintenanceRequestResponse),
         StatusCodes.Status201Created)]
     [ProducesResponseType(
         typeof(ValidationProblemDetails),
@@ -88,28 +91,25 @@ public sealed class ContractsController : ControllerBase
     [ProducesResponseType(
         typeof(ProblemDetails),
         StatusCodes.Status404NotFound)]
-    [ProducesResponseType(
-        typeof(ProblemDetails),
-        StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<RentalContractResponse>> CreateContract(
-        [FromBody] CreateRentalContractRequest request,
+    public async Task<ActionResult<MaintenanceRequestResponse>> CreateRequest(
+        [FromBody] CreateMaintenanceRequestRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _contractService.CreateDraftAsync(
+        var result = await _maintenanceRequestService.CreateAsync(
             request,
             cancellationToken);
 
         return CreatedAtAction(
-            nameof(GetContract),
-            new { contractId = result.Id },
+            nameof(GetRequest),
+            new { requestId = result.Id },
             result);
     }
 
-    /// <summary>Updates the editable terms of a draft contract.</summary>
+    /// <summary>Moves a submitted request into progress.</summary>
     [Authorize(Policy = AuthorizationPolicies.AdminOrStaff)]
-    [HttpPut("{contractId:guid}")]
+    [HttpPost("{requestId:guid}/start")]
     [ProducesResponseType(
-        typeof(RentalContractResponse),
+        typeof(MaintenanceRequestResponse),
         StatusCodes.Status200OK)]
     [ProducesResponseType(
         typeof(ValidationProblemDetails),
@@ -120,27 +120,27 @@ public sealed class ContractsController : ControllerBase
     [ProducesResponseType(
         typeof(ProblemDetails),
         StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<RentalContractResponse>> UpdateContract(
-        Guid contractId,
-        [FromBody] UpdateDraftContractRequest request,
+    public async Task<ActionResult<MaintenanceRequestResponse>> StartRequest(
+        Guid requestId,
+        [FromBody] StartMaintenanceRequestRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _contractService.UpdateDraftAsync(
-            contractId,
+        var result = await _maintenanceRequestService.StartProgressAsync(
+            requestId,
             request,
             cancellationToken);
 
         return Ok(result);
     }
 
-    /// <summary>Activates a draft contract and occupies its room.</summary>
+    /// <summary>Adds a progress note to an in-progress request.</summary>
     [Authorize(Policy = AuthorizationPolicies.AdminOrStaff)]
-    [HttpPost("{contractId:guid}/activate")]
+    [HttpPost("{requestId:guid}/progress-notes")]
     [ProducesResponseType(
-        typeof(RentalContractResponse),
+        typeof(MaintenanceRequestResponse),
         StatusCodes.Status200OK)]
     [ProducesResponseType(
-        typeof(ProblemDetails),
+        typeof(ValidationProblemDetails),
         StatusCodes.Status400BadRequest)]
     [ProducesResponseType(
         typeof(ProblemDetails),
@@ -148,28 +148,28 @@ public sealed class ContractsController : ControllerBase
     [ProducesResponseType(
         typeof(ProblemDetails),
         StatusCodes.Status404NotFound)]
-    [ProducesResponseType(
-        typeof(ProblemDetails),
-        StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<RentalContractResponse>> ActivateContract(
-        Guid contractId,
-        CancellationToken cancellationToken)
+    public async Task<ActionResult<MaintenanceRequestResponse>>
+        AddProgressNote(
+            Guid requestId,
+            [FromBody] AddMaintenanceProgressRequest request,
+            CancellationToken cancellationToken)
     {
-        var result = await _contractService.ActivateAsync(
-            contractId,
+        var result = await _maintenanceRequestService.AddProgressNoteAsync(
+            requestId,
+            request,
             cancellationToken);
 
         return Ok(result);
     }
 
-    /// <summary>Terminates an active contract and releases its room.</summary>
+    /// <summary>Resolves an in-progress maintenance request.</summary>
     [Authorize(Policy = AuthorizationPolicies.AdminOrStaff)]
-    [HttpPost("{contractId:guid}/terminate")]
+    [HttpPost("{requestId:guid}/resolve")]
     [ProducesResponseType(
-        typeof(RentalContractResponse),
+        typeof(MaintenanceRequestResponse),
         StatusCodes.Status200OK)]
     [ProducesResponseType(
-        typeof(ProblemDetails),
+        typeof(ValidationProblemDetails),
         StatusCodes.Status400BadRequest)]
     [ProducesResponseType(
         typeof(ProblemDetails),
@@ -177,28 +177,28 @@ public sealed class ContractsController : ControllerBase
     [ProducesResponseType(
         typeof(ProblemDetails),
         StatusCodes.Status404NotFound)]
-    [ProducesResponseType(
-        typeof(ProblemDetails),
-        StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<RentalContractResponse>> TerminateContract(
-        Guid contractId,
-        CancellationToken cancellationToken)
+    public async Task<ActionResult<MaintenanceRequestResponse>>
+        ResolveRequest(
+            Guid requestId,
+            [FromBody] ResolveMaintenanceRequestRequest request,
+            CancellationToken cancellationToken)
     {
-        var result = await _contractService.TerminateAsync(
-            contractId,
+        var result = await _maintenanceRequestService.ResolveAsync(
+            requestId,
+            request,
             cancellationToken);
 
         return Ok(result);
     }
 
-    /// <summary>Cancels a draft contract.</summary>
+    /// <summary>Closes a resolved maintenance request.</summary>
     [Authorize(Policy = AuthorizationPolicies.AdminOrStaff)]
-    [HttpPost("{contractId:guid}/cancel")]
+    [HttpPost("{requestId:guid}/close")]
     [ProducesResponseType(
-        typeof(RentalContractResponse),
+        typeof(MaintenanceRequestResponse),
         StatusCodes.Status200OK)]
     [ProducesResponseType(
-        typeof(ProblemDetails),
+        typeof(ValidationProblemDetails),
         StatusCodes.Status400BadRequest)]
     [ProducesResponseType(
         typeof(ProblemDetails),
@@ -206,12 +206,14 @@ public sealed class ContractsController : ControllerBase
     [ProducesResponseType(
         typeof(ProblemDetails),
         StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<RentalContractResponse>> CancelContract(
-        Guid contractId,
+    public async Task<ActionResult<MaintenanceRequestResponse>> CloseRequest(
+        Guid requestId,
+        [FromBody] CloseMaintenanceRequestRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _contractService.CancelDraftAsync(
-            contractId,
+        var result = await _maintenanceRequestService.CloseAsync(
+            requestId,
+            request,
             cancellationToken);
 
         return Ok(result);
