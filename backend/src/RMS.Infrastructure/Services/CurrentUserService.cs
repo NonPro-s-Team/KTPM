@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using RMS.Application.Interfaces;
+using RMS.Application.Common.Interfaces.Security;
+using RMS.Domain.Enums;
 
 namespace RMS.Infrastructure.Services;
 
@@ -18,8 +19,21 @@ public class CurrentUserService : ICurrentUserService
             ? id
             : Guid.Empty;
 
-    public string Role =>
-        _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role) ?? string.Empty;
+    public UserRole Role
+    {
+        get
+        {
+            var roleClaim = _httpContextAccessor.HttpContext?.User?
+                .FindFirstValue(ClaimTypes.Role);
+
+            return Enum.TryParse<UserRole>(
+                roleClaim,
+                ignoreCase: true,
+                out var role)
+                ? role
+                : default;
+        }
+    }
 
     public bool IsAuthenticated =>
         _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;

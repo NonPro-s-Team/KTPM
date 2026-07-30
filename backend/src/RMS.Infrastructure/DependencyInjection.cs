@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RMS.Application.Interfaces;
+using RMS.Application.Common.Interfaces.Security;
 using RMS.Domain.Interfaces.Repositories;
 using RMS.Infrastructure.Data;
 using RMS.Infrastructure.Repositories;
@@ -27,7 +27,6 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
 
         // Services
-        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddHttpContextAccessor();
 
