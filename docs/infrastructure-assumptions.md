@@ -33,6 +33,11 @@
     surfacing corrupt data rather than silently selecting one active contract.
 21. Payment notes have no Domain max-length constant, so they remain
     `nvarchar(max)`; maintenance notes use the Domain 2000-character limit.
-22. The initial migration is generated with Infrastructure as both target and
-    startup project because its design-time factory and Design package are
-    self-contained.
+22. EF tooling uses Infrastructure as the target project and API as the startup
+    project. Both reference the matching EF Core Design package, while the
+    design-time factory remains the authoritative connection-string loader.
+23. The local Docker image is pinned to SQL Server 2022 CU14 instead of a
+    mutable `latest` tag.
+24. The development seed contains one Admin, one Staff, two Tenant users and
+    profiles, active and draft contracts, issued and partially-paid invoices,
+    and a maintenance request.

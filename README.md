@@ -63,19 +63,28 @@ RMS/
 cp .env.example .env
 # Replace every placeholder in .env, then:
 docker compose --env-file .env up -d sqlserver
+docker compose ps
 ```
 
-### 2. Khôi phục tool và apply migration
+Đợi container chuyển sang trạng thái `healthy`. File `.env` phục vụ Docker
+Compose; export `ConnectionStrings__DefaultConnection` vào process chạy .NET
+trước khi dùng script database.
 
-```bash
-dotnet tool restore
-dotnet restore backend/RMS.slnx
-dotnet ef database update \
-  --project backend/src/RMS.Infrastructure \
-  --startup-project backend/src/RMS.Infrastructure
+### 2. Apply migration
+
+```powershell
+$env:ASPNETCORE_ENVIRONMENT = "Development"
+$env:ConnectionStrings__DefaultConnection = "<local-development-connection-string>"
+./scripts/database-update.ps1
 ```
 
-Chi tiết cấu hình, rollback và reset database:
+Reset có xác nhận và tùy chọn development seed:
+
+```powershell
+./scripts/database-reset.ps1 -Seed
+```
+
+Chi tiết cấu hình, migration, rollback và cảnh báo mất dữ liệu:
 `docs/database-setup.md`.
 
 ### 3. Chạy Backend

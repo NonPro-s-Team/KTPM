@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using RMS.API.Middleware;
 using RMS.Application;
 using RMS.Infrastructure;
+using RMS.Infrastructure.Data.Initialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+if (args.Contains(
+        "--seed-development-data",
+        StringComparer.OrdinalIgnoreCase))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var initializer =
+        scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+    await initializer.SeedDevelopmentDataAsync();
+    return;
+}
 
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionHandlingMiddleware>();

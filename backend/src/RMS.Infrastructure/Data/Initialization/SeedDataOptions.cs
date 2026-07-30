@@ -11,4 +11,6 @@ public sealed class SeedDataOptions
     public string StaffPassword { get; init; } = string.Empty;
     public string TenantUsername { get; init; } = "tenant";
     public string TenantPassword { get; init; } = string.Empty;
+    public string Tenant2Username { get; init; } = "tenant2";
+    public string Tenant2Password { get; init; } = string.Empty;
 }
