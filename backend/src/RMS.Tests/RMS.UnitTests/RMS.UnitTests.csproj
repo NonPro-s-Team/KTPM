@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\RMS.Application\RMS.Application.csproj" />
     <ProjectReference Include="..\..\RMS.Domain\RMS.Domain.csproj" />
+    <ProjectReference Include="..\..\RMS.Infrastructure\RMS.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
