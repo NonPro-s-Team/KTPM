@@ -5,7 +5,7 @@ Hệ thống quản lý phòng trọ (Room Management System) xây dựng trên 
 ## Tech Stack
 
 ### Backend
-- **Runtime:** .NET 8 / ASP.NET Core Web API
+- **Runtime:** .NET 10 / ASP.NET Core Web API
 - **ORM:** Entity Framework Core + SQL Server
 - **Architecture:** Clean Architecture (Domain → Application → Infrastructure → API)
 - **Auth:** JWT Bearer Authentication
@@ -53,17 +53,32 @@ RMS/
 ## Cách chạy
 
 ### Prerequisites
-- .NET 8 SDK
+- .NET 10 SDK
 - Node.js 20+
 - Docker (cho SQL Server)
 
 ### 1. Khởi động Database
 
 ```bash
-docker-compose up -d
+cp .env.example .env
+# Replace every placeholder in .env, then:
+docker compose --env-file .env up -d sqlserver
 ```
 
-### 2. Chạy Backend
+### 2. Khôi phục tool và apply migration
+
+```bash
+dotnet tool restore
+dotnet restore backend/RMS.slnx
+dotnet ef database update \
+  --project backend/src/RMS.Infrastructure \
+  --startup-project backend/src/RMS.Infrastructure
+```
+
+Chi tiết cấu hình, rollback và reset database:
+`docs/database-setup.md`.
+
+### 3. Chạy Backend
 
 ```bash
 cd backend
@@ -72,7 +87,7 @@ dotnet run --project src/RMS.API
 
 API sẽ chạy tại: `https://localhost:5001` / `http://localhost:5000`
 
-### 3. Chạy Frontend
+### 4. Chạy Frontend
 
 ```bash
 cd frontend
@@ -83,12 +98,14 @@ npm run dev
 
 Frontend sẽ chạy tại: `http://localhost:5173`
 
-### 4. Chạy Tests
+### 5. Chạy Tests
 
 ```bash
-# Backend unit tests
-cd backend
-dotnet test
+# Unit tests + EF model tests
+dotnet test backend/src/RMS.Tests/RMS.UnitTests/RMS.UnitTests.csproj
+
+# SQL Server 2022 integration tests (requires Docker)
+dotnet test backend/src/RMS.Tests/RMS.IntegrationTests/RMS.IntegrationTests.csproj
 
 # Frontend e2e tests
 cd frontend
