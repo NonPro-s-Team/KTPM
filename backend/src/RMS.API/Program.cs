@@ -28,16 +28,25 @@ if (args.Contains(
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseApiStatusCodePages();
 
-if (app.Environment.IsDevelopment())
+var swaggerEnabled =
+    app.Environment.IsDevelopment()
+    || app.Configuration.GetValue<bool>("Swagger:Enabled");
+
+if (swaggerEnabled)
 {
     app.UseSwagger();
+
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "RMS API v1");
+        options.SwaggerEndpoint(
+            "/swagger/v1/swagger.json",
+            "RMS API v1");
+
         options.DocumentTitle = "RMS API";
     });
 }
-else
+
+if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
 }
