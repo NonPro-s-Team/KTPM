@@ -84,5 +84,9 @@ Application persistence interfaces with scoped lifetime, and binds JWT and
 seed options. Password hashing and the UTC clock are stateless singletons.
 Current user and access-token generation are scoped.
 
-`DatabaseInitializer` is registered but not called automatically. A later API
-startup task may call `InitializeDevelopmentAsync` explicitly in Development.
+`DatabaseInitializer` is registered but not called automatically. Migration
+and seed operations are separated as `ApplyMigrationAsync` and
+`SeedDevelopmentDataAsync`; `InitializeDevelopmentAsync` remains an explicit
+Development-only convenience operation. The API recognizes
+`--seed-development-data` only as an explicit local CLI operation and never
+migrates or seeds during normal startup.

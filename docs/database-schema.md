@@ -5,6 +5,22 @@ values are stored as `uniqueidentifier` with `ValueGeneratedNever`. Timestamps
 are `datetimeoffset`, contract dates are `date`, money is `decimal(18,2)`, and
 meter readings are `decimal(18,3)`.
 
+## Relationship diagram
+
+```mermaid
+erDiagram
+    USERS ||--o| TENANTS : owns
+    USERS ||--o{ PAYMENTS : records
+    USERS ||--o{ MAINTENANCE_REQUEST_UPDATES : records
+    TENANTS ||--o{ RENTAL_CONTRACTS : signs
+    ROOMS ||--o{ RENTAL_CONTRACTS : contains
+    RENTAL_CONTRACTS ||--o{ INVOICES : generates
+    INVOICES ||--o{ PAYMENTS : receives
+    TENANTS ||--o{ MAINTENANCE_REQUESTS : submits
+    ROOMS ||--o{ MAINTENANCE_REQUESTS : relates_to
+    MAINTENANCE_REQUESTS ||--o{ MAINTENANCE_REQUEST_UPDATES : records
+```
+
 ## Tables
 
 ### Users
@@ -104,3 +120,31 @@ meter readings are `decimal(18,3)`.
 All core foreign keys use `Restrict`. Physical deletion cannot cascade from
 users, rooms, contracts, invoices, or maintenance records into business
 history. The current product has no physical-delete use case.
+
+| Parent | Child | Foreign key | Delete behavior | Reason |
+| --- | --- | --- | --- | --- |
+| Users | Tenants | `Tenants.UserId` | Restrict | Preserve account/profile identity |
+| Users | Payments | `Payments.RecordedByUserId` | Restrict | Preserve payment audit actor |
+| Users | MaintenanceRequestUpdates | `MaintenanceRequestUpdates.UpdatedByUserId` | Restrict | Preserve maintenance audit actor |
+| Rooms | RentalContracts | `RentalContracts.RoomId` | Restrict | Preserve rental history |
+| Rooms | MaintenanceRequests | `MaintenanceRequests.RoomId` | Restrict | Preserve repair history |
+| Tenants | RentalContracts | `RentalContracts.TenantId` | Restrict | Preserve tenant contract history |
+| Tenants | MaintenanceRequests | `MaintenanceRequests.TenantId` | Restrict | Preserve submitted requests |
+| RentalContracts | Invoices | `Invoices.ContractId` | Restrict | Preserve billing history |
+| Invoices | Payments | `Payments.InvoiceId` | Restrict | Preserve payment history |
+| MaintenanceRequests | MaintenanceRequestUpdates | `MaintenanceRequestUpdates.MaintenanceRequestId` | Restrict | Preserve request status history |
+
+## BillingPeriod mapping
+
+`Invoice.BillingPeriod` remains a Domain value object and is stored as the
+scalar `int` column `BillingPeriodKey`:
+
+- write: `Year * 100 + Month`
+- read month: `value % 100`
+- read year: `value / 100`
+- valid year: 2000-2100
+- valid month: 1-12
+
+The check constraint `CK_Invoices_BillingPeriod` validates the range and
+`UX_Invoices_Contract_BillingPeriod` enforces one invoice per contract and
+period. No separate BillingPeriod table exists.
