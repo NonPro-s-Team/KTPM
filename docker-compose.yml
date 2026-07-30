@@ -7,7 +7,7 @@ services:
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: "RMS@Strong!Pass123"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in .env}"
       ACCEPT_EULA: "Y"
     volumes:
       - sqlserver-data:/var/opt/mssql
