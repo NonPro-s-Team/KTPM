@@ -95,11 +95,11 @@ public sealed class MigrationTests : SqlServerIntegrationTestBase
         await using var command = connection.CreateCommand();
         command.CommandText =
             """
-            SELECT [TABLE_NAME]
-            FROM [INFORMATION_SCHEMA].[TABLES]
-            WHERE [TABLE_TYPE] = 'BASE TABLE'
-              AND [TABLE_NAME] <> '__EFMigrationsHistory'
-            ORDER BY [TABLE_NAME];
+            SELECT [name]
+            FROM [sys].[tables]
+            WHERE [is_ms_shipped] = 0
+              AND [name] <> '__EFMigrationsHistory'
+            ORDER BY [name];
             """;
         await using var reader = await command.ExecuteReaderAsync();
         var names = new List<string>();
@@ -123,7 +123,8 @@ public sealed class MigrationTests : SqlServerIntegrationTestBase
             FROM [sys].[indexes] AS [i]
             INNER JOIN [sys].[tables] AS [t]
                 ON [t].[object_id] = [i].[object_id]
-            WHERE [i].[name] IS NOT NULL;
+            WHERE [i].[name] IS NOT NULL
+              AND [t].[is_ms_shipped] = 0;
             """;
         await using var reader = await command.ExecuteReaderAsync();
         var indexes = new Dictionary<string, IndexInfo>(

@@ -121,10 +121,11 @@ public sealed class UserTenantRoomRepositoryTests :
     {
         await using var context = Fixture.CreateDbContext();
         var user = TestData.User(UserRole.Tenant);
-        context.AddRange(
-            user,
-            TestData.Tenant(user),
-            TestData.Tenant(user));
+        context.AddRange(user, TestData.Tenant(user));
+        await context.SaveChangesAsync();
+        context.ChangeTracker.Clear();
+
+        context.Tenants.Add(TestData.Tenant(user));
 
         var action = () => context.SaveChangesAsync();
 
