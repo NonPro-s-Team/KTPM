@@ -1,54 +1,57 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using RMS.API.Extensions;
 using RMS.API.Middleware;
 using RMS.Application;
 using RMS.Infrastructure;
+using RMS.Infrastructure.Data.Initialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-
-// JWT authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"]
-                ?? throw new InvalidOperationException("Jwt:Issuer is required."),
-            ValidAudience = builder.Configuration["Jwt:Audience"]
-                ?? throw new InvalidOperationException("Jwt:Audience is required."),
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(
-                    builder.Configuration["Jwt:Key"]
-                    ?? throw new InvalidOperationException(
-                        "Jwt:Key is required.")))
-        };
-    });
-
-builder.Services.AddAuthorization();
+builder.Services.AddApiServices(
+    builder.Configuration,
+    builder.Environment);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+if (args.Contains(
+        "--seed-development-data",
+        StringComparer.OrdinalIgnoreCase))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var initializer =
+        scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+    await initializer.SeedDevelopmentDataAsync();
+    return;
+}
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseApiStatusCodePages();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "RMS API v1");
+        options.DocumentTitle = "RMS API";
+    });
+}
+else
+{
+    app.UseHsts();
+}
 
 app.UseHttpsRedirection();
+
+app.UseCors(CorsExtensions.FrontendPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapApiHealthChecks();
 
 app.Run();
 
-// Make the implicit Program class public so test projects can access it
 public partial class Program { }

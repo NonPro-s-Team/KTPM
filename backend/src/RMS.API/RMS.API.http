@@ -1,6 +1,162 @@
-@RMS.API_HostAddress = http://localhost:5208
+@baseUrl = http://localhost:5000
+@ADMIN_PASSWORD =
+@STAFF_PASSWORD =
+@TENANT_PASSWORD =
+@adminToken =
+@staffToken =
+@tenantToken =
+@roomId =
+@tenantId =
+@contractId =
+@invoiceId =
+@maintenanceRequestId =
 
-GET {{RMS.API_HostAddress}}/weatherforecast/
+### Health - live
+GET {{baseUrl}}/health/live
 Accept: application/json
 
-###
+### Health - ready
+GET {{baseUrl}}/health/ready
+Accept: application/json
+
+### Login - Admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "{{ADMIN_PASSWORD}}"
+}
+
+### Login - Staff
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "staff",
+  "password": "{{STAFF_PASSWORD}}"
+}
+
+### Login - Tenant
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "tenant",
+  "password": "{{TENANT_PASSWORD}}"
+}
+
+### Create room - Admin/Staff
+POST {{baseUrl}}/api/rooms
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "roomNumber": "SMOKE-101",
+  "monthlyRent": 3500000,
+  "description": "Manual smoke-test room"
+}
+
+### Get rooms - Authenticated
+GET {{baseUrl}}/api/rooms?pageNumber=1&pageSize=20
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### Create tenant - Admin/Staff
+POST {{baseUrl}}/api/tenants
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "username": "smoke.tenant",
+  "initialPassword": "ReplaceManually",
+  "fullName": "Smoke Test Tenant",
+  "phoneNumber": "0900000000",
+  "citizenId": "SMOKE-CITIZEN-ID"
+}
+
+### Create draft contract - Admin/Staff
+POST {{baseUrl}}/api/contracts
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "roomId": "{{roomId}}",
+  "tenantId": "{{tenantId}}",
+  "startDate": "2026-08-01",
+  "endDate": "2027-07-31",
+  "monthlyRent": 3500000
+}
+
+### Activate contract - Admin/Staff
+POST {{baseUrl}}/api/contracts/{{contractId}}/activate
+Authorization: Bearer {{adminToken}}
+
+### Create draft invoice - Admin/Staff
+POST {{baseUrl}}/api/invoices
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "contractId": "{{contractId}}",
+  "billingMonth": 8,
+  "billingYear": 2026,
+  "electricityStartReading": 100,
+  "electricityEndReading": 125,
+  "waterStartReading": 20,
+  "waterEndReading": 24,
+  "electricityUnitPrice": 3500,
+  "waterUnitPrice": 15000
+}
+
+### Issue invoice - Admin/Staff
+POST {{baseUrl}}/api/invoices/{{invoiceId}}/issue
+Authorization: Bearer {{adminToken}}
+
+### Register payment - Admin/Staff
+POST {{baseUrl}}/api/invoices/{{invoiceId}}/payments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "amount": 1000000,
+  "note": "Manual smoke-test payment"
+}
+
+### Tenant gets own invoices
+GET {{baseUrl}}/api/invoices?pageNumber=1&pageSize=20
+Authorization: Bearer {{tenantToken}}
+Accept: application/json
+
+### Tenant creates maintenance request for active room
+POST {{baseUrl}}/api/maintenance-requests
+Authorization: Bearer {{tenantToken}}
+Content-Type: application/json
+
+{
+  "title": "Water leak",
+  "description": "Water is leaking under the sink."
+}
+
+### Staff starts maintenance request
+POST {{baseUrl}}/api/maintenance-requests/{{maintenanceRequestId}}/start
+Authorization: Bearer {{staffToken}}
+Content-Type: application/json
+
+{
+  "note": "Assigned for inspection."
+}
+
+### Staff resolves maintenance request
+POST {{baseUrl}}/api/maintenance-requests/{{maintenanceRequestId}}/resolve
+Authorization: Bearer {{staffToken}}
+Content-Type: application/json
+
+{
+  "resolutionNote": "Replaced the damaged pipe seal."
+}
+
+### Dashboard summary - Admin/Staff
+GET {{baseUrl}}/api/dashboard/summary
+Authorization: Bearer {{staffToken}}
+Accept: application/json

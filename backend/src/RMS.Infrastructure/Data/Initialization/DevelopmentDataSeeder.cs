@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using RMS.Application.Common.Interfaces.Security;
 using RMS.Application.Common.Interfaces.Services;
@@ -13,27 +14,40 @@ public sealed class DevelopmentDataSeeder
     private const string TenantFullName = "Development Tenant";
     private const string TenantPhone = "0900000000";
     private const string TenantCitizenId = "DEV-CITIZEN-ID";
+    private const string Tenant2FullName = "Development Tenant Two";
+    private const string Tenant2Phone = "0900000001";
+    private const string Tenant2CitizenId = "DEV-CITIZEN-ID-2";
 
     private readonly AppDbContext _dbContext;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IHostEnvironment _environment;
     private readonly SeedDataOptions _options;
 
     public DevelopmentDataSeeder(
         AppDbContext dbContext,
         IPasswordHasher passwordHasher,
         IDateTimeProvider dateTimeProvider,
+        IHostEnvironment environment,
         IOptions<SeedDataOptions> options)
     {
         _dbContext = dbContext;
         _passwordHasher = passwordHasher;
         _dateTimeProvider = dateTimeProvider;
+        _environment = environment;
         _options = options.Value;
     }
 
     public async Task SeedAsync(
         CancellationToken cancellationToken = default)
     {
+        if (!_environment.IsDevelopment())
+        {
+            throw new InvalidOperationException(
+                "Development seed data can run only when the host "
+                + "environment is Development.");
+        }
+
         if (!_options.Enabled)
         {
             return;
@@ -62,10 +76,26 @@ public sealed class DevelopmentDataSeeder
             cancellationToken);
         var tenant = await GetOrCreateTenantAsync(
             tenantUser,
+            TenantFullName,
+            TenantPhone,
+            TenantCitizenId,
+            now,
+            cancellationToken);
+        var tenant2User = await GetOrCreateUserAsync(
+            _options.Tenant2Username,
+            _options.Tenant2Password,
+            UserRole.Tenant,
+            now,
+            cancellationToken);
+        var tenant2 = await GetOrCreateTenantAsync(
+            tenant2User,
+            Tenant2FullName,
+            Tenant2Phone,
+            Tenant2CitizenId,
             now,
             cancellationToken);
 
-        _ = await GetOrCreateRoomAsync(
+        var availableRoom = await GetOrCreateRoomAsync(
             "DEV-AVAILABLE",
             3_000_000m,
             RoomStatus.Available,
@@ -93,6 +123,11 @@ public sealed class DevelopmentDataSeeder
         var contract = await GetOrCreateActiveContractAsync(
             occupiedRoom,
             tenant,
+            now,
+            cancellationToken);
+        _ = await GetOrCreateDraftContractAsync(
+            availableRoom,
+            tenant2,
             now,
             cancellationToken);
         await CreateInvoicesIfMissingAsync(
@@ -135,6 +170,9 @@ public sealed class DevelopmentDataSeeder
 
     private async Task<Tenant> GetOrCreateTenantAsync(
         User tenantUser,
+        string fullName,
+        string phoneNumber,
+        string citizenId,
         DateTimeOffset now,
         CancellationToken cancellationToken)
     {
@@ -148,9 +186,9 @@ public sealed class DevelopmentDataSeeder
 
         var tenant = new Tenant(
             tenantUser.Id,
-            TenantFullName,
-            TenantPhone,
-            TenantCitizenId,
+            fullName,
+            phoneNumber,
+            citizenId,
             now);
         _dbContext.Tenants.Add(tenant);
         return tenant;
@@ -217,6 +255,35 @@ public sealed class DevelopmentDataSeeder
         room.ChangeStatus(
             RoomStatus.Occupied,
             hasActiveContract: true,
+            now);
+        _dbContext.RentalContracts.Add(contract);
+        return contract;
+    }
+
+    private async Task<RentalContract> GetOrCreateDraftContractAsync(
+        Room room,
+        Tenant tenant,
+        DateTimeOffset now,
+        CancellationToken cancellationToken)
+    {
+        var existing = await _dbContext.RentalContracts
+            .SingleOrDefaultAsync(
+                contract =>
+                    contract.RoomId == room.Id
+                    && contract.Status == ContractStatus.Draft,
+                cancellationToken);
+        if (existing is not null)
+        {
+            return existing;
+        }
+
+        var startDate = DateOnly.FromDateTime(now.UtcDateTime).AddMonths(1);
+        var contract = new RentalContract(
+            room.Id,
+            tenant.Id,
+            startDate,
+            startDate.AddYears(1),
+            room.MonthlyRent,
             now);
         _dbContext.RentalContracts.Add(contract);
         return contract;
@@ -320,6 +387,8 @@ public sealed class DevelopmentDataSeeder
         AddIfMissing(missing, _options.StaffPassword, "StaffPassword");
         AddIfMissing(missing, _options.TenantUsername, "TenantUsername");
         AddIfMissing(missing, _options.TenantPassword, "TenantPassword");
+        AddIfMissing(missing, _options.Tenant2Username, "Tenant2Username");
+        AddIfMissing(missing, _options.Tenant2Password, "Tenant2Password");
         if (missing.Count > 0)
         {
             throw new InvalidOperationException(

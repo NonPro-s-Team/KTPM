@@ -19,8 +19,27 @@ public sealed class DatabaseInitializer
         _environment = environment;
     }
 
+    public Task ApplyMigrationAsync(
+        CancellationToken cancellationToken = default) =>
+        _dbContext.Database.MigrateAsync(cancellationToken);
+
+    public async Task SeedDevelopmentDataAsync(
+        CancellationToken cancellationToken = default)
+    {
+        EnsureDevelopmentEnvironment();
+
+        await _seeder.SeedAsync(cancellationToken);
+    }
+
     public async Task InitializeDevelopmentAsync(
         CancellationToken cancellationToken = default)
+    {
+        EnsureDevelopmentEnvironment();
+        await ApplyMigrationAsync(cancellationToken);
+        await SeedDevelopmentDataAsync(cancellationToken);
+    }
+
+    private void EnsureDevelopmentEnvironment()
     {
         if (!_environment.IsDevelopment())
         {
@@ -28,8 +47,5 @@ public sealed class DatabaseInitializer
                 "Development database initialization is available only "
                 + "when the host environment is Development.");
         }
-
-        await _dbContext.Database.MigrateAsync(cancellationToken);
-        await _seeder.SeedAsync(cancellationToken);
     }
 }
