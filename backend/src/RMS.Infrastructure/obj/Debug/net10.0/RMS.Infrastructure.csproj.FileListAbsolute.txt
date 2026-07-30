@@ -16,6 +16,7 @@ H:\Project\RMS\src\RMS.Infrastructure\obj\Debug\net10.0\refint\RMS.Infrastructur
 H:\Project\RMS\src\RMS.Infrastructure\obj\Debug\net10.0\RMS.Infrastructure.pdb
 H:\Project\RMS\src\RMS.Infrastructure\obj\Debug\net10.0\ref\RMS.Infrastructure.dll
 H:\Project\RMS\backend\src\RMS.Infrastructure\bin\Debug\net10.0\RMS.Infrastructure.deps.json
+H:\Project\RMS\backend\src\RMS.Infrastructure\bin\Debug\net10.0\RMS.Infrastructure.runtimeconfig.json
 H:\Project\RMS\backend\src\RMS.Infrastructure\bin\Debug\net10.0\RMS.Infrastructure.dll
 H:\Project\RMS\backend\src\RMS.Infrastructure\bin\Debug\net10.0\RMS.Infrastructure.pdb
 H:\Project\RMS\backend\src\RMS.Infrastructure\bin\Debug\net10.0\RMS.Application.dll
@@ -32,4 +33,5 @@ H:\Project\RMS\backend\src\RMS.Infrastructure\obj\Debug\net10.0\RMS.Infr.9272D3F
 H:\Project\RMS\backend\src\RMS.Infrastructure\obj\Debug\net10.0\RMS.Infrastructure.dll
 H:\Project\RMS\backend\src\RMS.Infrastructure\obj\Debug\net10.0\refint\RMS.Infrastructure.dll
 H:\Project\RMS\backend\src\RMS.Infrastructure\obj\Debug\net10.0\RMS.Infrastructure.pdb
+H:\Project\RMS\backend\src\RMS.Infrastructure\obj\Debug\net10.0\RMS.Infrastructure.genruntimeconfig.cache
 H:\Project\RMS\backend\src\RMS.Infrastructure\obj\Debug\net10.0\ref\RMS.Infrastructure.dll
