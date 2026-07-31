@@ -38,6 +38,11 @@ export interface DataTableProps<T> {
   filters?: DataTableFilter<T>[];
   searchPlaceholder?: string;
   pageSize?: number;
+  page?: number;
+  totalPages?: number;
+  totalItems?: number;
+  onPageChange?: (page: number) => void;
+  serverPagination?: boolean;
   selectable?: boolean;
   loading?: boolean;
   error?: string;
@@ -65,6 +70,11 @@ export function DataTable<T>({
   filters = [],
   searchPlaceholder = "Tìm kiếm...",
   pageSize = 6,
+  page: controlledPage,
+  totalPages: controlledTotalPages,
+  totalItems: controlledTotalItems,
+  onPageChange,
+  serverPagination = false,
   selectable = false,
   loading = false,
   error,
@@ -79,7 +89,7 @@ export function DataTable<T>({
     columnId: string;
     direction: SortDirection;
   } | null>(null);
-  const [page, setPage] = useState(1);
+  const [internalPage, setInternalPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const filteredRows = useMemo(() => {
@@ -110,12 +120,23 @@ export function DataTable<T>({
     });
   }, [columns, filteredRows, sort]);
 
-  const totalPages = Math.max(1, Math.ceil(sortedRows.length / pageSize));
-  const currentPage = Math.min(page, totalPages);
-  const visibleRows = sortedRows.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize,
+  const totalPages = serverPagination
+    ? Math.max(1, controlledTotalPages ?? 1)
+    : Math.max(1, Math.ceil(sortedRows.length / pageSize));
+  const currentPage = Math.min(
+    serverPagination ? (controlledPage ?? 1) : internalPage,
+    totalPages,
   );
+  const visibleRows = serverPagination
+    ? sortedRows
+    : sortedRows.slice(
+        (currentPage - 1) * pageSize,
+        currentPage * pageSize,
+      );
+  const changePage = (nextPage: number) => {
+    if (serverPagination) onPageChange?.(nextPage);
+    else setInternalPage(nextPage);
+  };
   const allVisibleSelected =
     visibleRows.length > 0 &&
     visibleRows.every((row) => selectedIds.has(getRowId(row)));
@@ -161,11 +182,11 @@ export function DataTable<T>({
           placeholder={searchPlaceholder}
           onChange={(event) => {
             setSearch(event.target.value);
-            setPage(1);
+            changePage(1);
           }}
           onClear={() => {
             setSearch("");
-            setPage(1);
+            changePage(1);
           }}
         />
         <div className="data-table__filters">
@@ -179,7 +200,7 @@ export function DataTable<T>({
                     ...current,
                     [filter.id]: event.target.value,
                   }));
-                  setPage(1);
+                  changePage(1);
                 }}
               >
                 <option value="">Tất cả</option>
@@ -339,8 +360,12 @@ export function DataTable<T>({
         <Pagination
           page={currentPage}
           totalPages={totalPages}
-          totalItems={sortedRows.length}
-          onPageChange={setPage}
+          totalItems={
+            serverPagination
+              ? (controlledTotalItems ?? sortedRows.length)
+              : sortedRows.length
+          }
+          onPageChange={changePage}
         />
       ) : null}
     </section>

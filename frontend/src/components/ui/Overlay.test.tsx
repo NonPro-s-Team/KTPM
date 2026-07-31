@@ -10,7 +10,7 @@ describe("Drawer", () => {
         open
         onClose={handleClose}
         title="Thêm phòng mới"
-        description="Tạo phòng trong dữ liệu bản mẫu."
+        description="Tạo phòng trong hệ thống."
       >
         <p>Nội dung biểu mẫu</p>
       </Drawer>,

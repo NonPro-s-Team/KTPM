@@ -1,73 +1,54 @@
 import {
-  Bell,
   BedDouble,
-  Building2,
   ChevronLeft,
   ChevronRight,
-  CircleHelp,
   FileSignature,
   LayoutDashboard,
   LogOut,
   Menu,
   ReceiptText,
-  Search,
   Settings,
   ShieldCheck,
   UserRound,
   UsersRound,
-  WalletCards,
   Wrench,
   X,
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
+import { useAuthStore } from "../../store/authStore";
+import type { UserRole } from "../../types/api";
+import { userRoleMap } from "../../utils/status";
 import { BrandLogo } from "../BrandLogo";
-import {
-  Breadcrumb,
-  DropdownMenu,
-  IconButton,
-  SearchInput,
-  ThemeToggle,
-  Tooltip,
-} from "../ui";
+import { Breadcrumb, DropdownMenu, IconButton, ThemeToggle, Tooltip } from "../ui";
 
 interface NavigationItem {
   label: string;
   to: string;
   icon: LucideIcon;
+  roles: UserRole[];
 }
 
-const primaryNavigation: NavigationItem[] = [
-  { label: "Tổng quan", to: "/dashboard", icon: LayoutDashboard },
-  { label: "Khu trọ", to: "/properties", icon: Building2 },
-  { label: "Phòng", to: "/rooms", icon: BedDouble },
-  { label: "Khách thuê", to: "/tenants", icon: UsersRound },
-  { label: "Hợp đồng", to: "/contracts", icon: FileSignature },
-  { label: "Hóa đơn", to: "/invoices", icon: ReceiptText },
-  { label: "Thanh toán", to: "/payments", icon: WalletCards },
-  { label: "Sửa chữa", to: "/maintenance", icon: Wrench },
+const navigation: NavigationItem[] = [
+  { label: "Tổng quan", to: "/dashboard", icon: LayoutDashboard, roles: ["admin", "staff"] },
+  { label: "Phòng", to: "/rooms", icon: BedDouble, roles: ["admin", "staff", "tenant"] },
+  { label: "Khách thuê", to: "/tenants", icon: UsersRound, roles: ["admin", "staff"] },
+  { label: "Hồ sơ của tôi", to: "/tenants", icon: UserRound, roles: ["tenant"] },
+  { label: "Hợp đồng", to: "/contracts", icon: FileSignature, roles: ["admin", "staff", "tenant"] },
+  { label: "Hóa đơn", to: "/invoices", icon: ReceiptText, roles: ["admin", "staff", "tenant"] },
+  { label: "Sửa chữa", to: "/maintenance", icon: Wrench, roles: ["admin", "staff", "tenant"] },
 ];
 
 const secondaryNavigation: NavigationItem[] = [
-  { label: "Tài khoản", to: "/users", icon: ShieldCheck },
-  { label: "Cài đặt", to: "/settings", icon: Settings },
+  { label: "Tài khoản", to: "/account", icon: ShieldCheck, roles: ["admin", "staff", "tenant"] },
+  { label: "Cài đặt", to: "/settings", icon: Settings, roles: ["admin", "staff", "tenant"] },
 ];
 
-const routeLabels: Record<string, string> = Object.fromEntries(
-  [...primaryNavigation, ...secondaryNavigation].map((item) => [
-    item.to,
-    item.label,
-  ]),
-);
-
 function Brand({ collapsed = false }: { collapsed?: boolean }) {
+  const role = useAuthStore((state) => state.role);
   return (
-    <NavLink
-      className="brand"
-      to="/dashboard"
-      aria-label="TroConnect - Trang tổng quan"
-    >
+    <NavLink className="brand" to={role === "tenant" ? "/invoices" : "/dashboard"} aria-label="TroConnect">
       <BrandLogo compact={collapsed} />
     </NavLink>
   );
@@ -75,86 +56,65 @@ function Brand({ collapsed = false }: { collapsed?: boolean }) {
 
 function NavigationGroup({
   items,
+  role,
   collapsed,
   onNavigate,
 }: {
   items: NavigationItem[];
+  role: UserRole;
   collapsed?: boolean;
   onNavigate?: () => void;
 }) {
   return (
     <nav className="sidebar-nav" aria-label="Điều hướng chính">
-      {items.map((item) => {
-        const Icon = item.icon;
-        return (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            onClick={onNavigate}
-            className={({ isActive }) =>
-              isActive ? "sidebar-nav__item is-active" : "sidebar-nav__item"
-            }
-            title={collapsed ? item.label : undefined}
-          >
-            <Icon size={18} aria-hidden="true" />
-            {!collapsed ? <span>{item.label}</span> : null}
-          </NavLink>
-        );
-      })}
+      {items
+        .filter((item) => item.roles.includes(role))
+        .map((item) => {
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={`${item.to}-${item.label}`}
+              to={item.to}
+              onClick={onNavigate}
+              className={({ isActive }) =>
+                isActive ? "sidebar-nav__item is-active" : "sidebar-nav__item"
+              }
+              title={collapsed ? item.label : undefined}
+            >
+              <Icon size={18} aria-hidden="true" />
+              {!collapsed ? <span>{item.label}</span> : null}
+            </NavLink>
+          );
+        })}
     </nav>
   );
 }
 
-function Sidebar({
-  collapsed,
-  onToggle,
-}: {
-  collapsed: boolean;
-  onToggle: () => void;
-}) {
+function Sidebar({ role, collapsed, onToggle }: { role: UserRole; collapsed: boolean; onToggle: () => void }) {
   return (
-    <aside
-      className={`sidebar ${collapsed ? "sidebar--collapsed" : ""}`}
-      aria-label="Thanh điều hướng"
-    >
-      <div className="sidebar__brand">
-        <Brand collapsed={collapsed} />
-      </div>
+    <aside className={`sidebar ${collapsed ? "sidebar--collapsed" : ""}`} aria-label="Thanh điều hướng">
+      <div className="sidebar__brand"><Brand collapsed={collapsed} /></div>
       <div className="sidebar__content">
-        <NavigationGroup items={primaryNavigation} collapsed={collapsed} />
+        <NavigationGroup items={navigation} role={role} collapsed={collapsed} />
         <div className="sidebar__divider" />
-        <NavigationGroup items={secondaryNavigation} collapsed={collapsed} />
+        <NavigationGroup items={secondaryNavigation} role={role} collapsed={collapsed} />
       </div>
       <div className="sidebar__footer">
-        <Tooltip
-          content={collapsed ? "Mở rộng thanh bên" : "Thu gọn thanh bên"}
-        >
+        <Tooltip content={collapsed ? "Mở rộng thanh bên" : "Thu gọn thanh bên"}>
           <IconButton
             icon={collapsed ? ChevronRight : ChevronLeft}
             label={collapsed ? "Mở rộng thanh bên" : "Thu gọn thanh bên"}
             onClick={onToggle}
           />
         </Tooltip>
-        {!collapsed ? (
-          <div>
-            <strong>Trợ giúp</strong>
-            <span>Phiên bản giao diện 0.1</span>
-          </div>
-        ) : null}
+        {!collapsed ? <div><strong>TroConnect</strong><span>Phiên bản 0.1</span></div> : null}
       </div>
     </aside>
   );
 }
 
-function MobileNavigation({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+function MobileNavigation({ role, open, onClose }: { role: UserRole; open: boolean; onClose: () => void }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
-
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
@@ -167,103 +127,62 @@ function MobileNavigation({
       ref={dialogRef}
       className="mobile-navigation"
       aria-label="Điều hướng trên thiết bị di động"
-      onCancel={(event) => {
-        event.preventDefault();
-        onClose();
-      }}
-      onClick={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
+      onCancel={(event) => { event.preventDefault(); onClose(); }}
+      onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}
     >
-      <div className="mobile-navigation__header">
-        <Brand />
-        <IconButton icon={X} label="Đóng điều hướng" onClick={onClose} />
-      </div>
+      <div className="mobile-navigation__header"><Brand /><IconButton icon={X} label="Đóng điều hướng" onClick={onClose} /></div>
       <div className="mobile-navigation__body">
-        <NavigationGroup items={primaryNavigation} onNavigate={onClose} />
+        <NavigationGroup items={navigation} role={role} onNavigate={onClose} />
         <div className="sidebar__divider" />
-        <NavigationGroup items={secondaryNavigation} onNavigate={onClose} />
-      </div>
-      <div className="mobile-navigation__help">
-        <CircleHelp size={18} aria-hidden="true" />
-        <span>Trung tâm hỗ trợ</span>
+        <NavigationGroup items={secondaryNavigation} role={role} onNavigate={onClose} />
       </div>
     </dialog>
   );
 }
 
+function initials(username: string) {
+  return username.slice(0, 2).toLocaleUpperCase("vi");
+}
+
 function AppHeader({ onOpenNavigation }: { onOpenNavigation: () => void }) {
-  const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  const username = useAuthStore((state) => state.username) ?? "Tài khoản";
+  const role = useAuthStore((state) => state.role) ?? "tenant";
+  const logout = useAuthStore((state) => state.logout);
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    try {
+      await logout();
+    } catch {
+      // The local session is cleared in the store even when the stateless API fails.
+    } finally {
+      navigate("/login", { replace: true });
+    }
+  };
 
   return (
     <header className="app-header">
       <div className="app-header__leading">
-        <IconButton
-          icon={Menu}
-          label="Mở điều hướng"
-          className="app-header__menu"
-          onClick={onOpenNavigation}
-        />
-        <div className="app-header__search">
-          <SearchInput
-            value={search}
-            placeholder="Tìm phòng, khách thuê, hóa đơn..."
-            onChange={(event) => setSearch(event.target.value)}
-            onClear={() => setSearch("")}
-          />
-          <span className="search-shortcut" aria-hidden="true">
-            Ctrl K
-          </span>
-        </div>
-        <Tooltip content="Tìm kiếm">
-          <IconButton
-            icon={Search}
-            label="Tìm kiếm"
-            className="app-header__mobile-search"
-          />
-        </Tooltip>
+        <IconButton icon={Menu} label="Mở điều hướng" className="app-header__menu" onClick={onOpenNavigation} />
       </div>
       <div className="app-header__actions">
-        <span className="app-header__notification">
-          <Tooltip content="Thông báo">
-            <span className="notification-button">
-              <IconButton icon={Bell} label="Thông báo, có 3 mục mới" />
-              <span className="notification-button__dot" aria-hidden="true" />
-            </span>
-          </Tooltip>
-        </span>
         <ThemeToggle />
         <DropdownMenu
           label="Menu tài khoản"
           triggerClassName="user-menu-trigger"
           trigger={
             <span className="user-trigger">
-              <span className="user-trigger__avatar">AN</span>
-              <span className="user-trigger__copy">
-                <strong>An Nguyễn</strong>
-                <small>Chủ nhà</small>
-              </span>
+              <span className="user-trigger__avatar">{initials(username)}</span>
+              <span className="user-trigger__copy"><strong>{username}</strong><small>{userRoleMap[role].label}</small></span>
             </span>
           }
           items={[
-            {
-              label: "Hồ sơ cá nhân",
-              icon: UserRound,
-              onSelect: () => navigate("/users"),
-            },
-            {
-              label: "Cài đặt",
-              icon: Settings,
-              onSelect: () => navigate("/settings"),
-            },
-            {
-              label: "Đăng xuất",
-              icon: LogOut,
-              danger: true,
-              separatorBefore: true,
-              onSelect: () => navigate("/login"),
-            },
+            { label: "Tài khoản", icon: UserRound, onSelect: () => navigate("/account") },
+            { label: "Cài đặt", icon: Settings, onSelect: () => navigate("/settings") },
+            { label: loggingOut ? "Đang đăng xuất..." : "Đăng xuất", icon: LogOut, danger: true, separatorBefore: true, onSelect: () => { void handleLogout(); } },
           ]}
         />
       </div>
@@ -272,6 +191,7 @@ function AppHeader({ onOpenNavigation }: { onOpenNavigation: () => void }) {
 }
 
 export function AppShell() {
+  const role = useAuthStore((state) => state.role) ?? "tenant";
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
@@ -282,39 +202,22 @@ export function AppShell() {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [location.pathname]);
 
-  const breadcrumbs = useMemo(
-    () => [
-      { label: "TroConnect", to: "/dashboard" },
-      { label: routeLabels[location.pathname] ?? "Trang" },
-    ],
-    [location.pathname],
+  const labels = useMemo(
+    () => Object.fromEntries([...navigation, ...secondaryNavigation].filter((item) => item.roles.includes(role)).map((item) => [item.to, item.label])),
+    [role],
   );
+  const breadcrumbs = [{ label: "TroConnect", to: role === "tenant" ? "/invoices" : "/dashboard" }, { label: labels[location.pathname] ?? "Trang" }];
 
   return (
     <div className={`app-shell ${collapsed ? "app-shell--collapsed" : ""}`}>
-      <a className="skip-link" href="#main-content">
-        Bỏ qua điều hướng
-      </a>
-      <Sidebar
-        collapsed={collapsed}
-        onToggle={() => setCollapsed((current) => !current)}
-      />
-      <MobileNavigation
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-      />
+      <a className="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+      <Sidebar role={role} collapsed={collapsed} onToggle={() => setCollapsed((current) => !current)} />
+      <MobileNavigation role={role} open={mobileOpen} onClose={() => setMobileOpen(false)} />
       <div className="app-shell__workspace">
         <AppHeader onOpenNavigation={() => setMobileOpen(true)} />
-        <main
-          ref={mainRef}
-          id="main-content"
-          className="app-main"
-          tabIndex={-1}
-        >
+        <main ref={mainRef} id="main-content" className="app-main" tabIndex={-1}>
           <Breadcrumb items={breadcrumbs} />
-          <div className="page-content">
-            <Outlet />
-          </div>
+          <div className="page-content"><Outlet /></div>
         </main>
       </div>
     </div>

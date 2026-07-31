@@ -1,5 +1,6 @@
 import { ArrowLeft, Ban, SearchX } from "lucide-react";
 import { Link } from "react-router";
+import { useAuthStore } from "../../store/authStore";
 
 function SystemPage({
   code,
@@ -12,6 +13,9 @@ function SystemPage({
   description: string;
   icon: typeof Ban;
 }) {
+  const role = useAuthStore((state) => state.role);
+  const destination = role === "tenant" ? "/invoices" : role ? "/dashboard" : "/login";
+
   return (
     <main className="system-page">
       <section>
@@ -21,9 +25,9 @@ function SystemPage({
         </div>
         <h1>{title}</h1>
         <p>{description}</p>
-        <Link className="button button--primary button--md" to="/dashboard">
+        <Link className="button button--primary button--md" to={destination}>
           <ArrowLeft size={16} aria-hidden="true" />
-          <span>Về trang tổng quan</span>
+          <span>Quay lại ứng dụng</span>
         </Link>
       </section>
     </main>
