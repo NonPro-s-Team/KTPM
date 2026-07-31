@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
+import { useAuthStore } from "../store/authStore";
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,
@@ -32,6 +33,10 @@ Object.defineProperty(HTMLDialogElement.prototype, "close", {
 
 afterEach(() => {
   cleanup();
+  useAuthStore.getState().clearSession();
   window.localStorage.clear();
+  window.sessionStorage.clear();
   delete document.documentElement.dataset.theme;
+  vi.restoreAllMocks();
+  vi.useRealTimers();
 });
