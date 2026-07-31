@@ -1,65 +1,57 @@
 import type {
   ContractStatus,
   InvoiceStatus,
-  MaintenancePriority,
-  MaintenanceStatus,
-  PaymentStatus,
+  MaintenanceRequestStatus,
   RoomStatus,
-  StatusTone,
   UserRole,
-  UserStatus,
-} from "../types/models";
-
-export interface StatusDefinition {
-  label: string;
-  tone: StatusTone;
-}
+} from "../types/api";
+import type { StatusDefinition } from "../types/models";
 
 export const roomStatusMap = {
-  vacant: { label: "Phòng trống", tone: "neutral" },
+  available: { label: "Phòng trống", tone: "neutral" },
   occupied: { label: "Đang thuê", tone: "success" },
   maintenance: { label: "Đang bảo trì", tone: "warning" },
+  inactive: { label: "Ngừng hoạt động", tone: "danger" },
 } satisfies Record<RoomStatus, StatusDefinition>;
 
 export const contractStatusMap = {
+  draft: { label: "Bản nháp", tone: "neutral" },
   active: { label: "Hiệu lực", tone: "success" },
-  expiring: { label: "Sắp hết hạn", tone: "warning" },
-  ended: { label: "Đã kết thúc", tone: "neutral" },
+  terminated: { label: "Đã chấm dứt", tone: "warning" },
+  cancelled: { label: "Đã hủy", tone: "danger" },
 } satisfies Record<ContractStatus, StatusDefinition>;
 
 export const invoiceStatusMap = {
+  draft: { label: "Bản nháp", tone: "neutral" },
+  issued: { label: "Đã phát hành", tone: "info" },
+  partiallyPaid: { label: "Thanh toán một phần", tone: "warning" },
   paid: { label: "Đã thanh toán", tone: "success" },
-  pending: { label: "Chờ thanh toán", tone: "info" },
   overdue: { label: "Quá hạn", tone: "danger" },
+  cancelled: { label: "Đã hủy", tone: "danger" },
 } satisfies Record<InvoiceStatus, StatusDefinition>;
 
-export const paymentStatusMap = {
-  completed: { label: "Hoàn tất", tone: "success" },
-  processing: { label: "Đang xử lý", tone: "info" },
-  failed: { label: "Thất bại", tone: "danger" },
-} satisfies Record<PaymentStatus, StatusDefinition>;
-
 export const maintenanceStatusMap = {
-  new: { label: "Yêu cầu mới", tone: "info" },
-  in_progress: { label: "Đang xử lý", tone: "warning" },
-  completed: { label: "Hoàn tất", tone: "success" },
-} satisfies Record<MaintenanceStatus, StatusDefinition>;
-
-export const maintenancePriorityMap = {
-  normal: { label: "Bình thường", tone: "neutral" },
-  high: { label: "Ưu tiên cao", tone: "warning" },
-  urgent: { label: "Khẩn cấp", tone: "danger" },
-} satisfies Record<MaintenancePriority, StatusDefinition>;
+  submitted: { label: "Đã gửi", tone: "info" },
+  inProgress: { label: "Đang xử lý", tone: "warning" },
+  resolved: { label: "Đã xử lý", tone: "success" },
+  closed: { label: "Đã đóng", tone: "neutral" },
+} satisfies Record<MaintenanceRequestStatus, StatusDefinition>;
 
 export const userRoleMap = {
-  owner: { label: "Chủ nhà", tone: "neutral" },
-  manager: { label: "Quản lý", tone: "info" },
-  accountant: { label: "Kế toán", tone: "success" },
-  admin: { label: "Quản trị", tone: "warning" },
+  admin: { label: "Quản trị viên", tone: "warning" },
+  staff: { label: "Nhân viên", tone: "info" },
+  tenant: { label: "Khách thuê", tone: "success" },
 } satisfies Record<UserRole, StatusDefinition>;
 
-export const userStatusMap = {
-  active: { label: "Đang hoạt động", tone: "success" },
-  invited: { label: "Đã mời", tone: "info" },
-  locked: { label: "Đã khóa", tone: "danger" },
-} satisfies Record<UserStatus, StatusDefinition>;
+export function isContractExpiringSoon(
+  status: ContractStatus,
+  endDate: string,
+  now = new Date(),
+) {
+  if (status !== "active") return false;
+
+  const end = new Date(`${endDate}T23:59:59`);
+  const threshold = new Date(now);
+  threshold.setDate(threshold.getDate() + 30);
+  return end >= now && end <= threshold;
+}

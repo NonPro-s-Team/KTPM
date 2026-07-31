@@ -1,127 +1,28 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router";
 import { AppShell } from "./components/layout/AppShell";
-import { RoutePlaceholder } from "./pages/system/RoutePlaceholder";
 import { ForbiddenPage, NotFoundPage } from "./pages/system/SystemPages";
+import { LoginRoute, defaultRouteForRole } from "./routes/LoginRoute";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { RoleGuard } from "./routes/RoleGuard";
+import { useAuthStore } from "./store/authStore";
 
-const LoginPage = lazy(() =>
-  import("./pages/auth/LoginPage").then((module) => ({
-    default: module.LoginPage,
-  })),
-);
+const LoginPage = lazy(() => import("./pages/auth/LoginPage").then((module) => ({ default: module.LoginPage })));
+const DashboardPage = lazy(() => import("./pages/dashboard/DashboardPage").then((module) => ({ default: module.DashboardPage })));
+const RoomsPage = lazy(() => import("./pages/rooms/RoomsPage").then((module) => ({ default: module.RoomsPage })));
+const PropertiesPage = lazy(() => import("./pages/properties/PropertiesPage").then((module) => ({ default: module.PropertiesPage })));
+const TenantsPage = lazy(() => import("./pages/tenants/TenantsPage").then((module) => ({ default: module.TenantsPage })));
+const ContractsPage = lazy(() => import("./pages/contracts/ContractsPage").then((module) => ({ default: module.ContractsPage })));
+const InvoicesPage = lazy(() => import("./pages/invoices/InvoicesPage").then((module) => ({ default: module.InvoicesPage })));
+const PaymentsPage = lazy(() => import("./pages/payments/PaymentsPage").then((module) => ({ default: module.PaymentsPage })));
+const MaintenancePage = lazy(() => import("./pages/maintenance/MaintenancePage").then((module) => ({ default: module.MaintenancePage })));
+const UsersPage = lazy(() => import("./pages/users/UsersPage").then((module) => ({ default: module.UsersPage })));
+const SettingsPage = lazy(() => import("./pages/settings/SettingsPage").then((module) => ({ default: module.SettingsPage })));
 
-const DashboardPage = lazy(() =>
-  import("./pages/dashboard/DashboardPage").then((module) => ({
-    default: module.DashboardPage,
-  })),
-);
-
-const RoomsPage = lazy(() =>
-  import("./pages/rooms/RoomsPage").then((module) => ({
-    default: module.RoomsPage,
-  })),
-);
-
-const PropertiesPage = lazy(() =>
-  import("./pages/properties/PropertiesPage").then((module) => ({
-    default: module.PropertiesPage,
-  })),
-);
-
-const TenantsPage = lazy(() =>
-  import("./pages/tenants/TenantsPage").then((module) => ({
-    default: module.TenantsPage,
-  })),
-);
-
-const ContractsPage = lazy(() =>
-  import("./pages/contracts/ContractsPage").then((module) => ({
-    default: module.ContractsPage,
-  })),
-);
-
-const InvoicesPage = lazy(() =>
-  import("./pages/invoices/InvoicesPage").then((module) => ({
-    default: module.InvoicesPage,
-  })),
-);
-
-const PaymentsPage = lazy(() =>
-  import("./pages/payments/PaymentsPage").then((module) => ({
-    default: module.PaymentsPage,
-  })),
-);
-
-const MaintenancePage = lazy(() =>
-  import("./pages/maintenance/MaintenancePage").then((module) => ({
-    default: module.MaintenancePage,
-  })),
-);
-
-const UsersPage = lazy(() =>
-  import("./pages/users/UsersPage").then((module) => ({
-    default: module.UsersPage,
-  })),
-);
-
-const SettingsPage = lazy(() =>
-  import("./pages/settings/SettingsPage").then((module) => ({
-    default: module.SettingsPage,
-  })),
-);
-
-const moduleRoutes = [
-  {
-    path: "dashboard",
-    title: "Tổng quan",
-    description: "Theo dõi nhanh tình hình vận hành và tài chính.",
-  },
-  {
-    path: "properties",
-    title: "Khu trọ",
-    description: "Quản lý các khu nhà và địa điểm đang vận hành.",
-  },
-  {
-    path: "rooms",
-    title: "Phòng",
-    description: "Quản lý tình trạng phòng và giá thuê.",
-  },
-  {
-    path: "tenants",
-    title: "Khách thuê",
-    description: "Quản lý hồ sơ và lịch sử lưu trú.",
-  },
-  {
-    path: "contracts",
-    title: "Hợp đồng",
-    description: "Theo dõi vòng đời hợp đồng thuê.",
-  },
-  {
-    path: "invoices",
-    title: "Hóa đơn",
-    description: "Lập và theo dõi hóa đơn định kỳ.",
-  },
-  {
-    path: "payments",
-    title: "Thanh toán",
-    description: "Đối soát các khoản thu và công nợ.",
-  },
-  {
-    path: "maintenance",
-    title: "Sửa chữa",
-    description: "Tiếp nhận và điều phối yêu cầu sửa chữa.",
-  },
-  {
-    path: "users",
-    title: "Tài khoản & phân quyền",
-    description: "Quản lý người dùng và vai trò truy cập.",
-  },
-  {
-    path: "settings",
-    title: "Cài đặt",
-    description: "Thiết lập giao diện và tùy chọn hệ thống.",
-  },
-];
+function HomeRedirect() {
+  const role = useAuthStore((state) => state.role);
+  return <Navigate to={defaultRouteForRole(role)} replace />;
+}
 
 export default function App() {
   return (
@@ -134,45 +35,33 @@ export default function App() {
       }
     >
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route element={<AppShell />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
-          {moduleRoutes.map((route) => (
-            <Route
-              key={route.path}
-              path={route.path}
-              element={
-                route.path === "dashboard" ? (
-                  <DashboardPage />
-                ) : route.path === "properties" ? (
-                  <PropertiesPage />
-                ) : route.path === "rooms" ? (
-                  <RoomsPage />
-                ) : route.path === "tenants" ? (
-                  <TenantsPage />
-                ) : route.path === "contracts" ? (
-                  <ContractsPage />
-                ) : route.path === "invoices" ? (
-                  <InvoicesPage />
-                ) : route.path === "payments" ? (
-                  <PaymentsPage />
-                ) : route.path === "maintenance" ? (
-                  <MaintenancePage />
-                ) : route.path === "users" ? (
-                  <UsersPage />
-                ) : route.path === "settings" ? (
-                  <SettingsPage />
-                ) : (
-                  <RoutePlaceholder
-                    title={route.title}
-                    description={route.description}
-                  />
-                )
-              }
-            />
-          ))}
+        <Route
+          path="/login"
+          element={
+            <LoginRoute>
+              <LoginPage />
+            </LoginRoute>
+          }
+        />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppShell />}>
+            <Route index element={<HomeRedirect />} />
+            <Route element={<RoleGuard allowedRoles={["admin", "staff"]} />}>
+              <Route path="dashboard" element={<DashboardPage />} />
+            </Route>
+            <Route path="rooms" element={<RoomsPage />} />
+            <Route path="tenants" element={<TenantsPage />} />
+            <Route path="contracts" element={<ContractsPage />} />
+            <Route path="invoices" element={<InvoicesPage />} />
+            <Route path="payments" element={<PaymentsPage />} />
+            <Route path="maintenance" element={<MaintenancePage />} />
+            <Route path="properties" element={<PropertiesPage />} />
+            <Route path="account" element={<UsersPage />} />
+            <Route path="users" element={<Navigate to="/account" replace />} />
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+          <Route path="/403" element={<ForbiddenPage />} />
         </Route>
-        <Route path="/403" element={<ForbiddenPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
