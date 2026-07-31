@@ -76,7 +76,7 @@ export function Input({
       <label className="field__label" htmlFor={id}>
         {label}
         {required ? (
-          <span className="field__required" aria-label="bắt buộc">
+          <span className="field__required" aria-hidden="true">
             *
           </span>
         ) : null}
@@ -119,7 +119,7 @@ export function Textarea({
       <label className="field__label" htmlFor={id}>
         {label}
         {required ? (
-          <span className="field__required" aria-label="bắt buộc">
+          <span className="field__required" aria-hidden="true">
             *
           </span>
         ) : null}
@@ -170,7 +170,7 @@ export function Select({
       <label className="field__label" htmlFor={id}>
         {label}
         {required ? (
-          <span className="field__required" aria-label="bắt buộc">
+          <span className="field__required" aria-hidden="true">
             *
           </span>
         ) : null}

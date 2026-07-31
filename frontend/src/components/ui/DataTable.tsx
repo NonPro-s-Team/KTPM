@@ -237,12 +237,14 @@ export function DataTable<T>({
               <tr>
                 {selectable ? (
                   <th className="data-table__select-column">
-                    <input
-                      type="checkbox"
-                      aria-label="Chọn tất cả hàng đang hiển thị"
-                      checked={allVisibleSelected}
-                      onChange={toggleAllVisible}
-                    />
+                    <label className="data-table__checkbox-target">
+                      <input
+                        type="checkbox"
+                        aria-label="Chọn tất cả hàng đang hiển thị"
+                        checked={allVisibleSelected}
+                        onChange={toggleAllVisible}
+                      />
+                    </label>
                   </th>
                 ) : null}
                 {columns.map((column) => {
@@ -307,12 +309,14 @@ export function DataTable<T>({
                       <tr key={rowId} data-selected={selected || undefined}>
                         {selectable ? (
                           <td className="data-table__select-column">
-                            <input
-                              type="checkbox"
-                              aria-label={`Chọn hàng ${rowId}`}
-                              checked={selected}
-                              onChange={() => toggleRow(rowId)}
-                            />
+                            <label className="data-table__checkbox-target">
+                              <input
+                                type="checkbox"
+                                aria-label={`Chọn hàng ${rowId}`}
+                                checked={selected}
+                                onChange={() => toggleRow(rowId)}
+                              />
+                            </label>
                           </td>
                         ) : null}
                         {columns.map((column) => (

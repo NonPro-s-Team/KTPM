@@ -9,6 +9,7 @@ import {
   Sun,
 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router";
 import {
   Alert,
   Button,
@@ -229,10 +230,10 @@ export function SettingsPage() {
                   Xem tài khoản, vai trò và khóa quyền truy cập khi cần thiết.
                 </p>
               </div>
-              <a href="/users" className="button button--secondary button--md">
+              <Link to="/users" className="button button--secondary button--md">
                 <LayoutPanelLeft size={16} aria-hidden="true" />
                 <span>Mở phân quyền</span>
-              </a>
+              </Link>
             </div>
           </Card>
         </div>

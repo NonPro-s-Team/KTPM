@@ -1058,7 +1058,16 @@
 
 .data-table__select-column {
   width: 3rem;
-  padding-right: 0 !important;
+  padding: 0 var(--space-1) !important;
+  text-align: center !important;
+}
+
+.data-table__checkbox-target {
+  display: inline-grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  cursor: pointer;
+  place-items: center;
 }
 
 .data-table input[type="checkbox"] {
