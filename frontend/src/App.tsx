@@ -16,6 +16,12 @@ const DashboardPage = lazy(() =>
   })),
 );
 
+const RoomsPage = lazy(() =>
+  import("./pages/rooms/RoomsPage").then((module) => ({
+    default: module.RoomsPage,
+  })),
+);
+
 const moduleRoutes = [
   {
     path: "dashboard",
@@ -90,6 +96,8 @@ export default function App() {
               element={
                 route.path === "dashboard" ? (
                   <DashboardPage />
+                ) : route.path === "rooms" ? (
+                  <RoomsPage />
                 ) : (
                   <RoutePlaceholder
                     title={route.title}
