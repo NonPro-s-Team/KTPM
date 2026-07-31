@@ -1,14 +1,9 @@
-import {
-  CircleDollarSign,
-  Clock3,
-  MoreHorizontal,
-  Plus,
-  ReceiptText,
-  Send,
-  TriangleAlert,
-} from "lucide-react";
-import { useMemo, useState, type FormEvent } from "react";
-import { ManagementSummary } from "../../components/management/ManagementSummary";
+import { CircleDollarSign, MoreHorizontal, Pencil, Plus, Send } from "lucide-react";
+import { useCallback, useMemo, useState, type FormEvent } from "react";
+import { Link } from "react-router";
+import { contractsApi } from "../../api/contractsApi";
+import { normalizeApiError } from "../../api/httpClient";
+import { invoicesApi } from "../../api/invoicesApi";
 import {
   Alert,
   Badge,
@@ -19,317 +14,262 @@ import {
   Modal,
   PageHeader,
   Select,
+  Tabs,
+  Textarea,
   type DataTableColumn,
 } from "../../components/ui";
-import { invoices as initialInvoices, rooms } from "../../data/mockData";
-import type { Invoice } from "../../types/models";
-import { formatCurrency, formatDate } from "../../utils/formatters";
+import { useApiQuery } from "../../hooks/useApiQuery";
+import { useAuthStore } from "../../store/authStore";
+import type { InvoiceResponse, InvoiceStatus, RentalContractResponse } from "../../types/api";
+import { formatCurrency } from "../../utils/formatters";
 import { invoiceStatusMap } from "../../utils/status";
 import "../../styles/management.css";
 
+const PAGE_SIZE = 10;
+type InvoiceTab = "all" | InvoiceStatus;
+
 interface InvoiceFormState {
-  roomId: string;
+  contractId: string;
   billingPeriod: string;
-  total: string;
-  dueDate: string;
+  rentAmount: string;
+  electricityStartReading: string;
+  electricityEndReading: string;
+  waterStartReading: string;
+  waterEndReading: string;
+  electricityUnitPrice: string;
+  waterUnitPrice: string;
 }
 
-const initialForm: InvoiceFormState = {
-  roomId: "",
-  billingPeriod: "2026-08",
-  total: "",
-  dueDate: "2026-08-05",
+const emptyForm: InvoiceFormState = {
+  contractId: "",
+  billingPeriod: "",
+  rentAmount: "",
+  electricityStartReading: "0",
+  electricityEndReading: "0",
+  waterStartReading: "0",
+  waterEndReading: "0",
+  electricityUnitPrice: "0",
+  waterUnitPrice: "0",
 };
 
-export function InvoicesPage() {
-  const [invoiceRows, setInvoiceRows] = useState(initialInvoices);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [form, setForm] = useState(initialForm);
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+function numericReadings(form: InvoiceFormState) {
+  return {
+    electricityStartReading: Number(form.electricityStartReading),
+    electricityEndReading: Number(form.electricityEndReading),
+    waterStartReading: Number(form.waterStartReading),
+    waterEndReading: Number(form.waterEndReading),
+    electricityUnitPrice: Number(form.electricityUnitPrice),
+    waterUnitPrice: Number(form.waterUnitPrice),
+  };
+}
 
-  const columns = useMemo<DataTableColumn<Invoice>[]>(
-    () => [
-      {
-        id: "invoice",
-        header: "Hóa đơn",
-        sortValue: (invoice) => invoice.code,
-        cell: (invoice) => (
-          <span className="primary-cell">
-            <strong>{invoice.code}</strong>
-            <small>Kỳ {invoice.billingPeriod}</small>
-          </span>
-        ),
-      },
-      {
-        id: "tenant",
-        header: "Khách thuê",
-        sortValue: (invoice) => invoice.tenantLabel,
-        cell: (invoice) => (
-          <span className="primary-cell">
-            <strong>{invoice.tenantLabel}</strong>
-            <small>Phòng {invoice.roomCode}</small>
-          </span>
-        ),
-      },
-      {
-        id: "dueDate",
-        header: "Hạn thanh toán",
-        sortValue: (invoice) => invoice.dueDate,
-        cell: (invoice) => formatDate(invoice.dueDate),
-      },
-      {
-        id: "total",
-        header: "Tổng tiền",
-        align: "end",
-        sortValue: (invoice) => invoice.total,
-        cell: (invoice) => (
-          <strong className="tabular">{formatCurrency(invoice.total)}</strong>
-        ),
-      },
-      {
-        id: "status",
-        header: "Trạng thái",
-        sortValue: (invoice) => invoice.status,
-        cell: (invoice) => {
-          const status = invoiceStatusMap[invoice.status];
-          return <Badge tone={status.tone}>{status.label}</Badge>;
-        },
-      },
-      {
-        id: "actions",
-        header: "Thao tác",
-        align: "end",
-        width: "5rem",
-        cell: (invoice) => (
-          <div className="row-actions">
-            <DropdownMenu
-              label={`Thao tác cho ${invoice.code}`}
-              trigger={<MoreHorizontal size={18} aria-hidden="true" />}
-              items={[
-                {
-                  label: "Gửi nhắc thanh toán",
-                  icon: Send,
-                  onSelect: () =>
-                    setMessage(`Đã mô phỏng gửi nhắc cho ${invoice.code}.`),
-                },
-                {
-                  label: "Xem hóa đơn",
-                  icon: ReceiptText,
-                  onSelect: () =>
-                    setMessage(`Đang xem hóa đơn ${invoice.code}.`),
-                },
-              ]}
-            />
-          </div>
-        ),
-      },
-    ],
+export function InvoicesPage() {
+  const role = useAuthStore((state) => state.role);
+  const canWrite = role === "admin" || role === "staff";
+  const [page, setPage] = useState(1);
+  const [status, setStatus] = useState<InvoiceTab>("all");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [paymentInvoice, setPaymentInvoice] = useState<InvoiceResponse | null>(null);
+  const [editing, setEditing] = useState<InvoiceResponse | null>(null);
+  const [form, setForm] = useState<InvoiceFormState>(emptyForm);
+  const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentNote, setPaymentNote] = useState("");
+  const [formError, setFormError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const load = useCallback(
+    (signal: AbortSignal) => invoicesApi.list({ pageNumber: page, pageSize: PAGE_SIZE, status: status === "all" ? undefined : status }, signal),
+    [page, status],
+  );
+  const { data, loading, error, retry } = useApiQuery(load);
+
+  const loadContracts = useCallback(
+    (signal: AbortSignal) => contractsApi.list({ pageNumber: 1, pageSize: 100 }, signal),
     [],
   );
+  const contractsQuery = useApiQuery(loadContracts);
+  const contractMap = useMemo(
+    () => new Map((contractsQuery.data?.items ?? []).map((contract) => [contract.id, contract])),
+    [contractsQuery.data],
+  );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const openCreate = () => {
+    setEditing(null);
+    setForm(emptyForm);
+    setFormError("");
+    setFieldErrors({});
+    setModalOpen(true);
+  };
+
+  const openEdit = (invoice: InvoiceResponse) => {
+    setEditing(invoice);
+    setForm({
+      contractId: invoice.contractId,
+      billingPeriod: `${invoice.billingYear}-${String(invoice.billingMonth).padStart(2, "0")}`,
+      rentAmount: String(invoice.rentAmount),
+      electricityStartReading: String(invoice.electricityStartReading),
+      electricityEndReading: String(invoice.electricityEndReading),
+      waterStartReading: String(invoice.waterStartReading),
+      waterEndReading: String(invoice.waterEndReading),
+      electricityUnitPrice: String(invoice.electricityUnitPrice),
+      waterUnitPrice: String(invoice.waterUnitPrice),
+    });
+    setFormError("");
+    setFieldErrors({});
+    setModalOpen(true);
+  };
+
+  const openPayment = (invoice: InvoiceResponse) => {
+    setPaymentInvoice(invoice);
+    setPaymentAmount(String(invoice.outstandingAmount));
+    setPaymentNote("");
+    setFormError("");
+    setFieldErrors({});
+  };
+
+  const issueInvoice = async (invoice: InvoiceResponse) => {
+    if (submitting) return;
+    setSubmitting(true);
+    setFormError("");
+    try {
+      const saved = await invoicesApi.issue(invoice.id);
+      setMessage(`Đã phát hành hóa đơn ${saved.id.slice(0, 8)}.`);
+      retry();
+    } catch (requestError) {
+      setFormError(normalizeApiError(requestError).detail);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const columns = useMemo<DataTableColumn<InvoiceResponse>[]>(
+    () => [
+      { id: "invoice", header: "Hóa đơn", sortValue: (invoice) => invoice.createdAt, cell: (invoice) => <span className="primary-cell"><strong>{invoice.id.slice(0, 8)}</strong><small>Kỳ {String(invoice.billingMonth).padStart(2, "0")}/{invoice.billingYear}</small></span> },
+      { id: "contract", header: "Hợp đồng", cell: (invoice) => { const contract = contractMap.get(invoice.contractId); return <span className="primary-cell"><strong>{contract?.roomNumber ?? invoice.contractId.slice(0, 8)}</strong><small>{contract?.tenantName ?? "Hợp đồng"}</small></span>; } },
+      { id: "amounts", header: "Tiền thuê / Điện / Nước", align: "end", cell: (invoice) => <span className="primary-cell align-end"><strong>{formatCurrency(invoice.rentAmount)}</strong><small>{formatCurrency(invoice.electricityAmount)} / {formatCurrency(invoice.waterAmount)}</small></span> },
+      { id: "total", header: "Tổng / Còn lại", align: "end", sortValue: (invoice) => invoice.totalAmount, cell: (invoice) => <span className="primary-cell align-end"><strong>{formatCurrency(invoice.totalAmount)}</strong><small>Còn {formatCurrency(invoice.outstandingAmount)}</small></span> },
+      { id: "status", header: "Trạng thái", sortValue: (invoice) => invoice.status, cell: (invoice) => { const definition = invoiceStatusMap[invoice.status]; return <Badge tone={definition.tone}>{definition.label}</Badge>; } },
+      ...(canWrite ? [{ id: "actions", header: "Thao tác", align: "end" as const, width: "5rem", cell: (invoice: InvoiceResponse) => {
+        const items = invoice.status === "draft"
+          ? [
+              { label: "Chỉnh sửa", icon: Pencil, onSelect: () => openEdit(invoice) },
+              { label: "Phát hành", icon: Send, onSelect: () => { void issueInvoice(invoice); } },
+            ]
+          : ["issued", "partiallyPaid", "overdue"].includes(invoice.status)
+            ? [{ label: "Ghi nhận thanh toán", icon: CircleDollarSign, onSelect: () => openPayment(invoice) }]
+            : [];
+        return items.length ? <DropdownMenu label={`Thao tác cho hóa đơn ${invoice.id}`} trigger={<MoreHorizontal size={18} aria-hidden="true" />} items={items} /> : <span>Chỉ đọc</span>;
+      } }] : []),
+    ],
+    [canWrite, contractMap, submitting],
+  );
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const room = rooms.find((item) => item.id === form.roomId);
-    const total = Number(form.total);
-    if (!room || !form.billingPeriod || !form.dueDate || total <= 0) {
-      setError(
-        "Hãy chọn phòng, kỳ hóa đơn, hạn thanh toán và tổng tiền hợp lệ.",
-      );
+    if (submitting) return;
+    const readings = numericReadings(form);
+    const values = Object.values(readings);
+    if ((!editing && (!form.contractId || !form.billingPeriod)) || values.some((value) => !Number.isFinite(value) || value < 0) || readings.electricityEndReading < readings.electricityStartReading || readings.waterEndReading < readings.waterStartReading) {
+      setFormError("Hãy nhập hợp đồng, kỳ hóa đơn, chỉ số và đơn giá hợp lệ.");
       return;
     }
 
-    const [year, month] = form.billingPeriod.split("-");
-    const invoice: Invoice = {
-      id: `invoice-local-${Date.now()}`,
-      code: `INV-${year?.slice(-2)}${month}-${String(
-        invoiceRows.length + 1,
-      ).padStart(3, "0")}`,
-      roomCode: room.code,
-      tenantLabel: room.tenantLabel ?? "Khách thuê mô phỏng",
-      billingPeriod: `${month}/${year}`,
-      total,
-      dueDate: form.dueDate,
-      status: "pending",
-    };
-    setInvoiceRows((current) => [invoice, ...current]);
-    setMessage(`Đã tạo hóa đơn ${invoice.code} trong dữ liệu mô phỏng.`);
-    setForm(initialForm);
-    setError("");
-    setModalOpen(false);
+    setSubmitting(true);
+    setFormError("");
+    setFieldErrors({});
+    try {
+      let saved: InvoiceResponse;
+      if (editing) {
+        const rentAmount = Number(form.rentAmount);
+        if (!Number.isFinite(rentAmount) || rentAmount < 0) throw new Error("Tiền thuê không hợp lệ.");
+        saved = await invoicesApi.update(editing.id, { rentAmount, ...readings });
+      } else {
+        const [year, month] = form.billingPeriod.split("-").map(Number);
+        saved = await invoicesApi.create({ contractId: form.contractId, billingMonth: month, billingYear: year, ...readings });
+      }
+      setMessage(`${editing ? "Đã cập nhật" : "Đã tạo"} hóa đơn ${saved.id.slice(0, 8)}.`);
+      setModalOpen(false);
+      setPage(1);
+      retry();
+    } catch (requestError) {
+      const apiError = normalizeApiError(requestError);
+      setFormError(apiError.detail);
+      setFieldErrors(apiError.fieldErrors ?? {});
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const totalDue = invoiceRows
-    .filter((invoice) => invoice.status !== "paid")
-    .reduce((total, invoice) => total + invoice.total, 0);
+  const registerPayment = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!paymentInvoice || submitting) return;
+    const amount = Number(paymentAmount);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setFormError("Số tiền thanh toán phải lớn hơn 0.");
+      return;
+    }
+    setSubmitting(true);
+    setFormError("");
+    try {
+      await invoicesApi.registerPayment(paymentInvoice.id, { amount, note: paymentNote.trim() || null });
+      setMessage(`Đã ghi nhận thanh toán cho hóa đơn ${paymentInvoice.id.slice(0, 8)}.`);
+      setPaymentInvoice(null);
+      retry();
+    } catch (requestError) {
+      const apiError = normalizeApiError(requestError);
+      setFormError(apiError.detail);
+      setFieldErrors(apiError.fieldErrors ?? {});
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="management-page">
       <PageHeader
         title="Quản lý hóa đơn"
-        description="Lập hóa đơn theo kỳ, theo dõi hạn thanh toán và công nợ."
-        actions={
-          <Button
-            leadingIcon={Plus}
-            onClick={() => {
-              setError("");
-              setModalOpen(true);
-            }}
-          >
-            Tạo hóa đơn
-          </Button>
-        }
+        description="Theo dõi tiền thuê, điện, nước, tổng tiền và công nợ theo dữ liệu Backend."
+        actions={<>{canWrite ? <Button leadingIcon={Plus} onClick={openCreate}>Tạo hóa đơn</Button> : null}<Link className="button button--secondary button--md" to="/payments">Lịch sử thanh toán</Link></>}
       />
-      {message ? (
-        <Alert title="Đã cập nhật dữ liệu bản mẫu" tone="success">
-          {message}
-        </Alert>
-      ) : null}
-      <ManagementSummary
-        items={[
-          {
-            label: "Tổng hóa đơn",
-            value: String(invoiceRows.length),
-            meta: "Trong hai kỳ gần nhất",
-            icon: ReceiptText,
-          },
-          {
-            label: "Đã thanh toán",
-            value: String(
-              invoiceRows.filter((item) => item.status === "paid").length,
-            ),
-            meta: "Đã đối soát",
-            icon: CircleDollarSign,
-          },
-          {
-            label: "Chờ thanh toán",
-            value: String(
-              invoiceRows.filter((item) => item.status === "pending").length,
-            ),
-            meta: "Trong thời hạn",
-            icon: Clock3,
-          },
-          {
-            label: "Công nợ cần thu",
-            value: formatCurrency(totalDue),
-            meta: "Bao gồm quá hạn",
-            icon: TriangleAlert,
-          },
-        ]}
-      />
+      {message ? <Alert title="Cập nhật thành công" tone="success">{message}</Alert> : null}
+      {formError && !modalOpen && !paymentInvoice ? <Alert title="Không thể cập nhật hóa đơn" tone="danger">{formError}</Alert> : null}
+      <Tabs label="Lọc theo trạng thái hóa đơn" activeId={status} onChange={(id) => { setStatus(id as InvoiceTab); setPage(1); }} items={[{ id: "all", label: "Tất cả" }, ...Object.entries(invoiceStatusMap).map(([id, definition]) => ({ id, label: definition.label }))]} />
       <DataTable
-        rows={invoiceRows}
+        rows={data?.items ?? []}
         columns={columns}
         getRowId={(invoice) => invoice.id}
-        getSearchText={(invoice) =>
-          `${invoice.code} ${invoice.roomCode} ${invoice.tenantLabel} ${invoice.billingPeriod}`
-        }
-        searchPlaceholder="Tìm hóa đơn, phòng hoặc khách thuê..."
-        filters={[
-          {
-            id: "status",
-            label: "Trạng thái",
-            options: [
-              { value: "paid", label: "Đã thanh toán" },
-              { value: "pending", label: "Chờ thanh toán" },
-              { value: "overdue", label: "Quá hạn" },
-            ],
-            predicate: (invoice, value) => invoice.status === value,
-          },
-        ]}
-        selectable
-        emptyTitle="Không tìm thấy hóa đơn"
-        emptyDescription="Thử đổi từ khóa, bộ lọc hoặc tạo hóa đơn mới."
+        getSearchText={(invoice) => `${invoice.id} ${invoice.contractId} ${invoice.billingMonth}/${invoice.billingYear}`}
+        searchPlaceholder="Tìm trong trang hiện tại..."
+        loading={loading}
+        error={error}
+        onRetry={retry}
+        page={data?.pageNumber ?? page}
+        pageSize={PAGE_SIZE}
+        totalPages={data?.totalPages ?? 1}
+        totalItems={data?.totalCount ?? 0}
+        onPageChange={setPage}
+        serverPagination
+        emptyTitle="Chưa có hóa đơn"
+        emptyDescription="Không có hóa đơn phù hợp với trạng thái đang chọn."
       />
 
-      <Modal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title="Tạo hóa đơn"
-        description="Lập hóa đơn mới cho một phòng đang thuê."
-        footer={
-          <>
-            <Button variant="secondary" onClick={() => setModalOpen(false)}>
-              Hủy
-            </Button>
-            <Button type="submit" form="create-invoice-form">
-              Tạo hóa đơn
-            </Button>
-          </>
-        }
-      >
-        <form
-          id="create-invoice-form"
-          className="management-form"
-          onSubmit={handleSubmit}
-          noValidate
-        >
-          {error ? (
-            <Alert title="Chưa thể tạo hóa đơn" tone="danger">
-              {error}
-            </Alert>
-          ) : null}
-          <Select
-            label="Phòng đang thuê"
-            placeholder="Chọn phòng"
-            value={form.roomId}
-            options={rooms
-              .filter((room) => room.status === "occupied")
-              .map((room) => ({
-                value: room.id,
-                label: `${room.code} · ${room.tenantLabel}`,
-              }))}
-            required
-            onChange={(event) =>
-              setForm((current) => ({
-                ...current,
-                roomId: event.target.value,
-              }))
-            }
-          />
-          <div className="form-grid form-grid--two">
-            <Input
-              label="Kỳ hóa đơn"
-              type="month"
-              value={form.billingPeriod}
-              required
-              onChange={(event) =>
-                setForm((current) => ({
-                  ...current,
-                  billingPeriod: event.target.value,
-                }))
-              }
-            />
-            <Input
-              label="Hạn thanh toán"
-              type="date"
-              value={form.dueDate}
-              required
-              onChange={(event) =>
-                setForm((current) => ({
-                  ...current,
-                  dueDate: event.target.value,
-                }))
-              }
-            />
-          </div>
-          <Input
-            label="Tổng tiền"
-            type="number"
-            inputMode="numeric"
-            min="1"
-            step="1000"
-            suffix="VND"
-            value={form.total}
-            helperText="Bao gồm tiền thuê và các dịch vụ đã chốt trong kỳ."
-            required
-            onChange={(event) =>
-              setForm((current) => ({
-                ...current,
-                total: event.target.value,
-              }))
-            }
-          />
+      <Modal open={modalOpen} onClose={() => { if (!submitting) setModalOpen(false); }} title={editing ? "Chỉnh sửa hóa đơn nháp" : "Tạo hóa đơn nháp"} description="Điền chỉ số đầu/cuối và đơn giá; Backend sẽ tính các thành tiền." footer={<><Button variant="secondary" disabled={submitting} onClick={() => setModalOpen(false)}>Hủy</Button><Button type="submit" form="invoice-form" loading={submitting}>Lưu hóa đơn</Button></>}>
+        <form id="invoice-form" className="management-form" onSubmit={handleSubmit} noValidate>
+          {formError ? <Alert title="Không thể lưu hóa đơn" tone="danger">{formError}</Alert> : null}
+          {!editing ? <><Select label="Hợp đồng" placeholder={contractsQuery.loading ? "Đang tải hợp đồng..." : "Chọn hợp đồng"} value={form.contractId} options={(contractsQuery.data?.items ?? []).filter((contract: RentalContractResponse) => contract.status === "active").map((contract) => ({ value: contract.id, label: `${contract.roomNumber ?? contract.roomId.slice(0, 8)} · ${contract.tenantName ?? contract.tenantId.slice(0, 8)}` }))} error={contractsQuery.error || fieldErrors.contractId?.[0]} required onChange={(event) => setForm((current) => ({ ...current, contractId: event.target.value }))} /><Input label="Kỳ hóa đơn" type="month" value={form.billingPeriod} error={fieldErrors.billingMonth?.[0] ?? fieldErrors.billingYear?.[0]} required onChange={(event) => setForm((current) => ({ ...current, billingPeriod: event.target.value }))} /></> : <Input label="Tiền thuê" type="number" min="0" suffix="VND" value={form.rentAmount} error={fieldErrors.rentAmount?.[0]} required onChange={(event) => setForm((current) => ({ ...current, rentAmount: event.target.value }))} />}
+          <div className="form-grid form-grid--two"><Input label="Chỉ số điện đầu" type="number" min="0" step="0.01" value={form.electricityStartReading} error={fieldErrors.electricityStartReading?.[0]} required onChange={(event) => setForm((current) => ({ ...current, electricityStartReading: event.target.value }))} /><Input label="Chỉ số điện cuối" type="number" min="0" step="0.01" value={form.electricityEndReading} error={fieldErrors.electricityEndReading?.[0]} required onChange={(event) => setForm((current) => ({ ...current, electricityEndReading: event.target.value }))} /></div>
+          <div className="form-grid form-grid--two"><Input label="Chỉ số nước đầu" type="number" min="0" step="0.01" value={form.waterStartReading} error={fieldErrors.waterStartReading?.[0]} required onChange={(event) => setForm((current) => ({ ...current, waterStartReading: event.target.value }))} /><Input label="Chỉ số nước cuối" type="number" min="0" step="0.01" value={form.waterEndReading} error={fieldErrors.waterEndReading?.[0]} required onChange={(event) => setForm((current) => ({ ...current, waterEndReading: event.target.value }))} /></div>
+          <div className="form-grid form-grid--two"><Input label="Đơn giá điện" type="number" min="0" suffix="VND" value={form.electricityUnitPrice} error={fieldErrors.electricityUnitPrice?.[0]} required onChange={(event) => setForm((current) => ({ ...current, electricityUnitPrice: event.target.value }))} /><Input label="Đơn giá nước" type="number" min="0" suffix="VND" value={form.waterUnitPrice} error={fieldErrors.waterUnitPrice?.[0]} required onChange={(event) => setForm((current) => ({ ...current, waterUnitPrice: event.target.value }))} /></div>
+        </form>
+      </Modal>
+
+      <Modal open={Boolean(paymentInvoice)} onClose={() => { if (!submitting) setPaymentInvoice(null); }} title="Ghi nhận thanh toán" description={paymentInvoice ? `Công nợ hiện tại: ${formatCurrency(paymentInvoice.outstandingAmount)}` : undefined} footer={<><Button variant="secondary" disabled={submitting} onClick={() => setPaymentInvoice(null)}>Hủy</Button><Button type="submit" form="payment-form" loading={submitting}>Ghi nhận</Button></>}>
+        <form id="payment-form" className="management-form" onSubmit={registerPayment} noValidate>
+          {formError ? <Alert title="Không thể ghi nhận thanh toán" tone="danger">{formError}</Alert> : null}
+          <Input label="Số tiền" type="number" min="1" suffix="VND" value={paymentAmount} error={fieldErrors.amount?.[0]} required onChange={(event) => setPaymentAmount(event.target.value)} />
+          <Textarea label="Ghi chú" value={paymentNote} error={fieldErrors.note?.[0]} onChange={(event) => setPaymentNote(event.target.value)} />
         </form>
       </Modal>
     </div>
