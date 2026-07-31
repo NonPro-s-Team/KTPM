@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router";
 import { AppShell } from "./components/layout/AppShell";
 import { RoutePlaceholder } from "./pages/system/RoutePlaceholder";
 import { ForbiddenPage, NotFoundPage } from "./pages/system/SystemPages";
