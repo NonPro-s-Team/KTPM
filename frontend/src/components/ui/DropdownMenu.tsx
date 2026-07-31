@@ -22,6 +22,7 @@ export interface DropdownMenuProps {
   label: string;
   items: DropdownMenuItem[];
   align?: "start" | "end";
+  triggerClassName?: string;
 }
 
 export function DropdownMenu({
@@ -29,6 +30,7 @@ export function DropdownMenu({
   label,
   items,
   align = "end",
+  triggerClassName = "",
 }: DropdownMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -81,7 +83,7 @@ export function DropdownMenu({
     <div className="dropdown" ref={rootRef}>
       <button
         type="button"
-        className="dropdown__trigger"
+        className={`dropdown__trigger ${triggerClassName}`}
         aria-label={label}
         aria-haspopup="menu"
         aria-expanded={open}
