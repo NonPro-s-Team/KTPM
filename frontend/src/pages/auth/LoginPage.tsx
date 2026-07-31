@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router";
+import { BrandLogo } from "../../components/BrandLogo";
 import {
   Button,
   Checkbox,
@@ -65,14 +66,12 @@ export function LoginPage() {
     <main className="login-page">
       <section className="login-panel" aria-labelledby="login-title">
         <header className="login-panel__header">
-          <a className="brand" href="/login" aria-label="RMS - Đăng nhập">
-            <span className="brand__mark" aria-hidden="true">
-              R
-            </span>
-            <span className="brand__copy">
-              <strong>RMS</strong>
-              <small>Quản lý phòng trọ</small>
-            </span>
+          <a
+            className="brand"
+            href="/login"
+            aria-label="TroConnect - Đăng nhập"
+          >
+            <BrandLogo />
           </a>
           <ThemeToggle />
         </header>
@@ -174,7 +173,7 @@ export function LoginPage() {
         </div>
 
         <footer className="login-panel__footer">
-          © 2026 RMS
+          © 2026 TroConnect
           <span aria-hidden="true">·</span>
           Hệ thống quản lý phòng trọ
         </footer>

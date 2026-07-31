@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
+import { BrandLogo } from "../BrandLogo";
 import {
   Breadcrumb,
   DropdownMenu,
@@ -65,17 +66,9 @@ function Brand({ collapsed = false }: { collapsed?: boolean }) {
     <NavLink
       className="brand"
       to="/dashboard"
-      aria-label="RMS - Trang tổng quan"
+      aria-label="TroConnect - Trang tổng quan"
     >
-      <span className="brand__mark" aria-hidden="true">
-        R
-      </span>
-      {!collapsed ? (
-        <span className="brand__copy">
-          <strong>RMS</strong>
-          <small>Quản lý phòng trọ</small>
-        </span>
-      ) : null}
+      <BrandLogo compact={collapsed} />
     </NavLink>
   );
 }
@@ -291,7 +284,7 @@ export function AppShell() {
 
   const breadcrumbs = useMemo(
     () => [
-      { label: "RMS", to: "/dashboard" },
+      { label: "TroConnect", to: "/dashboard" },
       { label: routeLabels[location.pathname] ?? "Trang" },
     ],
     [location.pathname],
