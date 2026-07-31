@@ -58,6 +58,18 @@ const MaintenancePage = lazy(() =>
   })),
 );
 
+const UsersPage = lazy(() =>
+  import("./pages/users/UsersPage").then((module) => ({
+    default: module.UsersPage,
+  })),
+);
+
+const SettingsPage = lazy(() =>
+  import("./pages/settings/SettingsPage").then((module) => ({
+    default: module.SettingsPage,
+  })),
+);
+
 const moduleRoutes = [
   {
     path: "dashboard",
@@ -146,6 +158,10 @@ export default function App() {
                   <PaymentsPage />
                 ) : route.path === "maintenance" ? (
                   <MaintenancePage />
+                ) : route.path === "users" ? (
+                  <UsersPage />
+                ) : route.path === "settings" ? (
+                  <SettingsPage />
                 ) : (
                   <RoutePlaceholder
                     title={route.title}
