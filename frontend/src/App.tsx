@@ -22,6 +22,36 @@ const RoomsPage = lazy(() =>
   })),
 );
 
+const PropertiesPage = lazy(() =>
+  import("./pages/properties/PropertiesPage").then((module) => ({
+    default: module.PropertiesPage,
+  })),
+);
+
+const TenantsPage = lazy(() =>
+  import("./pages/tenants/TenantsPage").then((module) => ({
+    default: module.TenantsPage,
+  })),
+);
+
+const ContractsPage = lazy(() =>
+  import("./pages/contracts/ContractsPage").then((module) => ({
+    default: module.ContractsPage,
+  })),
+);
+
+const InvoicesPage = lazy(() =>
+  import("./pages/invoices/InvoicesPage").then((module) => ({
+    default: module.InvoicesPage,
+  })),
+);
+
+const PaymentsPage = lazy(() =>
+  import("./pages/payments/PaymentsPage").then((module) => ({
+    default: module.PaymentsPage,
+  })),
+);
+
 const moduleRoutes = [
   {
     path: "dashboard",
@@ -96,8 +126,18 @@ export default function App() {
               element={
                 route.path === "dashboard" ? (
                   <DashboardPage />
+                ) : route.path === "properties" ? (
+                  <PropertiesPage />
                 ) : route.path === "rooms" ? (
                   <RoomsPage />
+                ) : route.path === "tenants" ? (
+                  <TenantsPage />
+                ) : route.path === "contracts" ? (
+                  <ContractsPage />
+                ) : route.path === "invoices" ? (
+                  <InvoicesPage />
+                ) : route.path === "payments" ? (
+                  <PaymentsPage />
                 ) : (
                   <RoutePlaceholder
                     title={route.title}
