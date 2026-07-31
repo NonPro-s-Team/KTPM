@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
+import { LoginPage } from "./pages/auth/LoginPage";
 import { RoutePlaceholder } from "./pages/system/RoutePlaceholder";
 import { ForbiddenPage, NotFoundPage } from "./pages/system/SystemPages";
 
@@ -59,16 +60,7 @@ const moduleRoutes = [
 export default function App() {
   return (
     <Routes>
-      <Route
-        path="/login"
-        element={
-          <RoutePlaceholder
-            title="Đăng nhập"
-            description="Truy cập hệ thống quản lý phòng trọ."
-            standalone
-          />
-        }
-      />
+      <Route path="/login" element={<LoginPage />} />
       <Route element={<AppShell />}>
         <Route index element={<Navigate to="/dashboard" replace />} />
         {moduleRoutes.map((route) => (

@@ -1,6 +1,7 @@
 import {
   useId,
   type InputHTMLAttributes,
+  type ReactNode,
   type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from "react";
@@ -47,9 +48,11 @@ function describedBy(
 }
 
 export interface InputProps
-  extends InputHTMLAttributes<HTMLInputElement>, FieldMetaProps {
-  prefix?: string;
-  suffix?: string;
+  extends
+    Omit<InputHTMLAttributes<HTMLInputElement>, "prefix">,
+    FieldMetaProps {
+  prefix?: ReactNode;
+  suffix?: ReactNode;
 }
 
 export function Input({
