@@ -1,65 +1,60 @@
 # RMS Frontend
 
-Giao diện quản lý phòng trọ được xây dựng bằng React, TypeScript và Vite. Bản
-hiện tại sử dụng dữ liệu mô phỏng an toàn để minh họa đầy đủ các luồng quản lý,
-đồng thời đã chuẩn bị lớp dịch vụ để kết nối API thật.
+Giao diện React + TypeScript của TroConnect, kết nối trực tiếp với RMS Backend API bằng Axios và quản lý phiên JWT bằng Zustand.
 
 ## Yêu cầu
 
 - Node.js 22.22 trở lên
 - npm 10 trở lên
+- RMS Backend đang chạy và đã cho phép CORS từ origin frontend
 
-## Khởi chạy
+## Khởi chạy cục bộ
 
 ```bash
-npm install
+npm ci
+copy .env.example .env
 npm run dev
 ```
 
-Ứng dụng mặc định chạy tại `http://localhost:5173`.
-
-## Biến môi trường
-
-Sao chép `.env.example` thành `.env` nếu cần thay đổi địa chỉ API:
+`.env.example` sử dụng:
 
 ```env
-VITE_API_BASE_URL=/api
+VITE_API_BASE_URL=http://localhost:5000/api
 ```
 
-Không đặt khóa bí mật hoặc token truy cập trong biến môi trường của frontend.
+Repository đã cấu hình `npm run dev` qua `.env.development` để gọi API đã host:
 
-## Các lệnh kiểm tra
+```env
+VITE_API_BASE_URL=https://api.troconnect.site/api
+```
+
+Nếu cần chạy backend cục bộ, tạo `.env.local` từ `.env.example`; giá trị trong `.env.local` sẽ ghi đè cấu hình development mặc định.
+
+Production build mặc định đọc `.env.production` với:
+
+```env
+VITE_API_BASE_URL=https://api.troconnect.site/api
+```
+
+Nền tảng deploy vẫn có thể ghi đè `VITE_API_BASE_URL` khi build. Không đưa token, mật khẩu hoặc secret vào biến môi trường frontend.
+
+## Kiểm tra
 
 ```bash
-npm run format:check
 npm run typecheck
 npm run lint
 npm run test
 npm run build
 ```
 
-## Tuyến giao diện
+## Tuyến chính
 
-- `/login`
-- `/dashboard`
-- `/properties`
-- `/rooms`
-- `/tenants`
-- `/contracts`
-- `/invoices`
-- `/payments`
-- `/maintenance`
-- `/users`
-- `/settings`
-- `/403`
+- `/login`: đăng nhập bằng tên đăng nhập và mật khẩu.
+- `/dashboard`: chỉ Admin/Staff.
+- `/rooms`, `/contracts`, `/invoices`, `/payments`, `/maintenance`: được bảo vệ và giới hạn thao tác theo vai trò.
+- `/tenants`: danh sách cho Admin/Staff; hồ sơ hiện tại cho Tenant.
+- `/account`: thông tin phiên và đổi mật khẩu.
+- `/settings`: tùy chọn theme lưu trong trình duyệt.
+- `/properties`: thông báo rõ API chưa được hỗ trợ.
 
-Các địa chỉ không tồn tại sẽ hiển thị trang 404.
-
-## Giao diện và dữ liệu
-
-- Hỗ trợ Sáng, Tối và Theo hệ thống; lựa chọn được lưu trên trình duyệt.
-- Responsive tại mobile, tablet và desktop.
-- Dữ liệu trong `src/data/mockData.ts` chỉ dùng cho bản mẫu.
-- Các hàm trong `src/services` là điểm nối dành cho API backend sau này.
-
-Tài liệu thiết kế, kết quả review và ảnh chụp nằm trong `docs/ui-ux`.
+Tài liệu chi tiết nằm tại `docs/frontend-backend-integration.md`.
