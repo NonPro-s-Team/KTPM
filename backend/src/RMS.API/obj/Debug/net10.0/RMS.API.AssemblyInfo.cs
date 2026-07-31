@@ -13,7 +13,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RMS.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< HEAD
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6880d29619caeae743c5ab866e2218ba3f9078ab")]
+=======
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d2cff88ab3ac48406b4cf78b6c56128cbdb050e")]
+>>>>>>> 3e5019120a83d3c280279f78f5ed081ae63d792e
 [assembly: System.Reflection.AssemblyProductAttribute("RMS.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RMS.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
