@@ -1,10 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta
+      name="description"
+      content="TroConnect - Hệ thống quản lý phòng trọ thông minh dành cho chủ nhà, nhân viên quản lý và kế toán."
+    />
+    <script>
+      (() => {
+        try {
+          const savedTheme = localStorage.getItem("rms-theme");
+          const prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          const resolvedTheme =
+            savedTheme === "light" || savedTheme === "dark"
+              ? savedTheme
+              : prefersDark
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = resolvedTheme;
+          document.documentElement.style.colorScheme = resolvedTheme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+          document.documentElement.style.colorScheme = "light";
+        }
+      })();
+    </script>
+    <title>TroConnect · Quản lý phòng trọ thông minh</title>
   </head>
   <body>
     <div id="root"></div>

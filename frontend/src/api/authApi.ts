@@ -1,15 +1,17 @@
-import api from './axiosConfig';
-import type { LoginRequest, LoginResponse, ChangePasswordRequest } from '../types/auth.types';
+import type { ChangePasswordRequest, LoginRequest, LoginResponse } from "../types/api";
+import { httpClient } from "./httpClient";
 
-export const login = async (data: LoginRequest): Promise<LoginResponse> => {
-  const response = await api.post<LoginResponse>('/auth/login', data);
-  return response.data;
-};
-
-export const logout = async (): Promise<void> => {
-  localStorage.removeItem('token');
-};
-
-export const changePassword = async (data: ChangePasswordRequest): Promise<void> => {
-  await api.post('/auth/change-password', data);
+export const authApi = {
+  async login(request: LoginRequest, signal?: AbortSignal) {
+    const response = await httpClient.post<LoginResponse>("/auth/login", request, {
+      signal,
+    });
+    return response.data;
+  },
+  async logout() {
+    await httpClient.post("/auth/logout");
+  },
+  async changePassword(request: ChangePasswordRequest) {
+    await httpClient.post("/auth/change-password", request);
+  },
 };
