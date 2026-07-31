@@ -22,8 +22,7 @@ export function RoutePlaceholder({
         <div>
           <h2>Đang hoàn thiện module</h2>
           <p>
-            Khung giao diện và các trạng thái tương tác đang được kết nối với dữ
-            liệu bản mẫu.
+            Module này chưa có luồng API phù hợp trong phiên bản hiện tại.
           </p>
         </div>
       </Card>
