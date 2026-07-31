@@ -7,6 +7,27 @@
       name="description"
       content="Hệ thống quản lý phòng trọ RMS dành cho chủ nhà, nhân viên quản lý và kế toán."
     />
+    <script>
+      (() => {
+        try {
+          const savedTheme = localStorage.getItem("rms-theme");
+          const prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          const resolvedTheme =
+            savedTheme === "light" || savedTheme === "dark"
+              ? savedTheme
+              : prefersDark
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = resolvedTheme;
+          document.documentElement.style.colorScheme = resolvedTheme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+          document.documentElement.style.colorScheme = "light";
+        }
+      })();
+    </script>
     <title>RMS · Quản lý phòng trọ</title>
   </head>
   <body>
