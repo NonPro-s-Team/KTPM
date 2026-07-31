@@ -1,8 +1,20 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
-import { LoginPage } from "./pages/auth/LoginPage";
 import { RoutePlaceholder } from "./pages/system/RoutePlaceholder";
 import { ForbiddenPage, NotFoundPage } from "./pages/system/SystemPages";
+
+const LoginPage = lazy(() =>
+  import("./pages/auth/LoginPage").then((module) => ({
+    default: module.LoginPage,
+  })),
+);
+
+const DashboardPage = lazy(() =>
+  import("./pages/dashboard/DashboardPage").then((module) => ({
+    default: module.DashboardPage,
+  })),
+);
 
 const moduleRoutes = [
   {
@@ -59,25 +71,38 @@ const moduleRoutes = [
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route element={<AppShell />}>
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        {moduleRoutes.map((route) => (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={
-              <RoutePlaceholder
-                title={route.title}
-                description={route.description}
-              />
-            }
-          />
-        ))}
-      </Route>
-      <Route path="/403" element={<ForbiddenPage />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+    <Suspense
+      fallback={
+        <div className="route-loading" role="status" aria-live="polite">
+          <span />
+          <p>Đang tải giao diện...</p>
+        </div>
+      }
+    >
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route element={<AppShell />}>
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          {moduleRoutes.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={
+                route.path === "dashboard" ? (
+                  <DashboardPage />
+                ) : (
+                  <RoutePlaceholder
+                    title={route.title}
+                    description={route.description}
+                  />
+                )
+              }
+            />
+          ))}
+        </Route>
+        <Route path="/403" element={<ForbiddenPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Suspense>
   );
 }
