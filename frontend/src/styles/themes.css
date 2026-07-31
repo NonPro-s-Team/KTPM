@@ -53,6 +53,8 @@
   --table-row-hover: var(--surface-hover);
   --modal-background: var(--surface);
   --dropdown-background: var(--surface);
+  --brand-plate-background: var(--neutral-0);
+  --brand-plate-border: rgb(10 10 10 / 0.1);
   --chart-primary: var(--neutral-800);
   --chart-secondary: var(--neutral-400);
   --chart-tertiary: var(--neutral-300);

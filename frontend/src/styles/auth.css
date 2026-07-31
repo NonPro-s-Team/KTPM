@@ -21,6 +21,11 @@
   gap: var(--space-4);
 }
 
+.login-panel__header .brand-logo--wordmark {
+  width: 12rem;
+  height: 3.25rem;
+}
+
 .login-panel__body {
   display: grid;
   width: min(100%, 27rem);
@@ -286,6 +291,11 @@
     width: 100%;
     gap: var(--space-6);
     padding-block: var(--space-8);
+  }
+
+  .login-panel__header .brand-logo--wordmark {
+    width: 10.25rem;
+    height: 2.75rem;
   }
 
   .login-form__options {
