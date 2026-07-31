@@ -52,6 +52,12 @@ const PaymentsPage = lazy(() =>
   })),
 );
 
+const MaintenancePage = lazy(() =>
+  import("./pages/maintenance/MaintenancePage").then((module) => ({
+    default: module.MaintenancePage,
+  })),
+);
+
 const moduleRoutes = [
   {
     path: "dashboard",
@@ -138,6 +144,8 @@ export default function App() {
                   <InvoicesPage />
                 ) : route.path === "payments" ? (
                   <PaymentsPage />
+                ) : route.path === "maintenance" ? (
+                  <MaintenancePage />
                 ) : (
                   <RoutePlaceholder
                     title={route.title}
