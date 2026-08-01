@@ -21,7 +21,7 @@ import { useApiQuery } from "../../hooks/useApiQuery";
 import { useAuthStore } from "../../store/authStore";
 import type { ContractStatus, RentalContractResponse, RoomResponse, TenantResponse } from "../../types/api";
 import { formatCurrency, formatDate } from "../../utils/formatters";
-import { contractStatusMap, isContractExpiringSoon } from "../../utils/status";
+import { contractStatusMap, isContractExpiringSoon, roomStatusMap } from "../../utils/status";
 import "../../styles/management.css";
 
 const PAGE_SIZE = 10;
@@ -183,15 +183,11 @@ export function ContractsPage() {
       >
         <form id="contract-form" className="management-form" onSubmit={handleSubmit} noValidate>
           {formError ? <Alert title="Không thể lưu hợp đồng" tone="danger">{formError}</Alert> : null}
-          {!editing ? <><Select label="Phòng" placeholder={options.loading ? "Đang tải phòng..." : "Chọn phòng"} searchable value={form.roomId} options={(options.data?.rooms ?? []).map((room) => ({ value: room.id, label: `${room.roomNumber} · ${roomStatusMapLabel(room.status)}` }))} error={options.error || fieldErrors.roomId?.[0]} helperText={(options.data?.roomsTotalCount ?? 0) > 100 ? "Chỉ hiển thị 100 phòng đầu, dùng ô tìm kiếm bên trên để lọc thêm." : undefined} required onChange={(event) => setForm((current) => ({ ...current, roomId: event.target.value }))} /><Select label="Khách thuê" placeholder={options.loading ? "Đang tải khách thuê..." : "Chọn khách thuê"} searchable value={form.tenantId} options={(options.data?.tenants ?? []).map((tenant) => ({ value: tenant.id, label: `${tenant.fullName} · @${tenant.username}` }))} error={options.error || fieldErrors.tenantId?.[0]} helperText={(options.data?.tenantsTotalCount ?? 0) > 100 ? "Chỉ hiển thị 100 khách thuê đầu, dùng ô tìm kiếm bên trên để lọc thêm." : undefined} required onChange={(event) => setForm((current) => ({ ...current, tenantId: event.target.value }))} /></> : null}
+          {!editing ? <><Select label="Phòng" placeholder={options.loading ? "Đang tải phòng..." : "Chọn phòng"} searchable value={form.roomId} options={(options.data?.rooms ?? []).map((room) => ({ value: room.id, label: `${room.roomNumber} · ${roomStatusMap[room.status].label}` }))} error={options.error || fieldErrors.roomId?.[0]} helperText={(options.data?.roomsTotalCount ?? 0) > 100 ? "Chỉ hiển thị 100 phòng đầu, dùng ô tìm kiếm bên trên để lọc thêm." : undefined} required onChange={(event) => setForm((current) => ({ ...current, roomId: event.target.value }))} /><Select label="Khách thuê" placeholder={options.loading ? "Đang tải khách thuê..." : "Chọn khách thuê"} searchable value={form.tenantId} options={(options.data?.tenants ?? []).map((tenant) => ({ value: tenant.id, label: `${tenant.fullName} · @${tenant.username}` }))} error={options.error || fieldErrors.tenantId?.[0]} helperText={(options.data?.tenantsTotalCount ?? 0) > 100 ? "Chỉ hiển thị 100 khách thuê đầu, dùng ô tìm kiếm bên trên để lọc thêm." : undefined} required onChange={(event) => setForm((current) => ({ ...current, tenantId: event.target.value }))} /></> : null}
           <div className="form-grid form-grid--two"><Input label="Ngày bắt đầu" type="date" value={form.startDate} error={fieldErrors.startDate?.[0]} required onChange={(event) => setForm((current) => ({ ...current, startDate: event.target.value }))} /><Input label="Ngày kết thúc" type="date" value={form.endDate} error={fieldErrors.endDate?.[0]} required onChange={(event) => setForm((current) => ({ ...current, endDate: event.target.value }))} /></div>
           <Input label="Giá thuê mỗi tháng" type="number" inputMode="numeric" min="1" suffix="VND" value={form.monthlyRent} error={fieldErrors.monthlyRent?.[0]} required onChange={(event) => setForm((current) => ({ ...current, monthlyRent: event.target.value }))} />
         </form>
       </Modal>
     </div>
   );
-}
-
-function roomStatusMapLabel(status: RoomResponse["status"]) {
-  return status === "available" ? "Phòng trống" : status === "occupied" ? "Đang thuê" : status === "maintenance" ? "Bảo trì" : "Ngừng hoạt động";
 }
