@@ -158,7 +158,7 @@ export function MaintenancePage() {
         columns={columns}
         getRowId={(request) => request.id}
         getSearchText={(request) => `${request.title} ${request.description} ${request.roomId}`}
-        searchPlaceholder="Tìm trong trang hiện tại..."
+        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
         loading={loading}
         error={error}
         onRetry={retry}
