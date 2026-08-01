@@ -53,9 +53,11 @@ export function LoginPage() {
     } catch (error) {
       const apiError = normalizeApiError(error);
       setRequestError(
-        apiError.status === 401
-          ? "Tên đăng nhập hoặc mật khẩu không chính xác."
-          : apiError.detail,
+        apiError.code === "ACCOUNT_LOCKED"
+          ? "Tài khoản đã bị khóa do nhập sai quá nhiều lần. Hãy liên hệ admin để mở khóa."
+          : apiError.status === 401
+            ? "Tên đăng nhập hoặc mật khẩu không chính xác."
+            : apiError.detail,
       );
       setErrors({
         username: apiError.fieldErrors?.username?.[0],

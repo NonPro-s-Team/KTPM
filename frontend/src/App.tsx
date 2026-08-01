@@ -55,7 +55,6 @@ export default function App() {
               <Route path="invoices" element={<InvoicesPage />} />
               <Route path="payments" element={<PaymentsPage />} />
               <Route path="maintenance" element={<MaintenancePage />} />
-              <Route path="properties" element={<PropertiesPage />} />
               <Route path="account" element={<AccountPage />} />
               <Route path="settings" element={<SettingsPage />} />
             </Route>
