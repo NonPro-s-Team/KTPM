@@ -13,10 +13,12 @@ public sealed class MigrationTests : SqlServerIntegrationTestBase
         "Invoices",
         "MaintenanceRequests",
         "MaintenanceRequestUpdates",
+        "PasswordResetTokens",
         "Payments",
         "RentalContracts",
         "Rooms",
         "Tenants",
+        "UserInvitations",
         "Users"
     ];
 
@@ -47,7 +49,10 @@ public sealed class MigrationTests : SqlServerIntegrationTestBase
                 "UX_RentalContracts_Room_Active",
                 "UX_Invoices_Contract_BillingPeriod",
                 "IX_Payments_InvoiceId_PaidAt",
-                "IX_MaintenanceRequestUpdates_Request_OccurredAt"
+                "IX_MaintenanceRequestUpdates_Request_OccurredAt",
+                "UX_Users_Email",
+                "UX_UserInvitations_TokenHash",
+                "UX_PasswordResetTokens_TokenHash"
             ]);
         indexes["UX_RentalContracts_Room_Active"].IsUnique
             .Should()
