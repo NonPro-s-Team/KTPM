@@ -2,6 +2,7 @@ import { CheckCircle2, MoreHorizontal, Pencil, Play, Plus, Wrench } from "lucide
 import { useCallback, useMemo, useState, type FormEvent } from "react";
 import { normalizeApiError } from "../../api/httpClient";
 import { maintenanceApi } from "../../api/maintenanceApi";
+import { roomsApi } from "../../api/roomsApi";
 import {
   Alert,
   Badge,
@@ -50,6 +51,16 @@ export function MaintenancePage() {
   );
   const { data, loading, error, retry } = useApiQuery(load);
 
+  const loadRooms = useCallback(
+    (signal: AbortSignal) => roomsApi.list({ pageNumber: 1, pageSize: 100 }, signal),
+    [],
+  );
+  const roomsQuery = useApiQuery(loadRooms);
+  const roomMap = useMemo(
+    () => new Map((roomsQuery.data?.items ?? []).map((room) => [room.id, room.roomNumber])),
+    [roomsQuery.data],
+  );
+
   const openCreate = () => {
     setTitle("");
     setDescription("");
@@ -69,7 +80,7 @@ export function MaintenancePage() {
   const columns = useMemo<DataTableColumn<MaintenanceRequestResponse>[]>(
     () => [
       { id: "request", header: "Yêu cầu", sortValue: (request) => request.title, cell: (request) => <span className="primary-cell"><strong>{request.title}</strong><small>{request.description}</small></span> },
-      { id: "room", header: "Phòng", cell: (request) => request.roomId.slice(0, 8) },
+      { id: "room", header: "Phòng", cell: (request) => roomMap.get(request.roomId) ?? request.roomId.slice(0, 8) },
       { id: "createdAt", header: "Ngày tạo", sortValue: (request) => request.createdAt, cell: (request) => formatDate(request.createdAt) },
       { id: "timeline", header: "Mốc xử lý", cell: (request) => <span className="primary-cell"><strong>{request.closedAt ? `Đóng ${formatDate(request.closedAt)}` : request.resolvedAt ? `Xử lý ${formatDate(request.resolvedAt)}` : request.startedAt ? `Bắt đầu ${formatDate(request.startedAt)}` : "Chưa bắt đầu"}</strong><small>{request.updates.length} cập nhật</small></span> },
       { id: "status", header: "Trạng thái", sortValue: (request) => request.status, cell: (request) => { const definition = maintenanceStatusMap[request.status]; return <Badge tone={definition.tone}>{definition.label}</Badge>; } },
@@ -84,7 +95,7 @@ export function MaintenancePage() {
         return items.length ? <DropdownMenu label={`Thao tác cho ${request.title}`} trigger={<MoreHorizontal size={18} aria-hidden="true" />} items={items} /> : <span>Chỉ đọc</span>;
       } }] : []),
     ],
-    [canManage],
+    [canManage, roomMap],
   );
 
   const handleCreate = async (event: FormEvent<HTMLFormElement>) => {
@@ -157,7 +168,7 @@ export function MaintenancePage() {
         rows={data?.items ?? []}
         columns={columns}
         getRowId={(request) => request.id}
-        getSearchText={(request) => `${request.title} ${request.description} ${request.roomId}`}
+        getSearchText={(request) => `${request.title} ${request.description} ${roomMap.get(request.roomId) ?? request.roomId}`}
         searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
         loading={loading}
         error={error}

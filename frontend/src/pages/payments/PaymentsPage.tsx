@@ -38,7 +38,7 @@ export function PaymentsPage() {
       { id: "payment", header: "Thanh toán", sortValue: (payment) => payment.paidAt, cell: (payment) => <span className="primary-cell"><strong>{payment.id.slice(0, 8)}</strong><small>{formatDate(payment.paidAt)}</small></span> },
       { id: "amount", header: "Số tiền", align: "end", sortValue: (payment) => payment.amount, cell: (payment) => <strong className="tabular">{formatCurrency(payment.amount)}</strong> },
       { id: "note", header: "Ghi chú", cell: (payment) => payment.note || "Không có ghi chú" },
-      { id: "recordedBy", header: "Người ghi nhận", cell: (payment) => payment.recordedByUserId.slice(0, 8) },
+      { id: "recordedBy", header: "Mã người ghi nhận", cell: (payment) => payment.recordedByUserId.slice(0, 8) },
     ],
     [],
   );
