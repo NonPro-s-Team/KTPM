@@ -38,4 +38,40 @@ describe("route guards", () => {
 
     expect(await screen.findByText("Không có quyền")).toBeInTheDocument();
   });
+
+  it.each(["admin", "staff", "tenant"] as const)(
+    "RoleGuard cho route /rooms cho phép role %s truy cập",
+    async (role) => {
+      useAuthStore.setState({ isHydrated: true, isAuthenticated: true, role });
+      render(
+        <MemoryRouter initialEntries={["/rooms"]}>
+          <Routes>
+            <Route element={<RoleGuard allowedRoles={["admin", "staff", "tenant"]} />}>
+              <Route path="/rooms" element={<p>Danh sách phòng</p>} />
+            </Route>
+            <Route path="/403" element={<p>Không có quyền</p>} />
+          </Routes>
+        </MemoryRouter>,
+      );
+
+      expect(await screen.findByText("Danh sách phòng")).toBeInTheDocument();
+    },
+  );
+
+  it("RoleGuard vẫn chuyển tới 403 khi role chưa xác định, kể cả trên route mới được bọc guard (/rooms)", async () => {
+    useAuthStore.setState({ isHydrated: true, isAuthenticated: true, role: null });
+    render(
+      <MemoryRouter initialEntries={["/rooms"]}>
+        <Routes>
+          <Route element={<RoleGuard allowedRoles={["admin", "staff", "tenant"]} />}>
+            <Route path="/rooms" element={<p>Danh sách phòng</p>} />
+          </Route>
+          <Route path="/403" element={<p>Không có quyền</p>} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(await screen.findByText("Không có quyền")).toBeInTheDocument();
+    expect(screen.queryByText("Danh sách phòng")).not.toBeInTheDocument();
+  });
 });

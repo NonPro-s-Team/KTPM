@@ -49,16 +49,18 @@ export default function App() {
             <Route element={<RoleGuard allowedRoles={["admin", "staff"]} />}>
               <Route path="dashboard" element={<DashboardPage />} />
             </Route>
-            <Route path="rooms" element={<RoomsPage />} />
-            <Route path="tenants" element={<TenantsPage />} />
-            <Route path="contracts" element={<ContractsPage />} />
-            <Route path="invoices" element={<InvoicesPage />} />
-            <Route path="payments" element={<PaymentsPage />} />
-            <Route path="maintenance" element={<MaintenancePage />} />
-            <Route path="properties" element={<PropertiesPage />} />
-            <Route path="account" element={<UsersPage />} />
+            <Route element={<RoleGuard allowedRoles={["admin", "staff", "tenant"]} />}>
+              <Route path="rooms" element={<RoomsPage />} />
+              <Route path="tenants" element={<TenantsPage />} />
+              <Route path="contracts" element={<ContractsPage />} />
+              <Route path="invoices" element={<InvoicesPage />} />
+              <Route path="payments" element={<PaymentsPage />} />
+              <Route path="maintenance" element={<MaintenancePage />} />
+              <Route path="properties" element={<PropertiesPage />} />
+              <Route path="account" element={<UsersPage />} />
+              <Route path="settings" element={<SettingsPage />} />
+            </Route>
             <Route path="users" element={<Navigate to="/account" replace />} />
-            <Route path="settings" element={<SettingsPage />} />
           </Route>
           <Route path="/403" element={<ForbiddenPage />} />
         </Route>
