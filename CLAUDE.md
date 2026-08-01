@@ -53,7 +53,7 @@ npm run format / format:check     # prettier
 npx playwright test               # e2e (separate from vitest unit tests)
 ```
 
-`VITE_API_BASE_URL` resolves from `.env.production` (build) or `.env.development` (dev, points at the hosted API by default); `.env.local` overrides both for local backend development. Never put secrets in frontend env vars.
+`VITE_API_BASE_URL` resolves from `.env.production` (build) or `.env.development` (dev, points at `http://localhost:5000/api` by default); `.env.local` overrides both if the local backend runs on a different port. Never put secrets in frontend env vars.
 
 ### CI
 
