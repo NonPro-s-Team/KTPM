@@ -61,6 +61,14 @@ npx playwright test               # e2e (separate from vitest unit tests)
 
 **Known discrepancy:** the original SRS/spec targeted .NET 8, but the actual build decision moved to **.NET 10** — all `.csproj` files correctly target `net10.0`. `ci.yml`'s `setup-dotnet` step still pins `8.x`, left over from the original spec; it has not been updated to match. Don't "fix" this to net10 without confirming with the maintainer first, and don't assume CI is validating against the real target framework.
 
+## Deployment
+
+Production runs on Azure and **auto-deploys on every push to `main`** — there is no staging environment or approval gate, so merging to `main` ships immediately:
+
+- **Frontend**: https://www.troconnect.site (Azure Static Web Apps), deployed by `.github/workflows/azure-static-web-apps-proud-stone-0b36ca300.yml` (uploads `frontend/dist`, the Vite build output).
+- **Backend API**: https://api.troconnect.site/swagger/index.html (Azure App Service `rms-api-hientm-2026`), deployed by `.github/workflows/main_rms-api-hientm-2026.yml` (`dotnet publish` of `RMS.API`). This workflow correctly uses the .NET 10 SDK — unlike `ci.yml`, it is not affected by the `8.x`/`net10.0` discrepancy above.
+- **Database**: production also runs on Azure, separate from the local `docker-compose` SQL Server used for development and the ephemeral Testcontainers instance used by integration tests. Connection string and other secrets are configured directly in Azure App Service settings, not in the repo.
+
 ## Architecture
 
 ### Backend: Clean Architecture, strict dependency direction
