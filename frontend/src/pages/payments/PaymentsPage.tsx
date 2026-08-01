@@ -85,9 +85,11 @@ export function PaymentsPage() {
       <Select
         label="Hóa đơn"
         placeholder={invoices.loading ? "Đang tải hóa đơn..." : "Chọn một hóa đơn"}
+        searchable
         value={invoiceId}
         options={(invoices.data?.items ?? []).map((invoice) => ({ value: invoice.id, label: `${invoice.id.slice(0, 8)} · ${String(invoice.billingMonth).padStart(2, "0")}/${invoice.billingYear} · ${formatCurrency(invoice.totalAmount)}` }))}
         error={invoices.error}
+        helperText={(invoices.data?.totalCount ?? 0) > 100 ? "Chỉ hiển thị 100 hóa đơn đầu, dùng ô tìm kiếm bên trên để lọc thêm." : undefined}
         onChange={(event) => setInvoiceId(event.target.value)}
       />
       <DataTable
