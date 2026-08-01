@@ -52,6 +52,12 @@ internal static class PersistenceExceptionTranslator
                     ApplicationErrorCodes.UsernameAlreadyExists,
                     "The username is already in use."),
             var message when message.Contains(
+                "UX_Users_Email",
+                StringComparison.OrdinalIgnoreCase) =>
+                new ConflictException(
+                    ApplicationErrorCodes.EmailAlreadyExists,
+                    "The email is already in use."),
+            var message when message.Contains(
                 "UX_Rooms_RoomNumber",
                 StringComparison.OrdinalIgnoreCase) =>
                 new ConflictException(

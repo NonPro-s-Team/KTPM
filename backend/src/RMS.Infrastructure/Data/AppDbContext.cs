@@ -21,6 +21,9 @@ public sealed class AppDbContext : DbContext, IUnitOfWork
         Set<MaintenanceRequest>();
     public DbSet<MaintenanceRequestUpdate> MaintenanceRequestUpdates =>
         Set<MaintenanceRequestUpdate>();
+    public DbSet<UserInvitation> UserInvitations => Set<UserInvitation>();
+    public DbSet<PasswordResetToken> PasswordResetTokens =>
+        Set<PasswordResetToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

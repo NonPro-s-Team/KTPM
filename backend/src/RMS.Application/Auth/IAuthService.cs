@@ -16,5 +16,13 @@ public interface IAuthService
         UnlockUserRequest request,
         CancellationToken cancellationToken = default);
 
+    Task RequestPasswordResetAsync(
+        RequestPasswordResetRequest request,
+        CancellationToken cancellationToken = default);
+
+    Task ResetPasswordAsync(
+        ResetPasswordRequest request,
+        CancellationToken cancellationToken = default);
+
     Task LogoutAsync(CancellationToken cancellationToken = default);
 }

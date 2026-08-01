@@ -1,4 +1,10 @@
-import type { ChangePasswordRequest, LoginRequest, LoginResponse } from "../types/api";
+import type {
+  ChangePasswordRequest,
+  LoginRequest,
+  LoginResponse,
+  RequestPasswordResetRequest,
+  ResetPasswordRequest,
+} from "../types/api";
 import { httpClient } from "./httpClient";
 
 export const authApi = {
@@ -13,5 +19,11 @@ export const authApi = {
   },
   async changePassword(request: ChangePasswordRequest) {
     await httpClient.post("/auth/change-password", request);
+  },
+  async forgotPassword(request: RequestPasswordResetRequest) {
+    await httpClient.post("/auth/forgot-password", request);
+  },
+  async resetPassword(request: ResetPasswordRequest) {
+    await httpClient.post("/auth/reset-password", request);
   },
 };

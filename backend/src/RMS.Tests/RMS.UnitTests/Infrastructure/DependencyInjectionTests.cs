@@ -1,6 +1,8 @@
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Moq;
 using RMS.Application.Common.Interfaces.Persistence;
 using RMS.Infrastructure;
 using RMS.Infrastructure.Data;
@@ -22,10 +24,11 @@ public sealed class DependencyInjectionTests
                 ["Jwt:Audience"] = "RMS.Client.Tests",
                 ["Jwt:Key"] =
                     "A-development-test-key-with-at-least-32-bytes",
-                ["Jwt:ExpirationMinutes"] = "60"
+                ["Jwt:ExpirationMinutes"] = "60",
+                ["Frontend:BaseUrl"] = "http://localhost:5173"
             });
         var services = new ServiceCollection();
-        services.AddInfrastructure(configuration);
+        services.AddInfrastructure(configuration, DevelopmentEnvironment());
         using var provider = services.BuildServiceProvider();
         using var scope = provider.CreateScope();
 
@@ -53,7 +56,8 @@ public sealed class DependencyInjectionTests
     {
         var services = new ServiceCollection();
         var action = () => services.AddInfrastructure(
-            BuildConfiguration(new Dictionary<string, string?>()));
+            BuildConfiguration(new Dictionary<string, string?>()),
+            DevelopmentEnvironment());
 
         action.Should()
             .Throw<InvalidOperationException>()
@@ -65,4 +69,12 @@ public sealed class DependencyInjectionTests
         new ConfigurationBuilder()
             .AddInMemoryCollection(values)
             .Build();
+
+    private static IHostEnvironment DevelopmentEnvironment()
+    {
+        var environment = new Mock<IHostEnvironment>();
+        environment.Setup(e => e.EnvironmentName)
+            .Returns(Environments.Development);
+        return environment.Object;
+    }
 }

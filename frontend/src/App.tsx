@@ -8,6 +8,9 @@ import { RoleGuard } from "./routes/RoleGuard";
 import { useAuthStore } from "./store/authStore";
 
 const LoginPage = lazy(() => import("./pages/auth/LoginPage").then((module) => ({ default: module.LoginPage })));
+const ForgotPasswordPage = lazy(() => import("./pages/auth/ForgotPasswordPage").then((module) => ({ default: module.ForgotPasswordPage })));
+const ResetPasswordPage = lazy(() => import("./pages/auth/ResetPasswordPage").then((module) => ({ default: module.ResetPasswordPage })));
+const AcceptInvitationPage = lazy(() => import("./pages/auth/AcceptInvitationPage").then((module) => ({ default: module.AcceptInvitationPage })));
 const DashboardPage = lazy(() => import("./pages/dashboard/DashboardPage").then((module) => ({ default: module.DashboardPage })));
 const RoomsPage = lazy(() => import("./pages/rooms/RoomsPage").then((module) => ({ default: module.RoomsPage })));
 const TenantsPage = lazy(() => import("./pages/tenants/TenantsPage").then((module) => ({ default: module.TenantsPage })));
@@ -42,6 +45,9 @@ export default function App() {
             </LoginRoute>
           }
         />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        <Route path="/invite/:token" element={<AcceptInvitationPage />} />
         <Route element={<ProtectedRoute />}>
           <Route element={<AppShell />}>
             <Route index element={<HomeRedirect />} />
