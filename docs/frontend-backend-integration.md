@@ -24,7 +24,7 @@ Local frontend:
 VITE_API_BASE_URL=http://localhost:5000/api
 ```
 
-Mặc định `npm run dev` đọc `frontend/.env.development` và gọi `https://api.troconnect.site/api`. Để chuyển về backend cục bộ, tạo `frontend/.env.local` với URL localhost ở trên; Vite ưu tiên `.env.local` hơn `.env.development`.
+Mặc định `npm run dev` đọc `frontend/.env.development`, vốn đã trỏ sẵn về `http://localhost:5000/api` để tránh vô tình gọi vào API production. Nếu backend cục bộ chạy ở cổng khác, tạo `frontend/.env.local` với URL tương ứng; Vite ưu tiên `.env.local` hơn `.env.development`.
 
 Production frontend:
 
