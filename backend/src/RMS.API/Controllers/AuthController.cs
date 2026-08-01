@@ -74,6 +74,42 @@ public sealed class AuthController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>Requests a password reset link by email.</summary>
+    [AllowAnonymous]
+    [HttpPost("forgot-password")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(
+        typeof(ValidationProblemDetails),
+        StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ForgotPassword(
+        [FromBody] RequestPasswordResetRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _authService.RequestPasswordResetAsync(
+            request,
+            cancellationToken);
+
+        return Accepted();
+    }
+
+    /// <summary>Resets a password using a reset token from email.</summary>
+    [AllowAnonymous]
+    [HttpPost("reset-password")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(
+        typeof(ValidationProblemDetails),
+        StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ResetPassword(
+        [FromBody] ResetPasswordRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _authService.ResetPasswordAsync(
+            request,
+            cancellationToken);
+
+        return NoContent();
+    }
+
     /// <summary>Unlocks a user account. Admin only.</summary>
     [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     [HttpPost("users/{userId:guid}/unlock")]

@@ -1,6 +1,6 @@
 import { BarChart3, Building2, CheckCircle2, Eye, EyeOff, KeyRound, ShieldCheck } from "lucide-react";
 import { useState, type FormEvent } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { normalizeApiError } from "../../api/httpClient";
 import { BrandLogo } from "../../components/BrandLogo";
 import { Alert, Button, Checkbox, IconButton, Input, ThemeToggle } from "../../components/ui";
@@ -107,6 +107,7 @@ export function LoginPage() {
             />
             <div className="login-form__options">
               <Checkbox label="Ghi nhớ đăng nhập" checked={remember} onChange={(event) => setRemember(event.target.checked)} />
+              <Link className="login-form__link" to="/forgot-password">Quên mật khẩu?</Link>
             </div>
             <Button type="submit" loading={loading}>Đăng nhập</Button>
           </form>

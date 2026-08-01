@@ -1,8 +1,82 @@
-import { Check, Monitor, Moon, Sun } from "lucide-react";
-import { Card, PageHeader } from "../../components/ui";
+import { Check, Monitor, Moon, Sun, UserPlus } from "lucide-react";
+import { useState, type FormEvent } from "react";
+import { invitationsApi } from "../../api/invitationsApi";
+import { normalizeApiError } from "../../api/httpClient";
+import { Alert, Button, Card, Input, PageHeader, Select } from "../../components/ui";
 import { useTheme } from "../../hooks/useTheme";
 import type { ThemeMode } from "../../providers/themeContext";
+import { useAuthStore } from "../../store/authStore";
 import "../../styles/settings.css";
+
+const invitationRoleOptions = [
+  { value: "staff", label: "Nhân viên" },
+  { value: "admin", label: "Quản trị viên" },
+];
+
+function InviteUserCard() {
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState<"staff" | "admin">("staff");
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (submitting) return;
+    if (!email.trim()) {
+      setError("Hãy nhập email của người được mời.");
+      return;
+    }
+
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    try {
+      await invitationsApi.create({ email: email.trim(), role });
+      setEmail("");
+      setMessage(`Đã gửi lời mời tới ${email.trim()}.`);
+    } catch (requestError) {
+      const apiError = normalizeApiError(requestError);
+      setError(
+        apiError.code === "EMAIL_ALREADY_EXISTS"
+          ? "Email này đã được sử dụng bởi một tài khoản khác."
+          : apiError.detail,
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <Card className="settings-card settings-card--narrow">
+      <div className="settings-card__header">
+        <div>
+          <h2>Mời tài khoản mới</h2>
+          <p>Gửi lời mời qua email để tạo tài khoản Nhân viên hoặc Quản trị viên.</p>
+        </div>
+      </div>
+      <form className="management-form" onSubmit={handleSubmit} noValidate>
+        {message ? <Alert title="Đã gửi lời mời" tone="success">{message}</Alert> : null}
+        {error ? <Alert title="Không thể gửi lời mời" tone="danger">{error}</Alert> : null}
+        <Input
+          label="Email"
+          type="email"
+          placeholder="nhanvien@vidu.com"
+          value={email}
+          required
+          onChange={(event) => { setEmail(event.target.value); setError(""); }}
+        />
+        <Select
+          label="Vai trò"
+          options={invitationRoleOptions}
+          value={role}
+          onChange={(event) => setRole(event.target.value as "staff" | "admin")}
+        />
+        <Button type="submit" leadingIcon={UserPlus} loading={submitting}>Gửi lời mời</Button>
+      </form>
+    </Card>
+  );
+}
 
 const themeOptions: Array<{
   id: ThemeMode;
@@ -17,6 +91,7 @@ const themeOptions: Array<{
 
 export function SettingsPage() {
   const { theme, setTheme } = useTheme();
+  const role = useAuthStore((state) => state.role);
   return (
     <div className="settings-page">
       <PageHeader title="Cài đặt" description="Tùy chọn giao diện được lưu cục bộ trong trình duyệt; Backend chưa có Settings API." />
@@ -36,6 +111,7 @@ export function SettingsPage() {
           })}
         </div>
       </Card>
+      {role === "admin" ? <InviteUserCard /> : null}
     </div>
   );
 }

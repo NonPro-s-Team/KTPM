@@ -36,6 +36,46 @@ export interface ChangePasswordRequest {
   newPassword: string;
 }
 
+export interface RequestPasswordResetRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}
+
+export interface CreateInvitationRequest {
+  email: string;
+  role: Exclude<UserRole, "tenant">;
+}
+
+export interface InvitationResponse {
+  id: string;
+  email: string;
+  role: UserRole;
+  expiresAt: string;
+  createdAt: string;
+}
+
+export interface InvitationPreviewResponse {
+  email: string;
+  role: UserRole;
+  expiresAt: string;
+}
+
+export interface AcceptInvitationRequest {
+  token: string;
+  username: string;
+  password: string;
+}
+
+export interface AcceptInvitationResponse {
+  userId: string;
+  username: string;
+  role: UserRole;
+}
+
 export interface PagedResult<T> {
   items: T[];
   pageNumber: number;

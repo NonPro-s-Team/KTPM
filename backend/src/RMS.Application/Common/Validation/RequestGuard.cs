@@ -1,10 +1,25 @@
+using System.Text.RegularExpressions;
 using RMS.Application.Common.Exceptions;
 using RMS.Application.Common.Models;
 
 namespace RMS.Application.Common.Validation;
 
-internal static class RequestGuard
+internal static partial class RequestGuard
 {
+    [GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
+    private static partial Regex EmailPattern();
+
+    public static string Email(string? value, string fieldName, int? maxLength = null)
+    {
+        var email = Required(value, fieldName, maxLength);
+        if (!EmailPattern().IsMatch(email))
+        {
+            throw new ValidationException($"{fieldName} is not a valid email address.");
+        }
+
+        return email.ToLowerInvariant();
+    }
+
     public static T NotNull<T>(T? value, string fieldName)
         where T : class
     {

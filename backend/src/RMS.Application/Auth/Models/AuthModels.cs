@@ -16,3 +16,7 @@ public sealed record ChangePasswordRequest(
     string NewPassword);
 
 public sealed record UnlockUserRequest(Guid UserId);
+
+public sealed record RequestPasswordResetRequest(string Email);
+
+public sealed record ResetPasswordRequest(string Token, string NewPassword);

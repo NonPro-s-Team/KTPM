@@ -22,7 +22,7 @@ public sealed class EfModelTests
     }
 
     [Fact]
-    public void Model_ContainsOnlyEightOfficialEntityTypes()
+    public void Model_ContainsOnlyOfficialEntityTypes()
     {
         var entityTypes = _model.GetEntityTypes()
             .Select(entityType => entityType.ClrType)
@@ -37,7 +37,9 @@ public sealed class EfModelTests
                 typeof(Invoice),
                 typeof(Payment),
                 typeof(MaintenanceRequest),
-                typeof(MaintenanceRequestUpdate)
+                typeof(MaintenanceRequestUpdate),
+                typeof(UserInvitation),
+                typeof(PasswordResetToken)
             ]);
         entityTypes.All(
                 type => _model.FindEntityType(type)!.FindPrimaryKey() != null)
@@ -170,12 +172,23 @@ public sealed class EfModelTests
     [Fact]
     public void AllRelationships_UseRestrictDeleteBehavior()
     {
+        // PasswordResetToken.UserId is the sole intentional exception: reset
+        // tokens are ephemeral and tightly scoped to their user, so they
+        // should be removed automatically if the user is ever deleted.
         _model.GetEntityTypes()
             .SelectMany(entity => entity.GetForeignKeys())
+            .Where(foreignKey =>
+                foreignKey.DeclaringEntityType.ClrType != typeof(PasswordResetToken))
             .Should()
             .OnlyContain(
                 foreignKey =>
                     foreignKey.DeleteBehavior == DeleteBehavior.Restrict);
+
+        _model.FindEntityType(typeof(PasswordResetToken))!
+            .GetForeignKeys()
+            .Should()
+            .ContainSingle(
+                foreignKey => foreignKey.DeleteBehavior == DeleteBehavior.Cascade);
     }
 
     private void AssertPrecision<TEntity>(
