@@ -10,7 +10,6 @@ import { useAuthStore } from "./store/authStore";
 const LoginPage = lazy(() => import("./pages/auth/LoginPage").then((module) => ({ default: module.LoginPage })));
 const DashboardPage = lazy(() => import("./pages/dashboard/DashboardPage").then((module) => ({ default: module.DashboardPage })));
 const RoomsPage = lazy(() => import("./pages/rooms/RoomsPage").then((module) => ({ default: module.RoomsPage })));
-const PropertiesPage = lazy(() => import("./pages/properties/PropertiesPage").then((module) => ({ default: module.PropertiesPage })));
 const TenantsPage = lazy(() => import("./pages/tenants/TenantsPage").then((module) => ({ default: module.TenantsPage })));
 const ContractsPage = lazy(() => import("./pages/contracts/ContractsPage").then((module) => ({ default: module.ContractsPage })));
 const InvoicesPage = lazy(() => import("./pages/invoices/InvoicesPage").then((module) => ({ default: module.InvoicesPage })));
@@ -56,7 +55,6 @@ export default function App() {
               <Route path="invoices" element={<InvoicesPage />} />
               <Route path="payments" element={<PaymentsPage />} />
               <Route path="maintenance" element={<MaintenancePage />} />
-              <Route path="properties" element={<PropertiesPage />} />
               <Route path="account" element={<UsersPage />} />
               <Route path="settings" element={<SettingsPage />} />
             </Route>
