@@ -241,7 +241,7 @@ export function InvoicesPage() {
         columns={columns}
         getRowId={(invoice) => invoice.id}
         getSearchText={(invoice) => `${invoice.id} ${invoice.contractId} ${invoice.billingMonth}/${invoice.billingYear}`}
-        searchPlaceholder="Tìm trong trang hiện tại..."
+        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
         loading={loading}
         error={error}
         onRetry={retry}

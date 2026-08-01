@@ -160,7 +160,7 @@ export function ContractsPage() {
         columns={columns}
         getRowId={(contract) => contract.id}
         getSearchText={(contract) => `${contract.id} ${contract.roomNumber ?? ""} ${contract.tenantName ?? ""}`}
-        searchPlaceholder="Tìm trong trang hiện tại..."
+        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
         loading={loading}
         error={error}
         onRetry={retry}
