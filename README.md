@@ -16,7 +16,6 @@ Hệ thống quản lý phòng trọ (Room Management System) xây dựng trên 
 - **Build Tool:** Vite
 - **State Management:** Zustand
 - **HTTP Client:** Axios
-- **E2E Testing:** Playwright
 
 ### DevOps
 - **CI/CD:** GitHub Actions
@@ -44,7 +43,6 @@ RMS/
 │   │   ├── pages/                # Page components
 │   │   ├── store/                # Zustand stores
 │   │   └── types/                # TypeScript type definitions
-│   └── e2e/                      # Playwright tests
 ├── .github/workflows/ci.yml
 ├── docker-compose.yml
 └── README.md
@@ -116,9 +114,9 @@ dotnet test backend/src/RMS.Tests/RMS.UnitTests/RMS.UnitTests.csproj
 # SQL Server 2022 integration tests (requires Docker)
 dotnet test backend/src/RMS.Tests/RMS.IntegrationTests/RMS.IntegrationTests.csproj
 
-# Frontend e2e tests
+# Frontend unit/component tests
 cd frontend
-npx playwright test
+npm run test
 ```
 
 ## License

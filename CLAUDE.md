@@ -50,7 +50,6 @@ npm run test                      # vitest run
 npm run test -- path/to/File.test.tsx -t "test name"   # single test
 npm run build                     # tsc -b && vite build
 npm run format / format:check     # prettier
-npx playwright test               # e2e (separate from vitest unit tests)
 ```
 
 `VITE_API_BASE_URL` resolves from `.env.production` (build) or `.env.development` (dev, points at the hosted API by default); `.env.local` overrides both for local backend development. Never put secrets in frontend env vars.
@@ -121,7 +120,7 @@ JWT bearer auth with three roles (`RMS.Domain.Enums.UserRole`: `Admin`, `Staff`,
 ### Testing structure
 
 - Backend: `RMS.UnitTests` (pure unit tests, mocked dependencies) vs. `RMS.IntegrationTests` (real SQL Server via Testcontainers, `SqlServerCollection`/`SqlServerContainerFixture` disable parallelization and reset all tables between tests via `ResetAsync`).
-- Frontend: Vitest + Testing Library for unit/component tests (co-located `*.test.tsx`/`*.test.ts`), Playwright for e2e (`frontend/e2e`, run separately via `npx playwright test`).
+- Frontend: Vitest + Testing Library for unit/component tests (co-located `*.test.tsx`/`*.test.ts`). No e2e suite exists — `@playwright/test` was previously declared as a dependency but never wired up (no config, no `frontend/e2e` directory) and has been removed.
 
 ## Docs map
 
