@@ -65,6 +65,10 @@ export function ContractsPage() {
     return { rooms: rooms.items, roomsTotalCount: rooms.totalCount, tenants: tenants.items, tenantsTotalCount: tenants.totalCount };
   }, [canWrite]);
   const options = useApiQuery(loadOptions);
+  const availableRooms = useMemo(
+    () => (options.data?.rooms ?? []).filter((room) => room.status === "available"),
+    [options.data],
+  );
 
   const openCreate = () => {
     setEditing(null);

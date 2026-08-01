@@ -43,7 +43,6 @@ export interface DataTableProps<T> {
   totalItems?: number;
   onPageChange?: (page: number) => void;
   serverPagination?: boolean;
-  selectable?: boolean;
   loading?: boolean;
   error?: string;
   onRetry?: () => void;
@@ -75,7 +74,6 @@ export function DataTable<T>({
   totalItems: controlledTotalItems,
   onPageChange,
   serverPagination = false,
-  selectable = false,
   loading = false,
   error,
   onRetry,
@@ -90,7 +88,6 @@ export function DataTable<T>({
     direction: SortDirection;
   } | null>(null);
   const [internalPage, setInternalPage] = useState(1);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const filteredRows = useMemo(() => {
     const normalizedSearch = deferredSearch.trim().toLocaleLowerCase("vi");
@@ -137,9 +134,6 @@ export function DataTable<T>({
     if (serverPagination) onPageChange?.(nextPage);
     else setInternalPage(nextPage);
   };
-  const allVisibleSelected =
-    visibleRows.length > 0 &&
-    visibleRows.every((row) => selectedIds.has(getRowId(row)));
 
   const toggleSort = (columnId: string) => {
     setSort((current) => {
@@ -150,27 +144,6 @@ export function DataTable<T>({
         columnId,
         direction: current.direction === "asc" ? "desc" : "asc",
       };
-    });
-  };
-
-  const toggleAllVisible = () => {
-    setSelectedIds((current) => {
-      const next = new Set(current);
-      if (allVisibleSelected) {
-        visibleRows.forEach((row) => next.delete(getRowId(row)));
-      } else {
-        visibleRows.forEach((row) => next.add(getRowId(row)));
-      }
-      return next;
-    });
-  };
-
-  const toggleRow = (rowId: string) => {
-    setSelectedIds((current) => {
-      const next = new Set(current);
-      if (next.has(rowId)) next.delete(rowId);
-      else next.add(rowId);
-      return next;
     });
   };
 
@@ -215,15 +188,6 @@ export function DataTable<T>({
         </div>
       </div>
 
-      {selectedIds.size > 0 ? (
-        <div className="data-table__selection" role="status">
-          Đã chọn <strong>{selectedIds.size}</strong> mục
-          <button type="button" onClick={() => setSelectedIds(new Set())}>
-            Bỏ chọn
-          </button>
-        </div>
-      ) : null}
-
       {error ? (
         <div className="data-table__state" role="alert">
           <div>
@@ -256,18 +220,6 @@ export function DataTable<T>({
           <table>
             <thead>
               <tr>
-                {selectable ? (
-                  <th className="data-table__select-column">
-                    <label className="data-table__checkbox-target">
-                      <input
-                        type="checkbox"
-                        aria-label="Chọn tất cả hàng đang hiển thị"
-                        checked={allVisibleSelected}
-                        onChange={toggleAllVisible}
-                      />
-                    </label>
-                  </th>
-                ) : null}
                 {columns.map((column) => {
                   const direction =
                     sort?.columnId === column.id ? sort.direction : null;
@@ -311,11 +263,6 @@ export function DataTable<T>({
               {loading
                 ? Array.from({ length: pageSize }, (_, rowIndex) => (
                     <tr key={`skeleton-${rowIndex}`}>
-                      {selectable ? (
-                        <td>
-                          <Skeleton width="1rem" height="1rem" />
-                        </td>
-                      ) : null}
                       {columns.map((column) => (
                         <td key={column.id}>
                           <Skeleton width="75%" height="1rem" />
@@ -325,21 +272,8 @@ export function DataTable<T>({
                   ))
                 : visibleRows.map((row) => {
                     const rowId = getRowId(row);
-                    const selected = selectedIds.has(rowId);
                     return (
-                      <tr key={rowId} data-selected={selected || undefined}>
-                        {selectable ? (
-                          <td className="data-table__select-column">
-                            <label className="data-table__checkbox-target">
-                              <input
-                                type="checkbox"
-                                aria-label={`Chọn hàng ${rowId}`}
-                                checked={selected}
-                                onChange={() => toggleRow(rowId)}
-                              />
-                            </label>
-                          </td>
-                        ) : null}
+                      <tr key={rowId}>
                         {columns.map((column) => (
                           <td
                             key={column.id}

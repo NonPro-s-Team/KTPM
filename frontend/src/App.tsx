@@ -10,13 +10,12 @@ import { useAuthStore } from "./store/authStore";
 const LoginPage = lazy(() => import("./pages/auth/LoginPage").then((module) => ({ default: module.LoginPage })));
 const DashboardPage = lazy(() => import("./pages/dashboard/DashboardPage").then((module) => ({ default: module.DashboardPage })));
 const RoomsPage = lazy(() => import("./pages/rooms/RoomsPage").then((module) => ({ default: module.RoomsPage })));
-const PropertiesPage = lazy(() => import("./pages/properties/PropertiesPage").then((module) => ({ default: module.PropertiesPage })));
 const TenantsPage = lazy(() => import("./pages/tenants/TenantsPage").then((module) => ({ default: module.TenantsPage })));
 const ContractsPage = lazy(() => import("./pages/contracts/ContractsPage").then((module) => ({ default: module.ContractsPage })));
 const InvoicesPage = lazy(() => import("./pages/invoices/InvoicesPage").then((module) => ({ default: module.InvoicesPage })));
 const PaymentsPage = lazy(() => import("./pages/payments/PaymentsPage").then((module) => ({ default: module.PaymentsPage })));
 const MaintenancePage = lazy(() => import("./pages/maintenance/MaintenancePage").then((module) => ({ default: module.MaintenancePage })));
-const UsersPage = lazy(() => import("./pages/users/UsersPage").then((module) => ({ default: module.UsersPage })));
+const AccountPage = lazy(() => import("./pages/account/AccountPage").then((module) => ({ default: module.AccountPage })));
 const SettingsPage = lazy(() => import("./pages/settings/SettingsPage").then((module) => ({ default: module.SettingsPage })));
 
 function HomeRedirect() {
@@ -57,10 +56,9 @@ export default function App() {
               <Route path="payments" element={<PaymentsPage />} />
               <Route path="maintenance" element={<MaintenancePage />} />
               <Route path="properties" element={<PropertiesPage />} />
-              <Route path="account" element={<UsersPage />} />
+              <Route path="account" element={<AccountPage />} />
               <Route path="settings" element={<SettingsPage />} />
             </Route>
-            <Route path="users" element={<Navigate to="/account" replace />} />
           </Route>
           <Route path="/403" element={<ForbiddenPage />} />
         </Route>

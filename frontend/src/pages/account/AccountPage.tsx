@@ -8,7 +8,7 @@ import { userRoleMap } from "../../utils/status";
 import "../../styles/management.css";
 import "../../styles/settings.css";
 
-export function UsersPage() {
+export function AccountPage() {
   const username = useAuthStore((state) => state.username) ?? "";
   const role = useAuthStore((state) => state.role) ?? "tenant";
   const [currentPassword, setCurrentPassword] = useState("");

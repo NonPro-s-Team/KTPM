@@ -973,29 +973,6 @@
   padding: var(--space-1) var(--space-8) var(--space-1) var(--space-3);
 }
 
-.data-table__selection {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  border-top: 1px solid var(--divider);
-  background: var(--surface-selected);
-  color: var(--text-secondary);
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--font-size-sm);
-}
-
-.data-table__selection strong {
-  color: var(--text-primary);
-}
-
-.data-table__selection button {
-  margin-left: auto;
-  border: 0;
-  background: transparent;
-  color: var(--text-primary);
-  font-weight: var(--font-weight-medium);
-}
-
 .data-table__scroll {
   max-width: 100%;
   overflow-x: auto;
@@ -1030,8 +1007,7 @@
   transition: background-color var(--duration-fast) var(--ease-standard);
 }
 
-.data-table tbody tr:hover,
-.data-table tbody tr[data-selected] {
+.data-table tbody tr:hover {
   background: var(--table-row-hover);
 }
 
@@ -1054,26 +1030,6 @@
   color: inherit;
   font: inherit;
   font-weight: inherit;
-}
-
-.data-table__select-column {
-  width: 3rem;
-  padding: 0 var(--space-1) !important;
-  text-align: center !important;
-}
-
-.data-table__checkbox-target {
-  display: inline-grid;
-  width: 2.75rem;
-  height: 2.75rem;
-  cursor: pointer;
-  place-items: center;
-}
-
-.data-table input[type="checkbox"] {
-  width: 1rem;
-  height: 1rem;
-  accent-color: var(--primary-background);
 }
 
 .data-table .align-center {
