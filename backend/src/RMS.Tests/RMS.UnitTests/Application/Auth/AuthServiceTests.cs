@@ -5,6 +5,7 @@ using RMS.Application.Auth.Models;
 using RMS.Application.Common.Exceptions;
 using RMS.Application.Common.Interfaces.Persistence;
 using RMS.Application.Common.Interfaces.Security;
+using RMS.Application.Common.Interfaces.Services;
 using RMS.Application.Common.Models;
 using RMS.Domain.Entities;
 using RMS.Domain.Enums;
@@ -17,8 +18,12 @@ namespace RMS.UnitTests.Application.Auth;
 public class AuthServiceTests
 {
     private readonly Mock<IUserRepository> _users = new();
+    private readonly Mock<IPasswordResetTokenRepository> _resetTokens = new();
     private readonly Mock<IPasswordHasher> _passwordHasher = new();
     private readonly Mock<IAccessTokenService> _tokens = new();
+    private readonly Mock<ISecureTokenGenerator> _secureTokenGenerator = new();
+    private readonly Mock<IEmailSender> _emailSender = new();
+    private readonly Mock<IEmailLinkBuilder> _emailLinkBuilder = new();
     private readonly Mock<IUnitOfWork> _unitOfWork = new();
     private readonly FakeCurrentUserService _currentUser = new();
     private readonly FakeDateTimeProvider _clock = new();
@@ -31,8 +36,12 @@ public class AuthServiceTests
             .ReturnsAsync(1);
         _service = new AuthService(
             _users.Object,
+            _resetTokens.Object,
             _passwordHasher.Object,
             _tokens.Object,
+            _secureTokenGenerator.Object,
+            _emailSender.Object,
+            _emailLinkBuilder.Object,
             _currentUser,
             _clock,
             _unitOfWork.Object);
@@ -328,6 +337,172 @@ public class AuthServiceTests
         user.Status.Should().Be(UserStatus.Active);
         user.LockedAt.Should().BeNull();
         user.FailedLoginAttempts.Should().Be(0);
+        _unitOfWork.Verify(
+            unit => unit.SaveChangesAsync(It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task RequestPasswordReset_UnknownEmail_CompletesSilently()
+    {
+        // Arrange
+        _users
+            .Setup(repository => repository.GetByEmailAsync(
+                "missing@example.com",
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync((User?)null);
+
+        // Act
+        await _service.RequestPasswordResetAsync(
+            new RequestPasswordResetRequest("missing@example.com"));
+
+        // Assert
+        _unitOfWork.Verify(
+            unit => unit.SaveChangesAsync(It.IsAny<CancellationToken>()),
+            Times.Never);
+        _emailSender.Verify(
+            sender => sender.SendAsync(
+                It.IsAny<OutgoingEmail>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never);
+    }
+
+    [Fact]
+    public async Task RequestPasswordReset_KnownActiveEmail_CreatesTokenAndSendsEmail()
+    {
+        // Arrange
+        var user = DomainTestFactory.CreateUser();
+        user.SetEmail("tenant@example.com", _clock.UtcNow);
+        _users
+            .Setup(repository => repository.GetByEmailAsync(
+                "tenant@example.com",
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+        _resetTokens
+            .Setup(repository => repository.GetActiveByUserIdAsync(
+                user.Id,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync([]);
+        _secureTokenGenerator.Setup(generator => generator.GenerateToken())
+            .Returns("plain-token");
+        _secureTokenGenerator.Setup(generator => generator.Hash("plain-token"))
+            .Returns("hashed-token");
+        _emailLinkBuilder
+            .Setup(builder => builder.BuildPasswordResetUrl("plain-token"))
+            .Returns("https://app/reset-password/plain-token");
+
+        // Act
+        await _service.RequestPasswordResetAsync(
+            new RequestPasswordResetRequest("tenant@example.com"));
+
+        // Assert
+        _resetTokens.Verify(
+            repository => repository.Add(
+                It.Is<PasswordResetToken>(token =>
+                    token.UserId == user.Id
+                    && token.TokenHash == "hashed-token")),
+            Times.Once);
+        _unitOfWork.Verify(
+            unit => unit.SaveChangesAsync(It.IsAny<CancellationToken>()),
+            Times.Once);
+        _emailSender.Verify(
+            sender => sender.SendAsync(
+                It.Is<OutgoingEmail>(email =>
+                    email.ToEmail == "tenant@example.com"
+                    && email.HtmlBody.Contains(
+                        "https://app/reset-password/plain-token")),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task ResetPassword_UnknownToken_ThrowsInvalidResetToken()
+    {
+        // Arrange
+        _secureTokenGenerator.Setup(generator => generator.Hash("bad-token"))
+            .Returns("bad-token-hash");
+        _resetTokens
+            .Setup(repository => repository.GetByTokenHashAsync(
+                "bad-token-hash",
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync((PasswordResetToken?)null);
+
+        // Act
+        Func<Task> act = () => _service.ResetPasswordAsync(
+            new ResetPasswordRequest("bad-token", "new-password"));
+
+        // Assert
+        var exception = await act.Should().ThrowAsync<ValidationException>();
+        exception.Which.Code.Should()
+            .Be(ApplicationErrorCodes.InvalidResetToken);
+    }
+
+    [Fact]
+    public async Task ResetPassword_ExpiredToken_ThrowsResetTokenExpired()
+    {
+        // Arrange
+        var user = DomainTestFactory.CreateUser();
+        var resetToken = new PasswordResetToken(
+            user.Id,
+            "token-hash",
+            _clock.UtcNow.AddMinutes(-1),
+            _clock.UtcNow.AddMinutes(-31));
+        _secureTokenGenerator.Setup(generator => generator.Hash("expired-token"))
+            .Returns("token-hash");
+        _resetTokens
+            .Setup(repository => repository.GetByTokenHashAsync(
+                "token-hash",
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(resetToken);
+
+        // Act
+        Func<Task> act = () => _service.ResetPasswordAsync(
+            new ResetPasswordRequest("expired-token", "new-password"));
+
+        // Assert
+        var exception = await act.Should().ThrowAsync<ValidationException>();
+        exception.Which.Code.Should()
+            .Be(ApplicationErrorCodes.ResetTokenExpired);
+    }
+
+    [Fact]
+    public async Task ResetPassword_ValidToken_ChangesPasswordAndUnlocksAccount()
+    {
+        // Arrange
+        var user = DomainTestFactory.CreateUser(status: UserStatus.Locked);
+        var resetToken = new PasswordResetToken(
+            user.Id,
+            "token-hash",
+            _clock.UtcNow.AddMinutes(30),
+            _clock.UtcNow.AddMinutes(-1));
+        _secureTokenGenerator.Setup(generator => generator.Hash("good-token"))
+            .Returns("token-hash");
+        _resetTokens
+            .Setup(repository => repository.GetByTokenHashAsync(
+                "token-hash",
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(resetToken);
+        _users
+            .Setup(repository => repository.GetByIdAsync(
+                user.Id,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+        _passwordHasher.Setup(hasher => hasher.Hash("new-password"))
+            .Returns("new-password-hash");
+        _resetTokens
+            .Setup(repository => repository.GetActiveByUserIdAsync(
+                user.Id,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync([]);
+
+        // Act
+        await _service.ResetPasswordAsync(
+            new ResetPasswordRequest("good-token", "new-password"));
+
+        // Assert
+        user.PasswordHash.Should().Be("new-password-hash");
+        user.Status.Should().Be(UserStatus.Active);
+        resetToken.UsedAt.Should().Be(_clock.UtcNow);
         _unitOfWork.Verify(
             unit => unit.SaveChangesAsync(It.IsAny<CancellationToken>()),
             Times.Once);

@@ -310,3 +310,27 @@
     display: none;
   }
 }
+
+.auth-standalone-page {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: var(--space-5);
+  background: var(--page-background);
+}
+
+.auth-standalone-card {
+  display: grid;
+  width: min(100%, 30rem);
+  gap: var(--space-6);
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: clamp(1.5rem, 5vw, 3rem);
+}
+
+.login-form__link--with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}

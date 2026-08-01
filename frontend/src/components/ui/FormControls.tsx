@@ -1,10 +1,12 @@
 import {
   useId,
+  useState,
   type InputHTMLAttributes,
   type ReactNode,
   type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from "react";
+import { SearchInput } from "./SearchInput";
 
 interface FieldMetaProps {
   label: string;
@@ -147,6 +149,8 @@ export interface SelectProps
   extends SelectHTMLAttributes<HTMLSelectElement>, FieldMetaProps {
   options: SelectOption[];
   placeholder?: string;
+  /** Shows a text filter above the options list — useful when `options` holds many records (e.g. a capped 100-record load). */
+  searchable?: boolean;
 }
 
 export function Select({
@@ -155,6 +159,7 @@ export function Select({
   error,
   options,
   placeholder,
+  searchable = false,
   id: providedId,
   required,
   className = "",
@@ -164,6 +169,11 @@ export function Select({
   const generatedId = useId();
   const id = providedId ?? generatedId;
   const fieldDescribedBy = describedBy(id, helperText, error, ariaDescribedBy);
+  const [filterText, setFilterText] = useState("");
+  const normalizedFilter = filterText.trim().toLocaleLowerCase("vi");
+  const filteredOptions = normalizedFilter
+    ? options.filter((option) => option.label.toLocaleLowerCase("vi").includes(normalizedFilter))
+    : options;
 
   return (
     <div className={`field ${className}`}>
@@ -175,6 +185,15 @@ export function Select({
           </span>
         ) : null}
       </label>
+      {searchable ? (
+        <SearchInput
+          label={`Lọc lựa chọn cho ${label}`}
+          placeholder="Gõ để lọc lựa chọn..."
+          value={filterText}
+          onChange={(event) => setFilterText(event.target.value)}
+          onClear={() => setFilterText("")}
+        />
+      ) : null}
       <select
         id={id}
         className={`select ${error ? "select--error" : ""}`}
@@ -188,7 +207,7 @@ export function Select({
             {placeholder}
           </option>
         ) : null}
-        {options.map((option) => (
+        {filteredOptions.map((option) => (
           <option
             key={option.value}
             value={option.value}

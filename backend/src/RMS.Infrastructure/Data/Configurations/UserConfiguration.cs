@@ -24,6 +24,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.PasswordHash)
             .HasMaxLength(User.PasswordHashMaxLength)
             .IsRequired();
+        builder.Property(user => user.Email)
+            .HasMaxLength(User.EmailMaxLength);
         builder.Property(user => user.Role)
             .HasConversion<int>()
             .IsRequired();
@@ -47,5 +49,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(user => user.Username)
             .IsUnique()
             .HasDatabaseName("UX_Users_Username");
+        builder.HasIndex(user => user.Email)
+            .IsUnique()
+            .HasDatabaseName("UX_Users_Email")
+            .HasFilter("[Email] IS NOT NULL");
     }
 }

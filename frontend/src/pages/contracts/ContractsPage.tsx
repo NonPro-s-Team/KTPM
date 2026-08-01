@@ -21,7 +21,7 @@ import { useApiQuery } from "../../hooks/useApiQuery";
 import { useAuthStore } from "../../store/authStore";
 import type { ContractStatus, RentalContractResponse, RoomResponse, TenantResponse } from "../../types/api";
 import { formatCurrency, formatDate } from "../../utils/formatters";
-import { contractStatusMap, isContractExpiringSoon } from "../../utils/status";
+import { contractStatusMap, isContractExpiringSoon, roomStatusMap } from "../../utils/status";
 import "../../styles/management.css";
 
 const PAGE_SIZE = 10;
@@ -56,15 +56,19 @@ export function ContractsPage() {
   );
   const { data, loading, error, retry } = useApiQuery(load);
 
-  const loadOptions = useCallback(async (signal: AbortSignal): Promise<{ rooms: RoomResponse[]; tenants: TenantResponse[] }> => {
-    if (!canWrite) return { rooms: [], tenants: [] };
+  const loadOptions = useCallback(async (signal: AbortSignal): Promise<{ rooms: RoomResponse[]; roomsTotalCount: number; tenants: TenantResponse[]; tenantsTotalCount: number }> => {
+    if (!canWrite) return { rooms: [], roomsTotalCount: 0, tenants: [], tenantsTotalCount: 0 };
     const [rooms, tenants] = await Promise.all([
       roomsApi.list({ pageNumber: 1, pageSize: 100 }, signal),
       tenantsApi.list(1, 100, signal),
     ]);
-    return { rooms: rooms.items, tenants: tenants.items };
+    return { rooms: rooms.items, roomsTotalCount: rooms.totalCount, tenants: tenants.items, tenantsTotalCount: tenants.totalCount };
   }, [canWrite]);
   const options = useApiQuery(loadOptions);
+  const availableRooms = useMemo(
+    () => (options.data?.rooms ?? []).filter((room) => room.status === "available"),
+    [options.data],
+  );
 
   const openCreate = () => {
     setEditing(null);
@@ -160,7 +164,7 @@ export function ContractsPage() {
         columns={columns}
         getRowId={(contract) => contract.id}
         getSearchText={(contract) => `${contract.id} ${contract.roomNumber ?? ""} ${contract.tenantName ?? ""}`}
-        searchPlaceholder="Tìm trong trang hiện tại..."
+        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
         loading={loading}
         error={error}
         onRetry={retry}
@@ -183,15 +187,11 @@ export function ContractsPage() {
       >
         <form id="contract-form" className="management-form" onSubmit={handleSubmit} noValidate>
           {formError ? <Alert title="Không thể lưu hợp đồng" tone="danger">{formError}</Alert> : null}
-          {!editing ? <><Select label="Phòng" placeholder={options.loading ? "Đang tải phòng..." : "Chọn phòng"} value={form.roomId} options={(options.data?.rooms ?? []).map((room) => ({ value: room.id, label: `${room.roomNumber} · ${roomStatusMapLabel(room.status)}` }))} error={options.error || fieldErrors.roomId?.[0]} required onChange={(event) => setForm((current) => ({ ...current, roomId: event.target.value }))} /><Select label="Khách thuê" placeholder={options.loading ? "Đang tải khách thuê..." : "Chọn khách thuê"} value={form.tenantId} options={(options.data?.tenants ?? []).map((tenant) => ({ value: tenant.id, label: `${tenant.fullName} · @${tenant.username}` }))} error={options.error || fieldErrors.tenantId?.[0]} required onChange={(event) => setForm((current) => ({ ...current, tenantId: event.target.value }))} /></> : null}
+          {!editing ? <><Select label="Phòng" placeholder={options.loading ? "Đang tải phòng..." : "Chọn phòng"} searchable value={form.roomId} options={(options.data?.rooms ?? []).map((room) => ({ value: room.id, label: `${room.roomNumber} · ${roomStatusMap[room.status].label}` }))} error={options.error || fieldErrors.roomId?.[0]} helperText={(options.data?.roomsTotalCount ?? 0) > 100 ? "Chỉ hiển thị 100 phòng đầu, dùng ô tìm kiếm bên trên để lọc thêm." : undefined} required onChange={(event) => setForm((current) => ({ ...current, roomId: event.target.value }))} /><Select label="Khách thuê" placeholder={options.loading ? "Đang tải khách thuê..." : "Chọn khách thuê"} searchable value={form.tenantId} options={(options.data?.tenants ?? []).map((tenant) => ({ value: tenant.id, label: `${tenant.fullName} · @${tenant.username}` }))} error={options.error || fieldErrors.tenantId?.[0]} helperText={(options.data?.tenantsTotalCount ?? 0) > 100 ? "Chỉ hiển thị 100 khách thuê đầu, dùng ô tìm kiếm bên trên để lọc thêm." : undefined} required onChange={(event) => setForm((current) => ({ ...current, tenantId: event.target.value }))} /></> : null}
           <div className="form-grid form-grid--two"><Input label="Ngày bắt đầu" type="date" value={form.startDate} error={fieldErrors.startDate?.[0]} required onChange={(event) => setForm((current) => ({ ...current, startDate: event.target.value }))} /><Input label="Ngày kết thúc" type="date" value={form.endDate} error={fieldErrors.endDate?.[0]} required onChange={(event) => setForm((current) => ({ ...current, endDate: event.target.value }))} /></div>
           <Input label="Giá thuê mỗi tháng" type="number" inputMode="numeric" min="1" suffix="VND" value={form.monthlyRent} error={fieldErrors.monthlyRent?.[0]} required onChange={(event) => setForm((current) => ({ ...current, monthlyRent: event.target.value }))} />
         </form>
       </Modal>
     </div>
   );
-}
-
-function roomStatusMapLabel(status: RoomResponse["status"]) {
-  return status === "available" ? "Phòng trống" : status === "occupied" ? "Đang thuê" : status === "maintenance" ? "Bảo trì" : "Ngừng hoạt động";
 }

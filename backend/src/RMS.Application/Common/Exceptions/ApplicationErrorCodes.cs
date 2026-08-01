@@ -14,4 +14,9 @@ public static class ApplicationErrorCodes
     public const string RoomNumberAlreadyExists = "ROOM_NUMBER_ALREADY_EXISTS";
     public const string Validation = "VALIDATION_ERROR";
     public const string ContractNotActive = "CONTRACT_NOT_ACTIVE";
+    public const string EmailAlreadyExists = "EMAIL_ALREADY_EXISTS";
+    public const string InvalidInvitationToken = "INVALID_INVITATION_TOKEN";
+    public const string InvitationExpired = "INVITATION_EXPIRED";
+    public const string InvalidResetToken = "INVALID_RESET_TOKEN";
+    public const string ResetTokenExpired = "RESET_TOKEN_EXPIRED";
 }

@@ -126,7 +126,7 @@ export function TenantsPage() {
         columns={columns}
         getRowId={(tenant) => tenant.id}
         getSearchText={(tenant) => `${tenant.fullName} ${tenant.username} ${tenant.phoneNumber}`}
-        searchPlaceholder="Tìm trong trang hiện tại..."
+        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
         loading={loading}
         error={error}
         onRetry={retry}

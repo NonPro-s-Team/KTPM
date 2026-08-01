@@ -44,6 +44,29 @@ public sealed class UserRepository : IUserRepository
             cancellationToken);
     }
 
+    public Task<User?> GetByEmailAsync(
+        string email,
+        CancellationToken cancellationToken = default)
+    {
+        var normalizedEmail = email.Trim();
+        return _dbContext.Users.SingleOrDefaultAsync(
+            user => user.Email == normalizedEmail,
+            cancellationToken);
+    }
+
+    public Task<bool> EmailExistsAsync(
+        string email,
+        Guid? excludeUserId,
+        CancellationToken cancellationToken = default)
+    {
+        var normalizedEmail = email.Trim();
+        return _dbContext.Users.AnyAsync(
+            user =>
+                user.Email == normalizedEmail
+                && (!excludeUserId.HasValue || user.Id != excludeUserId.Value),
+            cancellationToken);
+    }
+
     public void Add(User user)
     {
         ArgumentNullException.ThrowIfNull(user);

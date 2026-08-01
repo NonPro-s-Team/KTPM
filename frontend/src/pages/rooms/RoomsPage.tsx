@@ -156,7 +156,7 @@ export function RoomsPage() {
         columns={columns}
         getRowId={(room) => room.id}
         getSearchText={(room) => `${room.roomNumber} ${room.description ?? ""}`}
-        searchPlaceholder="Tìm trong trang hiện tại..."
+        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
         loading={loading}
         error={error}
         onRetry={retry}

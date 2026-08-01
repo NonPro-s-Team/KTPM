@@ -61,8 +61,17 @@ export function normalizeApiError(error: unknown): ApiError {
   return { title: DEFAULT_ERROR_TITLE, detail: DEFAULT_ERROR_DETAIL };
 }
 
-function isLoginRequest(url?: string) {
-  return Boolean(url?.replace(/^\//, "").startsWith("auth/login"));
+const PUBLIC_ENDPOINT_PATTERNS = [
+  /^auth\/login$/,
+  /^auth\/forgot-password$/,
+  /^auth\/reset-password$/,
+  /^invitations\/accept$/,
+  /^invitations\/[^/]+$/,
+];
+
+function isPublicEndpoint(url?: string) {
+  const path = url?.replace(/^\//, "") ?? "";
+  return PUBLIC_ENDPOINT_PATTERNS.some((pattern) => pattern.test(path));
 }
 
 export const httpClient = axios.create({
@@ -73,7 +82,7 @@ export const httpClient = axios.create({
 
 httpClient.interceptors.request.use((config) => {
   const session = readStoredSession();
-  if (session?.accessToken && !isLoginRequest(config.url)) {
+  if (session?.accessToken && !isPublicEndpoint(config.url)) {
     config.headers.set("Authorization", `Bearer ${session.accessToken}`);
   }
   return config;
@@ -85,7 +94,7 @@ httpClient.interceptors.response.use(
     const normalized = normalizeApiError(error);
     const axiosError = axios.isAxiosError(error) ? error : undefined;
 
-    if (normalized.status === 401 && !isLoginRequest(axiosError?.config?.url)) {
+    if (normalized.status === 401 && !isPublicEndpoint(axiosError?.config?.url)) {
       clearStoredSession();
       window.dispatchEvent(new Event(AUTH_SESSION_CLEARED_EVENT));
       if (window.location.pathname !== "/login") {

@@ -10,6 +10,7 @@ public class User : AuditableEntity
 {
     public const int UsernameMaxLength = 100;
     public const int PasswordHashMaxLength = 512;
+    public const int EmailMaxLength = 256;
     public const int MaximumFailedLoginAttempts = 5;
 
     private User()
@@ -47,10 +48,17 @@ public class User : AuditableEntity
 
     public string Username { get; private set; }
     public string PasswordHash { get; private set; }
+    public string? Email { get; private set; }
     public UserRole Role { get; private set; }
     public UserStatus Status { get; private set; }
     public int FailedLoginAttempts { get; private set; }
     public DateTimeOffset? LockedAt { get; private set; }
+
+    public void SetEmail(string email, DateTimeOffset occurredAt)
+    {
+        Email = Guard.Required(email, nameof(Email), EmailMaxLength);
+        MarkUpdated(occurredAt);
+    }
 
     public void ChangePasswordHash(
         string newPasswordHash,

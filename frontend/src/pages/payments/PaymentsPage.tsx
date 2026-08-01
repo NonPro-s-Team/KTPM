@@ -38,7 +38,7 @@ export function PaymentsPage() {
       { id: "payment", header: "Thanh toán", sortValue: (payment) => payment.paidAt, cell: (payment) => <span className="primary-cell"><strong>{payment.id.slice(0, 8)}</strong><small>{formatDate(payment.paidAt)}</small></span> },
       { id: "amount", header: "Số tiền", align: "end", sortValue: (payment) => payment.amount, cell: (payment) => <strong className="tabular">{formatCurrency(payment.amount)}</strong> },
       { id: "note", header: "Ghi chú", cell: (payment) => payment.note || "Không có ghi chú" },
-      { id: "recordedBy", header: "Người ghi nhận", cell: (payment) => payment.recordedByUserId.slice(0, 8) },
+      { id: "recordedBy", header: "Mã người ghi nhận", cell: (payment) => payment.recordedByUserId.slice(0, 8) },
     ],
     [],
   );
@@ -85,9 +85,11 @@ export function PaymentsPage() {
       <Select
         label="Hóa đơn"
         placeholder={invoices.loading ? "Đang tải hóa đơn..." : "Chọn một hóa đơn"}
+        searchable
         value={invoiceId}
         options={(invoices.data?.items ?? []).map((invoice) => ({ value: invoice.id, label: `${invoice.id.slice(0, 8)} · ${String(invoice.billingMonth).padStart(2, "0")}/${invoice.billingYear} · ${formatCurrency(invoice.totalAmount)}` }))}
         error={invoices.error}
+        helperText={(invoices.data?.totalCount ?? 0) > 100 ? "Chỉ hiển thị 100 hóa đơn đầu, dùng ô tìm kiếm bên trên để lọc thêm." : undefined}
         onChange={(event) => setInvoiceId(event.target.value)}
       />
       <DataTable
