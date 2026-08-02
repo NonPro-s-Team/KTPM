@@ -1,10 +1,8 @@
-import { Check, Monitor, Moon, Sun, UserPlus } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { invitationsApi } from "../../api/invitationsApi";
 import { normalizeApiError } from "../../api/httpClient";
 import { Alert, Button, Card, Input, PageHeader, Select } from "../../components/ui";
-import { useTheme } from "../../hooks/useTheme";
-import type { ThemeMode } from "../../providers/themeContext";
 import { useAuthStore } from "../../store/authStore";
 import "../../styles/settings.css";
 
@@ -77,17 +75,6 @@ function InviteUserCard() {
     </Card>
   );
 }
-
-const themeOptions: Array<{
-  id: ThemeMode;
-  label: string;
-  description: string;
-  icon: typeof Sun;
-}> = [
-  { id: "light", label: "Giao diện sáng", description: "Tương phản rõ trên nền trung tính sáng.", icon: Sun },
-  { id: "dark", label: "Giao diện tối", description: "Giảm độ chói trong môi trường thiếu sáng.", icon: Moon },
-  { id: "system", label: "Theo hệ thống", description: "Tự động theo cài đặt của thiết bị.", icon: Monitor },
-];
 
 export function SettingsPage() {
   // const { theme, setTheme } = useTheme();
