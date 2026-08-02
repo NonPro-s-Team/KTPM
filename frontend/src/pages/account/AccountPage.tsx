@@ -52,14 +52,14 @@ export function AccountPage() {
   const roleDefinition = userRoleMap[role];
   return (
     <div className="management-page">
-      <PageHeader title="Tài khoản" description="Thông tin tài khoản hiện tại từ phiên đăng nhập và chức năng đổi mật khẩu." />
+      <PageHeader title="Tài khoản" />
       {message ? <Alert title="Cập nhật thành công" tone="success">{message}</Alert> : null}
       <div className="settings-layout">
         <Card className="settings-card">
           <div className="settings-card__header"><div><h2>Thông tin đăng nhập</h2><p>Quản trị viên có thể mời tài khoản mới trong trang Cài đặt. Backend hiện chưa có API danh sách, khóa hoặc sửa vai trò người dùng.</p></div></div>
           <div className="settings-list">
-            <div className="settings-security"><span><UserRound size={21} aria-hidden="true" /></span><div><h2>{username}</h2><p>Tên đăng nhập hiện tại</p></div></div>
-            <div className="settings-security"><span><ShieldCheck size={21} aria-hidden="true" /></span><div><h2><Badge tone={roleDefinition.tone}>{roleDefinition.label}</Badge></h2><p>Vai trò do Backend trả về khi đăng nhập</p></div></div>
+            <div className="settings-security"><span><UserRound size={21} aria-hidden="true" /></span><div><h2>{username}</h2><p>Tên đăng nhập</p></div></div>
+            <div className="settings-security"><span><ShieldCheck size={21} aria-hidden="true" /></span><div><h2><Badge tone={roleDefinition.tone}>{roleDefinition.label}</Badge></h2><p>Vai trò</p></div></div>
           </div>
         </Card>
         <Card className="settings-card">

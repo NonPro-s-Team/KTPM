@@ -159,7 +159,7 @@ export function MaintenancePage() {
     <div className="management-page">
       <PageHeader
         title="Yêu cầu sửa chữa"
-        description="Yêu cầu và lịch sử chuyển trạng thái được tải trực tiếp từ Backend API."
+        // description="Yêu cầu và lịch sử chuyển trạng thái được tải trực tiếp từ Backend API."
         actions={isTenant ? <Button leadingIcon={Plus} onClick={openCreate}>Tạo yêu cầu</Button> : undefined}
       />
       {message ? <Alert title="Cập nhật thành công" tone="success">{message}</Alert> : null}
@@ -169,7 +169,7 @@ export function MaintenancePage() {
         columns={columns}
         getRowId={(request) => request.id}
         getSearchText={(request) => `${request.title} ${request.description} ${roomMap.get(request.roomId) ?? request.roomId}`}
-        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
+        searchPlaceholder="Tìm kiếm"
         loading={loading}
         error={error}
         onRetry={retry}

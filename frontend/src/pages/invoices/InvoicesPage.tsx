@@ -230,7 +230,7 @@ export function InvoicesPage() {
     <div className="management-page">
       <PageHeader
         title="Quản lý hóa đơn"
-        description="Theo dõi tiền thuê, điện, nước, tổng tiền và công nợ theo dữ liệu Backend."
+        // description="Theo dõi tiền thuê, điện, nước, tổng tiền và công nợ theo dữ liệu Backend."
         actions={<>{canWrite ? <Button leadingIcon={Plus} onClick={openCreate}>Tạo hóa đơn</Button> : null}<Link className="button button--secondary button--md" to="/payments">Lịch sử thanh toán</Link></>}
       />
       {message ? <Alert title="Cập nhật thành công" tone="success">{message}</Alert> : null}
@@ -241,7 +241,7 @@ export function InvoicesPage() {
         columns={columns}
         getRowId={(invoice) => invoice.id}
         getSearchText={(invoice) => `${invoice.id} ${invoice.contractId} ${invoice.billingMonth}/${invoice.billingYear}`}
-        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
+        searchPlaceholder="Tìm kiếm"
         loading={loading}
         error={error}
         onRetry={retry}
