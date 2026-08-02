@@ -44,7 +44,7 @@ export function DashboardPage() {
             </Card>
             <Card className="dashboard-chart-card">
               <div className="dashboard-card__header"><div><h2>Lịch sử doanh thu</h2><p>Chưa có API dữ liệu lịch sử.</p></div></div>
-              <div className="empty-state"><span className="empty-state__icon"><CircleAlert size={24} aria-hidden="true" /></span><h3>Chưa có dữ liệu biểu đồ</h3><p>Backend hiện chỉ cung cấp bốn chỉ số tổng hợp tại thời điểm truy vấn.</p></div>
+              <div className="empty-state"><span className="empty-state__icon"><CircleAlert size={24} aria-hidden="true" /></span><h3>Chưa có dữ liệu biểu đồ</h3></div>
             </Card>
           </section>
         </>
