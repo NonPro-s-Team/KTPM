@@ -52,7 +52,7 @@ function InviteUserCard() {
       <div className="settings-card__header">
         <div>
           <h2>Mời tài khoản mới</h2>
-          <p>Gửi lời mời qua email để tạo tài khoản Nhân viên hoặc Quản trị viên.</p>
+          {/* <p>Gửi lời mời qua email để tạo tài khoản Nhân viên hoặc Quản trị viên.</p> */}
         </div>
       </div>
       <form className="management-form" onSubmit={handleSubmit} noValidate>
@@ -90,12 +90,12 @@ const themeOptions: Array<{
 ];
 
 export function SettingsPage() {
-  const { theme, setTheme } = useTheme();
+  // const { theme, setTheme } = useTheme();
   const role = useAuthStore((state) => state.role);
   return (
     <div className="settings-page">
-      <PageHeader title="Cài đặt" description="Tùy chọn giao diện được lưu cục bộ trong trình duyệt; Backend chưa có Settings API." />
-      <Card className="settings-card settings-card--narrow">
+      <PageHeader title="Cài đặt"/>
+      {/* <Card className="settings-card settings-card--narrow">
         <div className="settings-card__header"><div><h2>Chế độ màu</h2><p>Thay đổi được áp dụng ngay và không gửi lên máy chủ.</p></div></div>
         <div className="theme-options">
           {themeOptions.map((option) => {
@@ -110,7 +110,7 @@ export function SettingsPage() {
             );
           })}
         </div>
-      </Card>
+      </Card> */}
       {role === "admin" ? <InviteUserCard /> : null}
     </div>
   );

@@ -155,7 +155,7 @@ export function ContractsPage() {
 
   return (
     <div className="management-page">
-      <PageHeader title="Quản lý hợp đồng" description="Trạng thái sắp hết hạn chỉ được tính để trình bày; API vẫn giữ trạng thái active." actions={canWrite ? <Button leadingIcon={Plus} onClick={openCreate}>Tạo hợp đồng</Button> : undefined} />
+      <PageHeader title="Quản lý hợp đồng" actions={canWrite ? <Button leadingIcon={Plus} onClick={openCreate}>Tạo hợp đồng</Button> : undefined} />
       {message ? <Alert title="Cập nhật thành công" tone="success">{message}</Alert> : null}
       {formError && !modalOpen ? <Alert title="Không thể cập nhật hợp đồng" tone="danger">{formError}</Alert> : null}
       <Tabs label="Lọc theo trạng thái hợp đồng" activeId={status} onChange={(id) => { setStatus(id as ContractTab); setPage(1); }} items={[{ id: "all", label: "Tất cả" }, ...Object.entries(contractStatusMap).map(([id, definition]) => ({ id, label: definition.label }))]} />
@@ -164,7 +164,7 @@ export function ContractsPage() {
         columns={columns}
         getRowId={(contract) => contract.id}
         getSearchText={(contract) => `${contract.id} ${contract.roomNumber ?? ""} ${contract.tenantName ?? ""}`}
-        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
+        searchPlaceholder="Tìm kiếm"
         loading={loading}
         error={error}
         onRetry={retry}

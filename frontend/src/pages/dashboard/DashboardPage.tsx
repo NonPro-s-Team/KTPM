@@ -15,7 +15,7 @@ export function DashboardPage() {
     <div className="dashboard-page">
       <PageHeader
         title={`Xin chào${username ? `, ${username}` : ""}`}
-        description="Các chỉ số vận hành hiện tại được tải trực tiếp từ RMS Backend API."
+        // description="Các chỉ số vận hành hiện tại được tải trực tiếp từ RMS Backend API."
       />
 
       {error ? (
@@ -39,12 +39,12 @@ export function DashboardPage() {
           </section>
           <section className="dashboard-charts" aria-label="Thông tin dữ liệu">
             <Card className="dashboard-chart-card">
-              <div className="dashboard-card__header"><div><h2>Phòng còn lại</h2><p>Chỉ số suy ra từ tổng số phòng trừ số phòng đang thuê.</p></div></div>
+              <div className="dashboard-card__header"><div><h2>Phòng còn lại</h2></div></div>
               <div className="empty-state"><span className="empty-state__icon"><CircleAlert size={24} aria-hidden="true" /></span><h3>{Math.max(0, data.totalRooms - data.occupiedRooms)} phòng chưa được ghi nhận là đang thuê</h3><p>Con số này có thể bao gồm phòng trống, bảo trì hoặc ngừng hoạt động.</p></div>
             </Card>
             <Card className="dashboard-chart-card">
               <div className="dashboard-card__header"><div><h2>Lịch sử doanh thu</h2><p>Chưa có API dữ liệu lịch sử.</p></div></div>
-              <div className="empty-state"><span className="empty-state__icon"><CircleAlert size={24} aria-hidden="true" /></span><h3>Chưa có dữ liệu biểu đồ</h3><p>Backend hiện chỉ cung cấp bốn chỉ số tổng hợp tại thời điểm truy vấn.</p></div>
+              <div className="empty-state"><span className="empty-state__icon"><CircleAlert size={24} aria-hidden="true" /></span><h3>Chưa có dữ liệu biểu đồ</h3></div>
             </Card>
           </section>
         </>
