@@ -137,7 +137,7 @@ export function RoomsPage() {
 
   return (
     <div className="management-page rooms-page">
-      <PageHeader title="Quản lý phòng" description="Dữ liệu phòng và trạng thái được đồng bộ trực tiếp với RMS Backend." actions={canWrite ? <Button leadingIcon={Plus} onClick={openCreate}>Thêm phòng</Button> : undefined} />
+      <PageHeader title="Quản lý phòng" actions={canWrite ? <Button leadingIcon={Plus} onClick={openCreate}>Thêm phòng</Button> : undefined} />
       {message ? <Alert title="Cập nhật thành công" tone="success">{message}</Alert> : null}
       <Tabs
         label="Lọc theo trạng thái phòng"
@@ -156,7 +156,7 @@ export function RoomsPage() {
         columns={columns}
         getRowId={(room) => room.id}
         getSearchText={(room) => `${room.roomNumber} ${room.description ?? ""}`}
-        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
+        searchPlaceholder="Tìm kiếm"
         loading={loading}
         error={error}
         onRetry={retry}

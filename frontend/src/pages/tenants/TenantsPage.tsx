@@ -117,7 +117,7 @@ export function TenantsPage() {
     <div className="management-page">
       <PageHeader
         title={role === "tenant" ? "Hồ sơ của tôi" : "Quản lý khách thuê"}
-        description={role === "tenant" ? "Thông tin hồ sơ được lấy từ tài khoản khách thuê hiện tại." : "Quản lý hồ sơ khách thuê; số căn cước được che bớt trong bảng."}
+        description={role === "tenant" ? "Thông tin hồ sơ được lấy từ tài khoản khách thuê hiện tại." : ""}
         actions={canWrite ? <Button leadingIcon={UserRoundPlus} onClick={openCreate}>Thêm khách thuê</Button> : undefined}
       />
       {message ? <Alert title="Cập nhật thành công" tone="success">{message}</Alert> : null}
@@ -126,7 +126,7 @@ export function TenantsPage() {
         columns={columns}
         getRowId={(tenant) => tenant.id}
         getSearchText={(tenant) => `${tenant.fullName} ${tenant.username} ${tenant.phoneNumber}`}
-        searchPlaceholder="Tìm trong trang hiện tại (Backend chưa hỗ trợ tìm kiếm toàn cục)"
+        searchPlaceholder="Tìm kiếm"
         loading={loading}
         error={error}
         onRetry={retry}
