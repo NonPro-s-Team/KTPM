@@ -489,11 +489,15 @@ public class AuthServiceTests
             .ReturnsAsync(user);
         _passwordHasher.Setup(hasher => hasher.Hash("new-password"))
             .Returns("new-password-hash");
+        // EF Core's identity map returns the same tracked instance for a
+        // row already loaded in this context — even before SaveChanges,
+        // a fresh query for "active tokens" still includes resetToken
+        // itself (already MarkUsed() in memory, not yet persisted).
         _resetTokens
             .Setup(repository => repository.GetActiveByUserIdAsync(
                 user.Id,
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync([]);
+            .ReturnsAsync([resetToken]);
 
         // Act
         await _service.ResetPasswordAsync(
@@ -506,6 +510,51 @@ public class AuthServiceTests
         _unitOfWork.Verify(
             unit => unit.SaveChangesAsync(It.IsAny<CancellationToken>()),
             Times.Once);
+    }
+
+    [Fact]
+    public async Task ResetPassword_OtherActiveTokensExist_InvalidatesOnlyOthers()
+    {
+        // Arrange
+        var user = DomainTestFactory.CreateUser();
+        var resetToken = new PasswordResetToken(
+            user.Id,
+            "token-hash",
+            _clock.UtcNow.AddMinutes(30),
+            _clock.UtcNow.AddMinutes(-1));
+        var otherToken = new PasswordResetToken(
+            user.Id,
+            "other-token-hash",
+            _clock.UtcNow.AddMinutes(29),
+            _clock.UtcNow.AddMinutes(-2));
+        _secureTokenGenerator.Setup(generator => generator.Hash("good-token"))
+            .Returns("token-hash");
+        _resetTokens
+            .Setup(repository => repository.GetByTokenHashAsync(
+                "token-hash",
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(resetToken);
+        _users
+            .Setup(repository => repository.GetByIdAsync(
+                user.Id,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+        _passwordHasher.Setup(hasher => hasher.Hash("new-password"))
+            .Returns("new-password-hash");
+        _resetTokens
+            .Setup(repository => repository.GetActiveByUserIdAsync(
+                user.Id,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync([resetToken, otherToken]);
+
+        // Act
+        await _service.ResetPasswordAsync(
+            new ResetPasswordRequest("good-token", "new-password"));
+
+        // Assert
+        resetToken.UsedAt.Should().Be(_clock.UtcNow);
+        resetToken.InvalidatedAt.Should().BeNull();
+        otherToken.InvalidatedAt.Should().Be(_clock.UtcNow);
     }
 
     private void SetupLogin(User user, bool passwordMatches)

@@ -264,6 +264,11 @@ public sealed class AuthService : IAuthService
             .GetActiveByUserIdAsync(user.Id, cancellationToken);
         foreach (var otherToken in otherActiveTokens)
         {
+            if (otherToken.Id == resetToken.Id)
+            {
+                continue;
+            }
+
             otherToken.Invalidate(now);
         }
 
