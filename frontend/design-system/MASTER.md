@@ -77,7 +77,8 @@ Class Tailwind tương ứng: `bg-bg`, `text-fg`, `text-muted`, `border-border`,
 
 | Component                              | Quy tắc chính                                                                                          |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `components/layout/AppLayout.tsx`       | Header có nav + `ThemeToggle` (tái dùng từ `components/auth`), không sidebar, nội dung căn giữa `max-w-5xl` |
+| `components/layout/Sidebar.tsx`         | Sidebar trái `w-64`, nhóm nav theo module (`NavGroup` — nhãn uppercase + icon), item active dùng `border-l-2 border-fg`, `ThemeToggle` ở cuối. Thêm module mới (Hợp đồng/Hóa đơn/Hồ sơ khách thuê...) = thêm 1 `NavGroup`, không build trước khi module đó có route |
+| `components/layout/AppLayout.tsx`       | `>=768px`: sidebar cố định bên trái + nội dung căn giữa `max-w-5xl`. `<768px`: sidebar ẩn, thay bằng top bar mỏng có nút hamburger mở drawer (dùng lại pattern overlay `bg-fg/40` của `Modal`) |
 | `components/shared/Modal.tsx`           | Overlay `bg-fg/40`, đóng bằng Esc hoặc click nền, `role="dialog"` — nền tảng cho form và confirm dialog   |
 | `components/shared/ConfirmDialog.tsx`   | Bọc `Modal`, dùng cho **mọi** hành động xoá (không xoá trực tiếp khi click) — nút Huỷ (`ghost`) + nút xác nhận (`primary`) |
 | `components/shared/DataTable.tsx`       | `>=768px` render `<table>`; `<768px` chuyển card key/value theo cột (Table Handling)                     |

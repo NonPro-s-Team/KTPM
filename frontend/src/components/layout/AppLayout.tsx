@@ -1,50 +1,64 @@
-import { type ReactNode } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { ThemeToggle } from '../auth/ThemeToggle'
-
-const navItems = [{ to: '/properties', label: 'Nhà trọ' }]
+import { useState, type ReactNode } from 'react'
+import { Menu, X } from 'lucide-react'
+import { Sidebar } from './Sidebar'
 
 interface AppLayoutProps {
   children: ReactNode
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const location = useLocation()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <div className="flex min-h-screen flex-col bg-bg text-fg">
-      <header className="flex items-center justify-between border-b border-border px-4 py-4 sm:px-6">
-        <div className="flex items-center gap-8">
-          <Link
-            to="/properties"
-            className="flex items-center gap-2 text-sm font-bold tracking-widest uppercase"
-          >
-            <span className="size-3 bg-fg" aria-hidden />
-            TroConnect
-          </Link>
-          <nav className="flex items-center gap-6">
-            {navItems.map((item) => {
-              const active = location.pathname.startsWith(item.to)
-              return (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={`text-sm font-medium tracking-wide transition-colors duration-150 ${
-                    active ? 'text-fg' : 'text-muted hover:text-fg'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              )
-            })}
-          </nav>
+    <div className="flex min-h-screen bg-bg text-fg">
+      <aside className="hidden w-64 shrink-0 border-r border-border md:block">
+        <div className="fixed h-screen w-64">
+          <Sidebar />
         </div>
-        <ThemeToggle />
-      </header>
+      </aside>
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
-        {children}
-      </main>
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div
+            className="absolute inset-0 bg-fg/40"
+            onClick={() => setMobileOpen(false)}
+            aria-hidden
+          />
+          <div className="absolute inset-y-0 left-0 w-64 bg-bg">
+            <div className="flex justify-end px-3 pt-3">
+              <button
+                type="button"
+                onClick={() => setMobileOpen(false)}
+                aria-label="Đóng menu"
+                className="cursor-pointer p-2 text-muted transition-colors duration-150 hover:text-fg"
+              >
+                <X className="size-5" aria-hidden />
+              </button>
+            </div>
+            <Sidebar onNavigate={() => setMobileOpen(false)} />
+          </div>
+        </div>
+      )}
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex items-center border-b border-border px-4 py-4 md:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Mở menu"
+            className="cursor-pointer p-1 text-fg"
+          >
+            <Menu className="size-5" aria-hidden />
+          </button>
+          <span className="ml-3 text-sm font-bold tracking-widest uppercase">
+            TroConnect
+          </span>
+        </div>
+
+        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
+          {children}
+        </main>
+      </div>
     </div>
   )
 }
