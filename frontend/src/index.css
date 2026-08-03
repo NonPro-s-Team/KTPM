@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Token màu đổi theo theme qua class `dark` trên <html> — xem design-system/MASTER.md */
+:root {
+  /* Khai báo color-scheme để trình duyệt không tự "auto dark" đè lên theme của app */
+  color-scheme: light;
+  --bg: #ffffff;
+  --fg: #0a0a0a;
+  --muted: #6e6e6e;
+  --border: #e2e2e2;
+  --border-strong: #0a0a0a;
+}
+
+.dark {
+  color-scheme: dark;
+  --bg: #000000;
+  --fg: #fafafa;
+  --muted: #9c9c9c;
+  --border: #2a2a2a;
+  --border-strong: #fafafa;
+}
+
+@theme {
+  /* Vô hiệu bảng màu mặc định của Tailwind — chỉ dùng token của design system */
+  --color-*: initial;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --radius-*: initial;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+}
+
+@layer base {
+  body {
+    margin: 0;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-border-strong);
+    outline-offset: 2px;
+  }
+
+  /* Input dùng đổi màu viền làm chỉ báo focus thay cho outline */
+  input:focus-visible {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
