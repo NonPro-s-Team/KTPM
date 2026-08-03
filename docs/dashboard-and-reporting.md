@@ -5,7 +5,7 @@
 The Dashboard is a **view-only summary screen** for the landlord: counts and totals, with the ability to click through into a module's detail page. It is **not** a place for business logic, and it does not introduce new business rules of its own.
 
 Summary metrics shown (MVP):
-- Number of buildings (dãy trọ), shown as a count only (e.g. "3 buildings"), not a management screen
+- Number of buildings (dãy trọ) — count sourced from the Building module's own list/summary endpoint (see `@docs/building-management.md`, which is now a full CRUD module with its own detail pages)
 - Total number of tenants (tenant profiles currently in the system)
 - Total number of rooms
 - Revenue by month/quarter/year

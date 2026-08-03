@@ -10,7 +10,8 @@ TroConnect is a management system for chains of rental boarding houses (nhà tr�
 - **Initial scale:** 2–3 boarding house buildings, ~20–50 rooms total.
 - **MVP scope:**
   - Dashboard: view-only summary counts (buildings, tenants, rooms, revenue by month/quarter/year) with drill-down into detail pages. No business logic lives on the dashboard — see `@docs/dashboard-and-reporting.md`.
-  - Full CRUD for: Rooms, Contracts, Invoices, Tenant Profiles, Tenant Accounts.
+  - Full CRUD for: **Building** (parent of Room — implement first), Rooms, Contracts, Invoices, Tenant Profiles, Tenant Accounts.
+  - **Build order:** Building → Room → Contract → Invoice. Tenant Profile/Account can be built in parallel (no FK dependency on Room/Contract).
 
 Detailed domain rules for each module are in `/docs` — see references below.
 
@@ -24,11 +25,14 @@ Detailed domain rules for each module are in `/docs` — see references below.
 - **Interfaces:** Do NOT create a 1:1 interface for every service. Only introduce an interface when there are genuinely ≥2 implementations, or when needed to mock for a test. Don't add abstraction "just in case."
 - **Shared/cross-module logic:** Only extract shared logic when it's actually reused in ≥2 places — do not pre-emptively extract "in case it's needed later."
 - **Testing:** Not required from day one. Priority is a working MVP first; testing strategy will be added later.
+- **Authentication:** JWT Bearer tokens for session auth; **BCrypt** for password hashing. A single shared `Account` entity (with a `Role` field) handles both Landlord and future Tenant self-service login — see `@docs/authentication.md`.
 
 ## 3. Domain Rules
 
 See detailed docs per module:
 - @docs/tenant-and-account.md — Tenant Profile vs Tenant Account, and their relationship
+- @docs/authentication.md — Account entity, Register/Login/Forgot Password flows, JWT + BCrypt rules
+- @docs/building-management.md — Building (dãy trọ) entity, fields, and build-order note (must exist before Room)
 - @docs/room-management.md — Room entity and fields
 - @docs/contract-management.md — Contract rules, Contract↔Room, Contract↔Tenant (representative/co-tenant)
 - @docs/invoice-billing.md — Invoice generation, status lifecycle
@@ -44,6 +48,10 @@ Backend:
 ```
 /src
   /Features
+    /Buildings
+      BuildingsController.cs
+      BuildingService.cs
+      BuildingDtos.cs
     /Rooms
       RoomsController.cs
       RoomService.cs
@@ -51,7 +59,7 @@ Backend:
     /Contracts
     /Invoices
     /Tenants        (tenant profile)
-    /Accounts       (tenant login account)
+    /Accounts       (shared login account — Landlord + future Tenant self-service, see @docs/authentication.md)
   /Data
     AppDbContext.cs
     /Entities
@@ -63,6 +71,7 @@ Frontend:
 ```
 /src
   /features
+    /buildings
     /rooms
     /contracts
     /invoices

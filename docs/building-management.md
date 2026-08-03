@@ -16,7 +16,9 @@ Implementation order for MVP: **Building → Room → Contract → Invoice**, wi
 
 These three fields are directly entered/edited by the landlord.
 
-**Future decision point:** once the Room module exists and individual Room records are tracked per building, decide whether `TotalRooms` should become auto-synced from the actual Room count, or remain an independently-editable declared value. Not a decision needed now — just don't forget to revisit it.
+**Resolved rule:** `TotalRooms` acts as a **hard cap** on how many Room records can be created under this Building. See `@docs/room-management.md` for the enforcement rule on the Room side (Create must be blocked once the cap is reached).
+
+Additionally: `TotalRooms` **cannot be decreased (via Update) below the current actual count of Room records** already created under this building. This prevents the declared capacity from silently dropping below data that already exists (e.g. building has 20 real rooms, landlord tries to edit `TotalRooms` down to 15 — must be blocked with a clear error).
 
 ## Computed / Read-Only Stats (Detail View Only)
 
@@ -32,6 +34,17 @@ These are **never stored fields** and are **never part of the Create/Update payl
 
 - One Building has many Rooms (1-to-many).
 - `Room.BuildingId` is a required foreign key — a Room cannot exist without referencing a valid Building. See `@docs/room-management.md`.
+
+## Duplicate Detection (Soft Warning)
+
+To avoid data-entry accidents (e.g. accidentally submitting the same building twice), Building creation includes a **soft duplicate check** — it warns, but does not hard-block.
+
+- **Match signal:** normalized `Address` only (trim whitespace, case-insensitive comparison). `Name` is intentionally NOT used — a landlord may legitimately reuse similar names across different real buildings (e.g. "Nhà trọ Cô Hương 1" / "2"), but two different buildings can't legitimately share the exact same physical address.
+- **Flow (warn-then-confirm):**
+  1. On `POST /api/buildings`, before creating, check if any existing Building has a normalized Address match.
+  2. If a match is found and the request does **not** include a `confirmDuplicate: true` flag: do NOT create the record. Return an HTTP `409 Conflict` with the existing building's `Id`, `Name`, `Address` in the body, so the frontend can show a confirmation dialog (e.g. "A building already exists at this address: {Name}. Create anyway?").
+  3. If the request includes `confirmDuplicate: true` (landlord explicitly confirmed via the dialog): skip the check and create the record even though the address matches an existing one.
+- Applies to **Create only**, not Update — editing an existing building's address to collide with another building's address is a rarer edge case, not handled in this pass.
 
 ## Delete Rule
 
