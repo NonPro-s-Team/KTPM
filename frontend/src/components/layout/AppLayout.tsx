@@ -2,18 +2,36 @@ import { useState, type ReactNode } from 'react'
 import { Menu, X } from 'lucide-react'
 import { Sidebar } from './Sidebar'
 
+const COLLAPSED_STORAGE_KEY = 'troconnect_sidebar_collapsed'
+
 interface AppLayoutProps {
   children: ReactNode
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  // Chỉ áp dụng cho sidebar cố định desktop — nhớ lựa chọn của người dùng qua các lần tải trang
+  const [collapsed, setCollapsed] = useState(
+    () => localStorage.getItem(COLLAPSED_STORAGE_KEY) === '1',
+  )
+
+  const toggleCollapsed = () => {
+    setCollapsed((prev) => {
+      const next = !prev
+      localStorage.setItem(COLLAPSED_STORAGE_KEY, next ? '1' : '0')
+      return next
+    })
+  }
 
   return (
     <div className="flex min-h-screen bg-bg text-fg">
-      <aside className="hidden w-64 shrink-0 border-r border-border md:block">
-        <div className="fixed h-screen w-64">
-          <Sidebar />
+      <aside
+        className={`hidden shrink-0 border-r border-border transition-[width] duration-200 md:block ${
+          collapsed ? 'w-16' : 'w-64'
+        }`}
+      >
+        <div className={`fixed h-screen transition-[width] duration-200 ${collapsed ? 'w-16' : 'w-64'}`}>
+          <Sidebar collapsed={collapsed} onToggleCollapsed={toggleCollapsed} />
         </div>
       </aside>
 
