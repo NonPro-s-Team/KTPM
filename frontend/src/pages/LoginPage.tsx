@@ -50,7 +50,7 @@ export default function LoginPage() {
       // "Ghi nhớ đăng nhập": localStorage giữ qua phiên, sessionStorage mất khi đóng tab
       const storage = remember ? localStorage : sessionStorage
       storage.setItem('troconnect_token', data.token)
-      navigate('/') // TODO: đổi sang /dashboard khi có trang dashboard
+      navigate('/properties') // TODO: đổi sang /dashboard khi có trang dashboard
     } catch (err) {
       setServerError(
         isAxiosError(err) && err.response?.status === 401
