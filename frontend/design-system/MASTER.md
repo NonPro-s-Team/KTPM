@@ -67,8 +67,21 @@ Class Tailwind tương ứng: `bg-bg`, `text-fg`, `text-muted`, `border-border`,
 ## 7. API
 
 - Axios instance: `src/lib/axios.ts`, baseURL `/api`, proxy dev → `http://localhost:5066` (backend ASP.NET).
+- Interceptor tự gắn `Authorization: Bearer <token>` — đọc từ `localStorage` (đã "Ghi nhớ đăng nhập") hoặc `sessionStorage`, key `troconnect_token`.
 - Endpoints auth: `POST /accounts/login`, `/accounts/register`, `/accounts/forgot-password`, `/accounts/reset-password`.
 - Register: backend nhận `{ email, password, role }` — `role` là enum SỐ (`0` = Landlord, `1` = Tenant) vì backend chưa bật `JsonStringEnumConverter`. Trường "Họ tên" trên UI chưa có chỗ chứa ở backend.
+- Endpoints Nhà trọ (Property): `GET/POST /buildings`, `GET/PUT/DELETE /buildings/{id}` — yêu cầu `[Authorize]`. Tên frontend "Property" ánh xạ 1:1 vào entity backend `Building`, xem `src/types/property.ts`. Create trả 409 `{ isDuplicate, existingBuilding, message }` khi trùng địa chỉ — flow xử lý ở `PropertyFormModal.tsx` (hỏi lại người dùng, gửi lại với `confirmDuplicate: true`).
+- Phòng (Room): **chưa có API thật** — backend chỉ có `Building`, chưa có module Room (xem TODO trong `BuildingService.cs`). `src/services/roomService.ts` đang chạy mock trên `localStorage`, cùng chữ ký hàm với service thật (`getByPropertyId/create/update/remove`) để sau này thay bằng axios call mà không phải sửa page. Cần thay ngay khi backend có Rooms feature.
+
+## 8. Components mở rộng sau auth
+
+| Component                              | Quy tắc chính                                                                                          |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `components/layout/AppLayout.tsx`       | Header có nav + `ThemeToggle` (tái dùng từ `components/auth`), không sidebar, nội dung căn giữa `max-w-5xl` |
+| `components/shared/Modal.tsx`           | Overlay `bg-fg/40`, đóng bằng Esc hoặc click nền, `role="dialog"` — nền tảng cho form và confirm dialog   |
+| `components/shared/ConfirmDialog.tsx`   | Bọc `Modal`, dùng cho **mọi** hành động xoá (không xoá trực tiếp khi click) — nút Huỷ (`ghost`) + nút xác nhận (`primary`) |
+| `components/shared/DataTable.tsx`       | `>=768px` render `<table>`; `<768px` chuyển card key/value theo cột (Table Handling)                     |
+| `components/shared/EmptyState.tsx`      | Icon `lucide-react` + tiêu đề uppercase + mô tả + action tuỳ chọn                                        |
 
 ## Overrides
 
