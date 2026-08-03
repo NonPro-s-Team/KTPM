@@ -37,8 +37,18 @@ public class BuildingsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateBuildingRequest request)
     {
-        var building = await _buildingService.CreateAsync(request);
-        return CreatedAtAction(nameof(GetById), new { id = building.Id }, building);
+        var result = await _buildingService.CreateAsync(request);
+        if (result.IsDuplicate)
+        {
+            return Conflict(new
+            {
+                isDuplicate = true,
+                existingBuilding = result.Duplicate,
+                message = $"A building already exists at this address: {result.Duplicate!.Name}."
+            });
+        }
+
+        return CreatedAtAction(nameof(GetById), new { id = result.Building!.Id }, result.Building);
     }
 
     [HttpPut("{id:guid}")]

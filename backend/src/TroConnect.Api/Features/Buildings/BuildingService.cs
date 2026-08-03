@@ -36,8 +36,24 @@ public class BuildingService
         return ToDetailDto(building);
     }
 
-    public async Task<BuildingDetailDto> CreateAsync(CreateBuildingRequest request)
+    public async Task<CreateBuildingResult> CreateAsync(CreateBuildingRequest request)
     {
+        if (!request.ConfirmDuplicate)
+        {
+            // Soft duplicate check: match on normalized Address only (docs/building-management.md) —
+            // Name is deliberately excluded since landlords may legitimately reuse similar names.
+            var normalizedAddress = request.Address.Trim().ToLower();
+            var existing = await _db.Buildings
+                .FirstOrDefaultAsync(b => b.Address.Trim().ToLower() == normalizedAddress);
+
+            if (existing is not null)
+            {
+                return new CreateBuildingResult(
+                    null,
+                    new DuplicateBuildingInfo(existing.Id, existing.Name, existing.Address));
+            }
+        }
+
         var building = new Building
         {
             Id = Guid.NewGuid(),
@@ -51,7 +67,7 @@ public class BuildingService
         _db.Buildings.Add(building);
         await _db.SaveChangesAsync();
 
-        return ToDetailDto(building);
+        return new CreateBuildingResult(ToDetailDto(building), null);
     }
 
     public async Task<BuildingDetailDto?> UpdateAsync(Guid id, UpdateBuildingRequest request)

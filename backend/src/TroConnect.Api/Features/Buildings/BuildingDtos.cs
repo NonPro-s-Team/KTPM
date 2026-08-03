@@ -5,7 +5,8 @@ namespace TroConnect.Api.Features.Buildings;
 public record CreateBuildingRequest(
     [Required] string Name,
     [Required] string Address,
-    [Range(0, int.MaxValue)] int TotalRooms
+    [Range(0, int.MaxValue)] int TotalRooms,
+    bool ConfirmDuplicate = false
 );
 
 public record UpdateBuildingRequest(
@@ -21,6 +22,8 @@ public record BuildingListDto(
     int TotalRooms
 );
 
+public record DuplicateBuildingInfo(Guid Id, string Name, string Address);
+
 public record BuildingDetailDto(
     Guid Id,
     string Name,
@@ -31,3 +34,8 @@ public record BuildingDetailDto(
     int VacantRooms,
     int OccupiedRooms
 );
+
+public record CreateBuildingResult(BuildingDetailDto? Building, DuplicateBuildingInfo? Duplicate)
+{
+    public bool IsDuplicate => Duplicate is not null;
+}
