@@ -6,6 +6,7 @@ using Microsoft.OpenApi;
 using TroConnect.Api.Common;
 using TroConnect.Api.Data;
 using TroConnect.Api.Features.Accounts;
+using TroConnect.Api.Features.Buildings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +61,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<BuildingService>();
 
 var app = builder.Build();
 

@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
+    public DbSet<Building> Buildings => Set<Building>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
