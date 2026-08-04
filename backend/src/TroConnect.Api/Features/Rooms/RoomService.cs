@@ -129,7 +129,8 @@ public class RoomService
 
         // TODO: once the Contract module exists, block this delete (return a clear error instead)
         // if the room has an active contract — see docs/contract-management.md.
-        _db.Rooms.Remove(room);
+        room.IsDeleted = true;
+        room.DeletedAt = DateTimeOffset.UtcNow;
         await _db.SaveChangesAsync();
         return true;
     }

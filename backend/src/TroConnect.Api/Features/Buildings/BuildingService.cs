@@ -110,7 +110,8 @@ public class BuildingService
             return DeleteBuildingResult.HasRooms;
         }
 
-        _db.Buildings.Remove(building);
+        building.IsDeleted = true;
+        building.DeletedAt = DateTimeOffset.UtcNow;
         await _db.SaveChangesAsync();
         return DeleteBuildingResult.Deleted;
     }

@@ -21,6 +21,7 @@ public class AppDbContext : DbContext
         {
             entity.HasIndex(a => a.Email).IsUnique();
             entity.Property(a => a.Role).HasConversion<string>();
+            entity.HasQueryFilter(a => !a.IsDeleted);
         });
 
         modelBuilder.Entity<PasswordResetToken>(entity =>
@@ -30,6 +31,11 @@ public class AppDbContext : DbContext
                 .WithMany(a => a.PasswordResetTokens)
                 .HasForeignKey(t => t.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Building>(entity =>
+        {
+            entity.HasQueryFilter(b => !b.IsDeleted);
         });
 
         modelBuilder.Entity<Room>(entity =>
@@ -44,6 +50,8 @@ public class AppDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(r => r.BuildingId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasQueryFilter(r => !r.IsDeleted);
         });
 
         modelBuilder.Entity<Tenant>(entity =>
