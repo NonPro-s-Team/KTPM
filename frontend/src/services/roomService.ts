@@ -54,12 +54,26 @@ function getFieldErrors(err: unknown): Partial<Record<keyof RoomPayload, string>
   return Object.keys(mapped).length > 0 ? mapped : null
 }
 
+// BE trả message business-rule bằng TIẾNG ANH (RoomsController.ToErrorResult) — dịch sang
+// tiếng Việt trước khi hiển thị, tránh lòi chuỗi tiếng Anh ra UI. Nhận diện bằng chuỗi con
+// vì BE chưa trả mã lỗi riêng; fallback về message gốc nếu gặp trường hợp chưa map.
+function translateErrorMessage(message: string): string {
+  if (message.includes('room limit')) {
+    const limit = message.match(/room limit of (\d+)/)?.[1]
+    const limitPhrase = limit ? `giới hạn ${limit} phòng` : 'giới hạn số phòng'
+    return `Nhà trọ này đã đạt ${limitPhrase}. Vui lòng tăng Tổng số phòng của nhà trọ trước khi thêm phòng mới.`
+  }
+  if (message.includes('Building not found')) return 'Không tìm thấy nhà trọ.'
+  if (message.includes('Room not found')) return 'Không tìm thấy phòng.'
+  return message
+}
+
 // RoomLimitReached (400) và BuildingNotFound/RoomNotFound (404) đều trả { message } phẳng,
 // không nằm trong "errors" — dùng cho các lỗi không gắn được vào field cụ thể nào.
 function getErrorMessage(err: unknown): string | null {
   if (!isAxiosError(err)) return null
   const message = err.response?.data?.message as string | undefined
-  return message ?? null
+  return message ? translateErrorMessage(message) : null
 }
 
 export const roomService = {

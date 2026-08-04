@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Pencil } from 'lucide-react'
 import { AppLayout } from '../../components/layout/AppLayout'
 import { Button } from '../../components/auth/Button'
@@ -10,10 +10,24 @@ import { PropertyFormModal } from './PropertyFormModal'
 
 export default function PropertyDetailPage() {
   const { id } = useParams<{ id: string }>()
+  // ?edit=1 để trang khác (vd: trang Phòng khi hết hạn mức) link thẳng vào form sửa,
+  // người dùng không phải tự mò tìm nút Sửa.
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [property, setProperty] = useState<PropertyDetail>()
   const [error, setError] = useState<string>()
-  const [editingProperty, setEditingProperty] = useState(false)
+  const [editingProperty, setEditingProperty] = useState(
+    () => searchParams.get('edit') === '1',
+  )
+
+  const closeEditModal = () => {
+    setEditingProperty(false)
+    // Bỏ query param đi, không thì F5 lại tự mở form lần nữa
+    if (searchParams.has('edit')) {
+      searchParams.delete('edit')
+      setSearchParams(searchParams, { replace: true })
+    }
+  }
 
   const loadProperty = async () => {
     if (!id) return
@@ -80,9 +94,9 @@ export default function PropertyDetailPage() {
       {editingProperty && property && (
         <PropertyFormModal
           property={property}
-          onClose={() => setEditingProperty(false)}
+          onClose={closeEditModal}
           onSaved={() => {
-            setEditingProperty(false)
+            closeEditModal()
             loadProperty()
           }}
         />

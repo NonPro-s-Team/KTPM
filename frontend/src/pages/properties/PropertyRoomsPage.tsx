@@ -17,6 +17,9 @@ import { RoomFormModal } from '../../components/properties/RoomFormModal'
 
 const currency = new Intl.NumberFormat('vi-VN')
 
+const ROOM_LIMIT_TOOLTIP =
+  'Đã đạt giới hạn phòng, tăng Tổng số phòng của nhà trọ để thêm mới'
+
 export default function PropertyRoomsPage() {
   const { propertyId } = useParams<{ propertyId: string }>()
   const { showToast } = useToast()
@@ -75,6 +78,25 @@ export default function PropertyRoomsPage() {
     load()
   }
 
+  // Check giới hạn phòng ngay trên client bằng dữ liệu ĐÃ có sẵn (số phòng đang render +
+  // property.totalRooms) — không gọi thêm API, và không để người dùng gõ hết form rồi mới
+  // báo lỗi. BE vẫn giữ check của nó làm lớp bảo vệ cuối cho race condition (2 tab cùng thêm).
+  // `load()` chạy lại sau mỗi lần thêm/xoá nên trạng thái này tự cập nhật real-time.
+  const isAtRoomLimit =
+    rooms !== undefined && property !== undefined && rooms.length >= property.totalRooms
+
+  const roomLimitMessage = property
+    ? `Nhà trọ này đã đạt giới hạn ${property.totalRooms} phòng. Vui lòng tăng Tổng số phòng ở trang chỉnh sửa nhà trọ trước khi thêm phòng mới.`
+    : ''
+
+  const handleOpenCreate = () => {
+    if (isAtRoomLimit) {
+      showToast(roomLimitMessage, 'error')
+      return
+    }
+    setFormTarget('new')
+  }
+
   if (!propertyId) return null
 
   return (
@@ -91,13 +113,37 @@ export default function PropertyRoomsPage() {
         <h1 className="text-xl font-bold tracking-tight">
           Phòng {property && `— ${property.name}`}
         </h1>
-        <Button onClick={() => setFormTarget('new')}>
+        <Button
+          onClick={handleOpenCreate}
+          disabled={isAtRoomLimit}
+          title={isAtRoomLimit ? ROOM_LIMIT_TOOLTIP : undefined}
+        >
           <Plus className="size-4" aria-hidden />
           Thêm phòng
         </Button>
       </div>
 
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && (
+        <div className="mb-6">
+          <Alert variant="error">{error}</Alert>
+        </div>
+      )}
+
+      {/* Giải thích ngay vì sao nút "Thêm phòng" bị vô hiệu, kèm lối tắt đi tăng giới hạn —
+          nút disabled mà không nói lý do thì người dùng không biết phải làm gì tiếp. */}
+      {isAtRoomLimit && property && (
+        <div className="mb-6">
+          <Alert variant="info">
+            {roomLimitMessage}{' '}
+            <Link
+              to={`/properties/${propertyId}?edit=1`}
+              className="font-semibold text-fg underline transition-colors duration-150 hover:text-muted"
+            >
+              Tăng Tổng số phòng
+            </Link>
+          </Alert>
+        </div>
+      )}
 
       {rooms === undefined && !error ? (
         <TableSkeleton columns={3} />
@@ -107,7 +153,14 @@ export default function PropertyRoomsPage() {
           title="Chưa có phòng nào"
           description="Thêm phòng đầu tiên cho nhà trọ này."
           action={
-            <Button variant="secondary" onClick={() => setFormTarget('new')}>
+            // Vẫn phải check: nhà trọ khai báo TotalRooms = 0 thì 0 >= 0, hết hạn mức ngay
+            // cả khi chưa có phòng nào.
+            <Button
+              variant="secondary"
+              onClick={handleOpenCreate}
+              disabled={isAtRoomLimit}
+              title={isAtRoomLimit ? ROOM_LIMIT_TOOLTIP : undefined}
+            >
               Thêm phòng đầu tiên
             </Button>
           }
