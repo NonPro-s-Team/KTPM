@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
     public DbSet<Building> Buildings => Set<Building>();
+    public DbSet<Room> Rooms => Set<Room>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,6 +29,20 @@ public class AppDbContext : DbContext
                 .WithMany(a => a.PasswordResetTokens)
                 .HasForeignKey(t => t.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Room>(entity =>
+        {
+            entity.Property(r => r.BasePrice).HasColumnType("numeric(14,2)");
+            entity.Property(r => r.ServicePrice).HasColumnType("numeric(14,2)");
+            entity.Property(r => r.SingleOccupantDiscountAmount).HasColumnType("numeric(14,2)");
+
+            // No navigation properties either side — Building deletion-blocked-by-rooms and the room-count
+            // cap are enforced explicitly in service code, so Restrict is just a DB-level backstop.
+            entity.HasOne<Building>()
+                .WithMany()
+                .HasForeignKey(r => r.BuildingId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }
