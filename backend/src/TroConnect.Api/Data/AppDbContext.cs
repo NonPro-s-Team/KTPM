@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
     public DbSet<Building> Buildings => Set<Building>();
     public DbSet<Room> Rooms => Set<Room>();
+    public DbSet<Tenant> Tenants => Set<Tenant>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,6 +44,12 @@ public class AppDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(r => r.BuildingId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Tenant>(entity =>
+        {
+            entity.HasIndex(t => t.IdNumber).IsUnique();
+            entity.Property(t => t.Gender).HasConversion<string>();
         });
     }
 }

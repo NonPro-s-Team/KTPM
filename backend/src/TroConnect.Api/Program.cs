@@ -8,6 +8,7 @@ using TroConnect.Api.Data;
 using TroConnect.Api.Features.Accounts;
 using TroConnect.Api.Features.Buildings;
 using TroConnect.Api.Features.Rooms;
+using TroConnect.Api.Features.Tenants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<BuildingService>();
 builder.Services.AddScoped<RoomService>();
+builder.Services.AddScoped<TenantService>();
 
 var app = builder.Build();
 
