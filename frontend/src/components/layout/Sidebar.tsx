@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import { Building2, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { Building2, PanelLeftClose, PanelLeftOpen, Users } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { ThemeToggle } from '../auth/ThemeToggle'
 
@@ -21,6 +21,11 @@ const navGroups: NavGroup[] = [
     label: 'Nhà trọ',
     icon: Building2,
     items: [{ label: 'Danh sách nhà trọ', to: '/properties' }],
+  },
+  {
+    label: 'Người thuê',
+    icon: Users,
+    items: [{ label: 'Hồ sơ người thuê', to: '/tenants' }],
   },
 ]
 

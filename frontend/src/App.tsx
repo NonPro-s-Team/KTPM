@@ -8,6 +8,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage'
 import PropertiesPage from './pages/properties/PropertiesPage'
 import PropertyDetailPage from './pages/properties/PropertyDetailPage'
 import PropertyRoomsPage from './pages/properties/PropertyRoomsPage'
+import TenantsPage from './pages/tenants/TenantsPage'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/properties" element={<PropertiesPage />} />
             <Route path="/properties/:id" element={<PropertyDetailPage />} />
             <Route path="/properties/:propertyId/rooms" element={<PropertyRoomsPage />} />
+            <Route path="/tenants" element={<TenantsPage />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </BrowserRouter>
