@@ -1,23 +1,42 @@
-// TODO: Backend chưa có module Room (chỉ có Building — xem BuildingService.cs dòng
-// "once the Room module exists"). Type + service này đang chạy trên mock data cục bộ
-// theo docs/room-management.md, thay bằng gọi API thật khi backend có Rooms feature.
+// Khớp 100% với backend/src/TroConnect.Api/Features/Rooms/RoomDtos.cs — đã verify trực tiếp
+// qua API thật (không đoán field). Route thật: /api/rooms (flat, KHÔNG nested theo building),
+// lọc theo nhà trọ bằng query param ?buildingId=. Không có pagination, không có response wrapper
+// — mảng/object trả thẳng.
+//
+// TODO đã báo lại người dùng: BE hiện KHÔNG có trường trạng thái phòng (Available/Occupied/
+// Maintenance), KHÔNG có tầng, KHÔNG có diện tích — dù yêu cầu ban đầu có nhắc tới. Không tự
+// thêm các field này ở đây cho tới khi BE thực sự có.
 
+// RoomListDto — GET /rooms, GET /rooms?buildingId=X. Chỉ có 4 field, KHÔNG có servicePrice /
+// singleOccupantDiscountAmount (khác với bản mock cũ) — muốn xem đủ field phải gọi getById.
 export interface Room {
   id: string
-  propertyId: string
+  name: string
+  buildingName: string
+  basePrice: number
+  maxOccupancy: number
+}
+
+// RoomDetailDto — GET /rooms/{id}, và cũng là response của POST/PUT /rooms
+export interface RoomDetail {
+  id: string
+  buildingId: string
+  buildingName: string
   name: string
   basePrice: number
   servicePrice: number
   maxOccupancy: number
-  singleOccupantDiscount: number | null
+  singleOccupantDiscountAmount: number | null
+  createdAt: string
+  updatedAt: string
 }
 
-export interface CreateRoomPayload {
+// CreateRoomRequest / UpdateRoomRequest — hai request có cùng shape ở BE
+export interface RoomPayload {
+  buildingId: string
   name: string
   basePrice: number
   servicePrice: number
   maxOccupancy: number
-  singleOccupantDiscount: number | null
+  singleOccupantDiscountAmount: number | null
 }
-
-export type UpdateRoomPayload = CreateRoomPayload

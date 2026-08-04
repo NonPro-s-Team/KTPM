@@ -71,7 +71,9 @@ Class Tailwind tương ứng: `bg-bg`, `text-fg`, `text-muted`, `border-border`,
 - Endpoints auth: `POST /accounts/login`, `/accounts/register`, `/accounts/forgot-password`, `/accounts/reset-password`.
 - Register: backend nhận `{ email, password, role }` — `role` là enum SỐ (`0` = Landlord, `1` = Tenant) vì backend chưa bật `JsonStringEnumConverter`. Trường "Họ tên" trên UI chưa có chỗ chứa ở backend.
 - Endpoints Nhà trọ (Property): `GET/POST /buildings`, `GET/PUT/DELETE /buildings/{id}` — yêu cầu `[Authorize]`. Tên frontend "Property" ánh xạ 1:1 vào entity backend `Building`, xem `src/types/property.ts`. Create trả 409 `{ isDuplicate, existingBuilding, message }` khi trùng địa chỉ — flow xử lý ở `PropertyFormModal.tsx` (hỏi lại người dùng, gửi lại với `confirmDuplicate: true`).
-- Phòng (Room): **chưa có API thật** — backend chỉ có `Building`, chưa có module Room (xem TODO trong `BuildingService.cs`). `src/services/roomService.ts` đang chạy mock trên `localStorage`, cùng chữ ký hàm với service thật (`getByPropertyId/create/update/remove`) để sau này thay bằng axios call mà không phải sửa page. Cần thay ngay khi backend có Rooms feature.
+- Response 401 khi token hết hạn/không hợp lệ (đã gắn Authorization mà vẫn 401) → interceptor tự xoá token + điều hướng `/login`. KHÔNG áp dụng cho 401 của chính `/accounts/login` (sai mật khẩu) — request đó không gắn token nên interceptor bỏ qua, page tự xử lý lỗi inline.
+- Endpoints Phòng (Room): **API thật**, route FLAT `GET/POST /rooms`, `GET/PUT/DELETE /rooms/{id}` — KHÔNG nested theo building. Lọc theo nhà trọ bằng query param `?buildingId=`. Không phân trang, không response wrapper. List (`RoomListDto`) chỉ có `id/name/buildingName/basePrice/maxOccupancy` — thiếu `servicePrice`/`singleOccupantDiscountAmount` nên sửa phòng phải gọi `GET /rooms/{id}` lấy đủ field trước khi mở form (xem `PropertyRoomsPage.tsx`). Lỗi 400 model-validation trả `{ errors: { "Name": [...], "BasePrice": [...] } }` — **key PascalCase đúng tên field C#**, khác hẳn casing camelCase của các response khác; map field qua `roomService.getFieldErrors`. Lỗi business rule (hết hạn mức phòng, sai buildingId) trả `{ message }` phẳng qua `roomService.getErrorMessage`.
+- **Room KHÔNG có trường trạng thái phòng (Available/Occupied/Maintenance), KHÔNG có tầng, KHÔNG có diện tích** — đã verify trực tiếp qua `Room.cs`/API thật. Không tự thêm các field này ở FE cho tới khi backend có.
 
 ## 8. Components mở rộng sau auth
 
@@ -83,6 +85,9 @@ Class Tailwind tương ứng: `bg-bg`, `text-fg`, `text-muted`, `border-border`,
 | `components/shared/ConfirmDialog.tsx`   | Bọc `Modal`, dùng cho **mọi** hành động xoá (không xoá trực tiếp khi click) — nút Huỷ (`ghost`) + nút xác nhận (`primary`) |
 | `components/shared/DataTable.tsx`       | `>=768px` render `<table>`; `<768px` chuyển card key/value theo cột (Table Handling)                     |
 | `components/shared/EmptyState.tsx`      | Icon `lucide-react` + tiêu đề uppercase + mô tả + action tuỳ chọn                                        |
+| `components/shared/Toast.tsx`           | `ToastProvider` bọc toàn app (`App.tsx`) + hook `useToast().showToast(message, variant?)`. Cùng ngôn ngữ với `Alert` (viền đậm phân biệt trạng thái, không màu semantic), tự ẩn sau 3.5s, xếp chồng góc dưới-phải |
+| `components/shared/TableSkeleton.tsx`   | Khung loading khớp breakpoint của `DataTable` (table `>=768px` / card `<768px`), bar `animate-pulse bg-border` |
+| `components/properties/RoomFormModal.tsx` | Dùng chung Tạo/Sửa qua prop `mode: 'create' \| 'edit'`. Field khớp `CreateRoomRequest`/`UpdateRoomRequest` thật — validate onBlur mirror đúng `[Range]`/`[Required]` của BE. Lỗi 400 field-level từ BE ghi đè lỗi client-side qua `roomService.getFieldErrors` |
 
 ## Overrides
 

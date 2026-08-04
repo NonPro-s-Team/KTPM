@@ -1,57 +1,73 @@
-import type { CreateRoomPayload, Room, UpdateRoomPayload } from '../types/room'
+import { isAxiosError } from 'axios'
+import { api } from '../lib/axios'
+import type { Room, RoomDetail, RoomPayload } from '../types/room'
 
-// TODO: MOCK — chưa có Rooms API thật ở backend. Dữ liệu lưu tạm trong localStorage
-// để CRUD hoạt động qua reload trang, thay toàn bộ file này bằng axios calls tới
-// /api/properties/{propertyId}/rooms (hoặc route tương đương) khi backend có Rooms feature.
+// Gọi API thật /api/rooms — xem backend/src/TroConnect.Api/Features/Rooms/RoomsController.cs.
+// Route flat (không nested theo building), lọc theo nhà trọ bằng query param buildingId.
 
-const STORAGE_KEY = 'troconnect_mock_rooms'
-
-function readAll(): Room[] {
-  const raw = localStorage.getItem(STORAGE_KEY)
-  if (!raw) return []
-  try {
-    return JSON.parse(raw) as Room[]
-  } catch {
-    return []
-  }
+async function getByBuildingId(buildingId: string): Promise<Room[]> {
+  const { data } = await api.get<Room[]>('/rooms', { params: { buildingId } })
+  return data
 }
 
-function writeAll(rooms: Room[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(rooms))
+async function getById(id: string): Promise<RoomDetail> {
+  const { data } = await api.get<RoomDetail>(`/rooms/${id}`)
+  return data
 }
 
-function simulateLatency<T>(value: T): Promise<T> {
-  return new Promise((resolve) => setTimeout(() => resolve(value), 250))
+async function create(payload: RoomPayload): Promise<RoomDetail> {
+  const { data } = await api.post<RoomDetail>('/rooms', payload)
+  return data
 }
 
-async function getByPropertyId(propertyId: string): Promise<Room[]> {
-  const rooms = readAll().filter((r) => r.propertyId === propertyId)
-  return simulateLatency(rooms)
-}
-
-async function create(
-  propertyId: string,
-  payload: CreateRoomPayload,
-): Promise<Room> {
-  const rooms = readAll()
-  const room: Room = { id: crypto.randomUUID(), propertyId, ...payload }
-  rooms.push(room)
-  writeAll(rooms)
-  return simulateLatency(room)
-}
-
-async function update(id: string, payload: UpdateRoomPayload): Promise<Room> {
-  const rooms = readAll()
-  const index = rooms.findIndex((r) => r.id === id)
-  if (index === -1) throw new Error('Room not found')
-  rooms[index] = { ...rooms[index], ...payload }
-  writeAll(rooms)
-  return simulateLatency(rooms[index])
+async function update(id: string, payload: RoomPayload): Promise<RoomDetail> {
+  const { data } = await api.put<RoomDetail>(`/rooms/${id}`, payload)
+  return data
 }
 
 async function remove(id: string): Promise<void> {
-  writeAll(readAll().filter((r) => r.id !== id))
-  return simulateLatency(undefined)
+  await api.delete(`/rooms/${id}`)
 }
 
-export const roomService = { getByPropertyId, create, update, remove }
+// 400 model-validation (thiếu Name, giá âm...) trả ValidationProblemDetails chuẩn ASP.NET:
+// { errors: { "Name": ["..."], "BasePrice": ["..."] } } — key PascalCase đúng tên field C#,
+// đã verify trực tiếp qua API thật, KHÔNG phải camelCase như các response khác.
+const FIELD_KEY_MAP: Record<string, keyof RoomPayload> = {
+  Name: 'name',
+  BasePrice: 'basePrice',
+  ServicePrice: 'servicePrice',
+  MaxOccupancy: 'maxOccupancy',
+  SingleOccupantDiscountAmount: 'singleOccupantDiscountAmount',
+  BuildingId: 'buildingId',
+}
+
+function getFieldErrors(err: unknown): Partial<Record<keyof RoomPayload, string>> | null {
+  if (!isAxiosError(err) || err.response?.status !== 400) return null
+  const errors = err.response.data?.errors as Record<string, string[]> | undefined
+  if (!errors) return null
+
+  const mapped: Partial<Record<keyof RoomPayload, string>> = {}
+  for (const [key, messages] of Object.entries(errors)) {
+    const field = FIELD_KEY_MAP[key]
+    if (field && messages[0]) mapped[field] = messages[0]
+  }
+  return Object.keys(mapped).length > 0 ? mapped : null
+}
+
+// RoomLimitReached (400) và BuildingNotFound/RoomNotFound (404) đều trả { message } phẳng,
+// không nằm trong "errors" — dùng cho các lỗi không gắn được vào field cụ thể nào.
+function getErrorMessage(err: unknown): string | null {
+  if (!isAxiosError(err)) return null
+  const message = err.response?.data?.message as string | undefined
+  return message ?? null
+}
+
+export const roomService = {
+  getByBuildingId,
+  getById,
+  create,
+  update,
+  remove,
+  getFieldErrors,
+  getErrorMessage,
+}
