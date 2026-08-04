@@ -70,12 +70,21 @@ public class BuildingService
         return new CreateBuildingResult(ToDetailDto(building), null);
     }
 
-    public async Task<BuildingDetailDto?> UpdateAsync(Guid id, UpdateBuildingRequest request)
+    public async Task<UpdateBuildingResult?> UpdateAsync(Guid id, UpdateBuildingRequest request)
     {
         var building = await _db.Buildings.FindAsync(id);
         if (building is null)
         {
             return null;
+        }
+
+        if (request.TotalRooms < building.TotalRooms)
+        {
+            var actualRoomCount = await _db.Rooms.CountAsync(r => r.BuildingId == id);
+            if (request.TotalRooms < actualRoomCount)
+            {
+                return UpdateBuildingResult.TotalRoomsBelowActual(actualRoomCount);
+            }
         }
 
         building.Name = request.Name;
@@ -84,22 +93,26 @@ public class BuildingService
         building.UpdatedAt = DateTimeOffset.UtcNow;
 
         await _db.SaveChangesAsync();
-        return ToDetailDto(building);
+        return UpdateBuildingResult.Success(ToDetailDto(building));
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<DeleteBuildingResult> DeleteAsync(Guid id)
     {
         var building = await _db.Buildings.FindAsync(id);
         if (building is null)
         {
-            return false;
+            return DeleteBuildingResult.NotFound;
         }
 
-        // TODO: once the Room module exists, block this delete (return a clear error instead)
-        // if the building still has any rooms attached — see docs/building-management.md's delete rule.
+        var hasRooms = await _db.Rooms.AnyAsync(r => r.BuildingId == id);
+        if (hasRooms)
+        {
+            return DeleteBuildingResult.HasRooms;
+        }
+
         _db.Buildings.Remove(building);
         await _db.SaveChangesAsync();
-        return true;
+        return DeleteBuildingResult.Deleted;
     }
 
     private static BuildingDetailDto ToDetailDto(Building building)

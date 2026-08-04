@@ -39,3 +39,18 @@ public record CreateBuildingResult(BuildingDetailDto? Building, DuplicateBuildin
 {
     public bool IsDuplicate => Duplicate is not null;
 }
+
+public record UpdateBuildingResult(BuildingDetailDto? Building, int? ActualRoomCount)
+{
+    public bool IsTotalRoomsBelowActual => ActualRoomCount is not null;
+
+    public static UpdateBuildingResult Success(BuildingDetailDto building) => new(building, null);
+    public static UpdateBuildingResult TotalRoomsBelowActual(int actualRoomCount) => new(null, actualRoomCount);
+}
+
+public enum DeleteBuildingResult
+{
+    Deleted,
+    NotFound,
+    HasRooms
+}

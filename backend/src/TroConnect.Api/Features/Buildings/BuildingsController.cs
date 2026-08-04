@@ -54,24 +54,35 @@ public class BuildingsController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, UpdateBuildingRequest request)
     {
-        var building = await _buildingService.UpdateAsync(id, request);
-        if (building is null)
+        var result = await _buildingService.UpdateAsync(id, request);
+        if (result is null)
         {
             return NotFound(new { message = "Building not found." });
         }
 
-        return Ok(building);
+        if (result.IsTotalRoomsBelowActual)
+        {
+            return BadRequest(new
+            {
+                message = $"Cannot set TotalRooms below the current number of rooms ({result.ActualRoomCount}) already in this building."
+            });
+        }
+
+        return Ok(result.Building);
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var deleted = await _buildingService.DeleteAsync(id);
-        if (!deleted)
+        var result = await _buildingService.DeleteAsync(id);
+        return result switch
         {
-            return NotFound(new { message = "Building not found." });
-        }
-
-        return NoContent();
+            DeleteBuildingResult.NotFound => NotFound(new { message = "Building not found." }),
+            DeleteBuildingResult.HasRooms => BadRequest(new
+            {
+                message = "Cannot delete a building that still has rooms. Move or delete its rooms first."
+            }),
+            _ => NoContent()
+        };
     }
 }
