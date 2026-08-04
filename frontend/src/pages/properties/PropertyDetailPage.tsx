@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Pencil } from 'lucide-react'
+import { ArrowRight, Pencil } from 'lucide-react'
 import { AppLayout } from '../../components/layout/AppLayout'
+import { DetailView } from '../../components/shared/DetailView'
 import { Button } from '../../components/auth/Button'
 import { Alert } from '../../components/auth/Alert'
+import { formatDateTime } from '../../lib/format'
 import { propertyService } from '../../services/propertyService'
 import type { PropertyDetail } from '../../types/property'
 import { PropertyFormModal } from './PropertyFormModal'
@@ -47,48 +49,39 @@ export default function PropertyDetailPage() {
 
   return (
     <AppLayout>
-      <Link
-        to="/properties"
-        className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted transition-colors duration-150 hover:text-fg"
-      >
-        <ArrowLeft className="size-4" aria-hidden />
-        Quay lại danh sách nhà trọ
-      </Link>
-
       {error && <Alert variant="error">{error}</Alert>}
 
       {property && (
-        <div className="flex items-start justify-between gap-4 border border-border p-6">
-          <div>
-            <h1 className="text-xl font-bold tracking-tight">{property.name}</h1>
-            <p className="mt-1 text-sm text-muted">{property.address}</p>
-            <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm">
-              <div>
-                <dt className="text-muted">Tổng số phòng</dt>
-                <dd className="font-semibold">{property.totalRooms}</dd>
-              </div>
-              <div>
-                <dt className="text-muted">Phòng trống</dt>
-                <dd className="font-semibold">{property.vacantRooms}</dd>
-              </div>
-              <div>
-                <dt className="text-muted">Phòng đã thuê</dt>
-                <dd className="font-semibold">{property.occupiedRooms}</dd>
-              </div>
-            </dl>
-            <Link
-              to={`/properties/${id}/rooms`}
-              className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-fg transition-colors duration-150 hover:text-muted"
-            >
-              Xem danh sách phòng
-              <ArrowRight className="size-4" aria-hidden />
-            </Link>
-          </div>
-          <Button variant="secondary" onClick={() => setEditingProperty(true)}>
-            <Pencil className="size-4" aria-hidden />
-            Sửa
-          </Button>
-        </div>
+        <DetailView
+          backTo="/properties"
+          backLabel="Quay lại danh sách nhà trọ"
+          title={property.name}
+          subtitle={property.address}
+          actions={
+            <Button variant="secondary" onClick={() => setEditingProperty(true)}>
+              <Pencil className="size-4" aria-hidden />
+              Sửa
+            </Button>
+          }
+          fields={[
+            { label: 'Tổng số phòng', value: property.totalRooms },
+            { label: 'Phòng trống', value: property.vacantRooms },
+            { label: 'Phòng đã thuê', value: property.occupiedRooms },
+            { label: 'Ngày tạo', value: formatDateTime(property.createdAt) },
+            {
+              label: 'Cập nhật lần cuối',
+              value: formatDateTime(property.updatedAt),
+            },
+          ]}
+        >
+          <Link
+            to={`/properties/${id}/rooms`}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-fg transition-colors duration-150 hover:text-muted"
+          >
+            Xem danh sách phòng
+            <ArrowRight className="size-4" aria-hidden />
+          </Link>
+        </DetailView>
       )}
 
       {editingProperty && property && (

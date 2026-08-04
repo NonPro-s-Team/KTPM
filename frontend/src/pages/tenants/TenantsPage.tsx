@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Pencil, Plus, Search, Trash2, Users } from 'lucide-react'
 import { AppLayout } from '../../components/layout/AppLayout'
 import { DataTable } from '../../components/shared/DataTable'
@@ -142,9 +143,24 @@ export default function TenantsPage() {
         <DataTable
           data={tenants}
           keyField={(t) => t.id}
-          cardTitle={(t) => t.fullName}
+          cardTitle={(t) => (
+            <Link to={`/tenants/${t.id}`} className="hover:underline">
+              {t.fullName}
+            </Link>
+          )}
           columns={[
-            { header: 'Họ tên', hideOnCard: true, render: (t) => t.fullName },
+            {
+              header: 'Họ tên',
+              hideOnCard: true,
+              render: (t) => (
+                <Link
+                  to={`/tenants/${t.id}`}
+                  className="font-medium hover:underline"
+                >
+                  {t.fullName}
+                </Link>
+              ),
+            },
             { header: 'Số CCCD/CMND', render: (t) => t.idNumber },
             { header: 'Số điện thoại', render: (t) => t.phoneNumber },
           ]}

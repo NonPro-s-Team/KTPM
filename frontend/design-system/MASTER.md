@@ -88,11 +88,20 @@ Class Tailwind tương ứng: `bg-bg`, `text-fg`, `text-muted`, `border-border`,
 | `components/shared/ConfirmDialog.tsx`   | Bọc `Modal`, dùng cho **mọi** hành động xoá (không xoá trực tiếp khi click) — nút Huỷ (`ghost`) + nút xác nhận (`primary`) |
 | `components/shared/DataTable.tsx`       | `>=768px` render `<table>`; `<768px` chuyển card key/value theo cột (Table Handling)                     |
 | `components/shared/EmptyState.tsx`      | Icon `lucide-react` + tiêu đề uppercase + mô tả + action tuỳ chọn                                        |
+| `components/shared/DetailView.tsx`      | Khung chung cho MỌI trang chi tiết (Nhà trọ / Phòng / Người thuê): link quay lại + tiêu đề/phụ đề + nút hành động góc phải + `<dl>` field. Field xếp 1 cột `<640px`, 2 cột từ `sm`, 3 cột từ `lg`; `fullWidth` cho field dài (địa chỉ, quê quán). Module mới có trang chi tiết thì dùng lại component này, không tự dựng layout riêng |
 | `components/shared/Toast.tsx`           | `ToastProvider` bọc toàn app (`App.tsx`) + hook `useToast().showToast(message, variant?)`. Cùng ngôn ngữ với `Alert` (viền đậm phân biệt trạng thái, không màu semantic), tự ẩn sau 3.5s, xếp chồng góc dưới-phải |
 | `components/shared/TableSkeleton.tsx`   | Khung loading khớp breakpoint của `DataTable` (table `>=768px` / card `<768px`), bar `animate-pulse bg-border` |
 | `components/properties/RoomFormModal.tsx` | Dùng chung Tạo/Sửa qua prop `mode: 'create' \| 'edit'`. Field khớp `CreateRoomRequest`/`UpdateRoomRequest` thật — validate onBlur mirror đúng `[Range]`/`[Required]` của BE. Lỗi 400 field-level từ BE ghi đè lỗi client-side qua `roomService.getFieldErrors` |
 | `components/auth/Select.tsx`            | Dropdown cùng ngôn ngữ với `Input` (label uppercase, viền `border-strong` khi focus/lỗi), `appearance-none` + icon `ChevronDown` tự vẽ. Prop `placeholder` = dòng trống đầu danh sách cho field optional |
 | `components/tenants/TenantFormModal.tsx` | Dùng chung Tạo/Sửa qua prop `mode`. Lỗi trùng CCCD hiển thị inline ngay dưới ô CCCD (không đẩy lên banner) vì gắn được vào đúng field |
+
+## 9. Quy ước trang chi tiết
+
+- Mỗi module CRUD có **trang chi tiết riêng** với URL riêng (bookmark/share được), không dùng modal xem nhanh: `/properties/:id`, `/properties/:propertyId/rooms/:roomId`, `/tenants/:id`.
+- Vào bằng cách bấm **tên** ở cột đầu bảng danh sách (và tiêu đề card ở mobile).
+- Trang chi tiết phải hiện **đủ field của Detail DTO**, kể cả field mà List DTO không trả (vd: `servicePrice`/`singleOccupantDiscountAmount` của Phòng, quê quán/ngày sinh/giới tính/email của Người thuê) — trước khi có trang này, muốn xem các field đó phải mở form Sửa, rất ngược đời.
+- Hành động trên trang chi tiết: **Sửa** (`secondary`, mở lại đúng FormModal của module) và **Xoá** (`ghost` + `ConfirmDialog`, xoá xong `navigate` về trang danh sách kèm Toast).
+- Format hiển thị dùng `src/lib/format.ts`: `formatCurrency`, `formatDateOnly` (field `DateOnly` `yyyy-MM-dd` — tự tách chuỗi, KHÔNG `new Date()` để tránh lệch múi giờ), `formatDateTime` (`DateTimeOffset` → `dd/MM/yyyy HH:mm`), `EMPTY_VALUE` (`—`) cho field rỗng.
 
 ## Overrides
 

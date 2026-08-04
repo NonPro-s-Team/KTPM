@@ -9,13 +9,12 @@ import { TableSkeleton } from '../../components/shared/TableSkeleton'
 import { Button } from '../../components/auth/Button'
 import { Alert } from '../../components/auth/Alert'
 import { useToast } from '../../components/shared/Toast'
+import { formatCurrency } from '../../lib/format'
 import { propertyService } from '../../services/propertyService'
 import { roomService } from '../../services/roomService'
 import type { Property } from '../../types/property'
 import type { Room, RoomDetail } from '../../types/room'
 import { RoomFormModal } from '../../components/properties/RoomFormModal'
-
-const currency = new Intl.NumberFormat('vi-VN')
 
 const ROOM_LIMIT_TOOLTIP =
   'Đã đạt giới hạn phòng, tăng Tổng số phòng của nhà trọ để thêm mới'
@@ -169,13 +168,28 @@ export default function PropertyRoomsPage() {
         <DataTable
           data={rooms}
           keyField={(r) => r.id}
-          cardTitle={(r) => r.name}
+          cardTitle={(r) => (
+            <Link
+              to={`/properties/${propertyId}/rooms/${r.id}`}
+              className="hover:underline"
+            >
+              {r.name}
+            </Link>
+          )}
           columns={[
-            { header: 'Tên phòng', hideOnCard: true, render: (r) => r.name },
             {
-              header: 'Giá phòng',
-              render: (r) => `${currency.format(r.basePrice)} đ`,
+              header: 'Tên phòng',
+              hideOnCard: true,
+              render: (r) => (
+                <Link
+                  to={`/properties/${propertyId}/rooms/${r.id}`}
+                  className="font-medium hover:underline"
+                >
+                  {r.name}
+                </Link>
+              ),
             },
+            { header: 'Giá phòng', render: (r) => formatCurrency(r.basePrice) },
             { header: 'Số người tối đa', render: (r) => r.maxOccupancy },
           ]}
           actions={(r) => (
