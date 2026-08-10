@@ -1,127 +1,149 @@
-import type { LucideIcon } from 'lucide-react'
-import { Building2, PanelLeftClose, PanelLeftOpen, Users } from 'lucide-react'
-import { Link, useLocation } from 'react-router-dom'
-import { ThemeToggle } from '../auth/ThemeToggle'
+import {
+  Activity,
+  BarChart2,
+  Briefcase,
+  Filter,
+  Gauge,
+  LayoutGrid,
+  Layers,
+  Megaphone,
+  MoreVertical,
+  PieChart,
+  Puzzle,
+  Settings,
+  User,
+  Users,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react'
 
 interface NavItem {
   label: string
-  to: string
+  icon: LucideIcon
+  active?: boolean
 }
 
-interface NavGroup {
+interface NavSection {
   label: string
-  icon: LucideIcon
   items: NavItem[]
 }
 
-// Mỗi module (Hợp đồng, Hóa đơn, Hồ sơ khách thuê...) thêm 1 NavGroup mới ở đây khi
-// module đó thực sự có route — chưa build trước cho module chưa tồn tại.
-const navGroups: NavGroup[] = [
+const topLevelItem: NavItem = { label: 'Overview', icon: LayoutGrid }
+
+const sections: NavSection[] = [
   {
-    label: 'Nhà trọ',
-    icon: Building2,
-    items: [{ label: 'Danh sách nhà trọ', to: '/properties' }],
+    label: 'Analytics',
+    items: [
+      { label: 'Reports', icon: Gauge },
+      { label: 'Funnels', icon: Filter, active: true },
+      { label: 'Cohorts', icon: Layers },
+      { label: 'Insights', icon: BarChart2 },
+    ],
   },
   {
-    label: 'Người thuê',
-    icon: Users,
-    items: [{ label: 'Hồ sơ người thuê', to: '/tenants' }],
+    label: 'Engagement',
+    items: [
+      { label: 'Users', icon: User },
+      { label: 'Accounts', icon: Briefcase },
+      { label: 'Segments', icon: PieChart },
+      { label: 'Activity', icon: Activity },
+    ],
+  },
+  {
+    label: 'Operations',
+    items: [
+      { label: 'Integrations', icon: Puzzle },
+      { label: 'Automations', icon: Zap },
+      { label: 'Campaigns', icon: Megaphone },
+    ],
+  },
+  {
+    label: 'Settings',
+    items: [
+      { label: 'Teams', icon: Users },
+      { label: 'Settings', icon: Settings },
+      { label: 'Billings', icon: Briefcase },
+    ],
   },
 ]
 
-interface SidebarProps {
-  onNavigate?: () => void
-  /** Chỉ dùng cho sidebar cố định desktop — drawer mobile luôn hiện đầy đủ */
-  collapsed?: boolean
-  onToggleCollapsed?: () => void
+function NavLink({ label, icon: Icon, active }: NavItem) {
+  return (
+    <a
+      href="#"
+      aria-current={active ? 'page' : undefined}
+      className={`relative flex items-center gap-3 rounded-control px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${
+        active
+          ? 'bg-primary-soft text-primary'
+          : 'text-text-secondary hover:bg-bg hover:text-text-primary'
+      }`}
+    >
+      {active && (
+        <span className="absolute left-0 top-1/2 h-5 w-0.5 -translate-x-3 -translate-y-1/2 rounded-full bg-primary" />
+      )}
+      <Icon size={18} aria-hidden="true" />
+      <span>{label}</span>
+    </a>
+  )
 }
 
-export function Sidebar({ onNavigate, collapsed, onToggleCollapsed }: SidebarProps) {
-  const location = useLocation()
-
+export function Sidebar() {
   return (
-    <div className="flex h-full flex-col">
-      <Link
-        to="/properties"
-        onClick={onNavigate}
-        className={`flex items-center gap-2 border-b border-border py-5 text-sm font-bold tracking-widest uppercase ${
-          collapsed ? 'justify-center px-2' : 'px-6'
-        }`}
-      >
-        <span className="size-3 shrink-0 bg-fg" aria-hidden />
-        {!collapsed && 'TroConnect'}
-      </Link>
+    <nav
+      aria-label="Main navigation"
+      className="flex h-full w-(--sidebar-width) shrink-0 flex-col border-r border-border bg-surface px-4 py-6"
+    >
+      <div className="mb-6 flex items-center gap-2 px-2 text-lg font-bold text-text-primary">
+        <span
+          className="inline-block size-7 rounded-full bg-gradient-to-br from-(--color-primary) to-(--color-teal)"
+          aria-hidden="true"
+        />
+        <span>
+          RevenuePulse
+          <span className="bg-gradient-to-r from-(--color-primary) to-(--color-teal) bg-clip-text text-transparent">
+            AI
+          </span>
+        </span>
+      </div>
 
-      <nav className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-5">
-        {navGroups.map((group) => (
-          <div key={group.label} className="mb-6">
-            {collapsed ? (
-              // Mỗi group hiện 1 nhóm duy nhất 1 mục — thu gọn xuống 1 icon trỏ thẳng
-              // vào mục đó. Khi group có nhiều mục, chỗ này cần đổi sang flyout/tooltip menu.
-              <Link
-                to={group.items[0].to}
-                onClick={onNavigate}
-                title={group.label}
-                className={`flex justify-center border-l-2 py-2.5 transition-colors duration-150 ${
-                  location.pathname.startsWith(group.items[0].to)
-                    ? 'border-fg text-fg'
-                    : 'border-transparent text-muted hover:border-border hover:text-fg'
-                }`}
-              >
-                <group.icon className="size-4" aria-hidden />
-              </Link>
-            ) : (
-              <>
-                <div className="mb-2 flex items-center gap-2 px-3 text-xs font-semibold tracking-widest text-muted uppercase">
-                  <group.icon className="size-3.5" aria-hidden />
-                  {group.label}
-                </div>
-                <div className="flex flex-col gap-0.5">
-                  {group.items.map((item) => {
-                    const active = location.pathname.startsWith(item.to)
-                    return (
-                      <Link
-                        key={item.to}
-                        to={item.to}
-                        onClick={onNavigate}
-                        className={`border-l-2 px-4 py-2 text-sm transition-colors duration-150 ${
-                          active
-                            ? 'border-fg font-medium text-fg'
-                            : 'border-transparent text-muted hover:border-border hover:text-fg'
-                        }`}
-                      >
-                        {item.label}
-                      </Link>
-                    )
-                  })}
-                </div>
-              </>
-            )}
+      <div className="flex flex-1 flex-col gap-6 overflow-y-auto">
+        <div className="px-2">
+          <NavLink {...topLevelItem} />
+        </div>
+
+        {sections.map((section) => (
+          <div key={section.label}>
+            <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-text-muted">
+              {section.label}
+            </p>
+            <div className="flex flex-col gap-1">
+              {section.items.map((item) => (
+                <NavLink key={item.label} {...item} />
+              ))}
+            </div>
           </div>
         ))}
-      </nav>
-
-      <div
-        className={`border-t border-border py-4 ${
-          collapsed ? 'flex flex-col items-center gap-3' : 'flex items-center justify-between px-6'
-        }`}
-      >
-        <ThemeToggle />
-        {onToggleCollapsed && (
-          <button
-            type="button"
-            onClick={onToggleCollapsed}
-            aria-label={collapsed ? 'Mở rộng sidebar' : 'Thu gọn sidebar'}
-            className="cursor-pointer border border-border p-2 text-muted transition-colors duration-150 hover:border-border-strong hover:text-fg"
-          >
-            {collapsed ? (
-              <PanelLeftOpen className="size-4" aria-hidden />
-            ) : (
-              <PanelLeftClose className="size-4" aria-hidden />
-            )}
-          </button>
-        )}
       </div>
-    </div>
+
+      <div className="mt-4 flex items-center gap-3 border-t border-border pt-4">
+        <div
+          className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-sm font-semibold text-primary"
+          aria-hidden="true"
+        >
+          AM
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold text-text-primary">Alex Morgan</p>
+          <p className="truncate text-xs text-text-secondary">Admin</p>
+        </div>
+        <button
+          type="button"
+          aria-label="Account menu"
+          className="inline-flex size-8 items-center justify-center rounded-control text-text-muted hover:bg-bg focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          <MoreVertical size={16} aria-hidden="true" />
+        </button>
+      </div>
+    </nav>
   )
 }
