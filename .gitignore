@@ -2,6 +2,9 @@
 bin/
 obj/
 *.user
+appsettings.json
+appsettings.Development.json
+
 
 ## Node / frontend
 node_modules/
@@ -14,3 +17,5 @@ dist/
 .vscode/
 .idea/
 .DS_Store
+
+
