@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<Building> Buildings => Set<Building>();
     public DbSet<Room> Rooms => Set<Room>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
+    public DbSet<Invitation> Invitations => Set<Invitation>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,6 +59,22 @@ public class AppDbContext : DbContext
         {
             entity.HasIndex(t => t.IdNumber).IsUnique();
             entity.Property(t => t.Gender).HasConversion<string>();
+        });
+
+        modelBuilder.Entity<Invitation>(entity =>
+        {
+            entity.HasIndex(i => i.TokenHash).IsUnique();
+            entity.Property(i => i.Role).HasConversion<string>();
+            entity.Property(i => i.Status).HasConversion<string>();
+
+            // No navigation property either side, Restrict — deleting an Account shouldn't
+            // cascade-delete the invitations it sent (same style as Room.BuildingId).
+            entity.HasOne<Account>()
+                .WithMany()
+                .HasForeignKey(i => i.InvitedByAccountId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasQueryFilter(i => !i.IsDeleted);
         });
     }
 }

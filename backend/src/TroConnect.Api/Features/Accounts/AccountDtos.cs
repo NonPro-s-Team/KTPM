@@ -34,3 +34,25 @@ public record ResetPasswordRequest(
 );
 
 public record ResetPasswordResponse(string Message);
+
+public record InviteUserRequest(
+    [Required, EmailAddress] string Email,
+    [Required] AccountRole Role
+);
+
+public record InviteUserResponse(
+    string Email,
+    AccountRole Role,
+    // DEV-ONLY: local/dev has no real email delivery yet, so the invite link is returned directly
+    // in the response. TODO: once a real email service is wired up (post-deploy), stop returning
+    // this field and send the link via email instead.
+    string InviteLink,
+    DateTimeOffset ExpiresAt
+);
+
+public record AcceptInviteRequest(
+    [Required] string Token,
+    [Required, MinLength(8)] string Password
+);
+
+public record AcceptInviteResponse(string Token, DateTimeOffset ExpiresAt, string Email, AccountRole Role);

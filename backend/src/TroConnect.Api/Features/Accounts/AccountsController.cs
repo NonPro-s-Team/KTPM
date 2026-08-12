@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TroConnect.Api.Features.Accounts;
@@ -59,5 +61,33 @@ public class AccountsController : ControllerBase
         }
 
         return Ok(new ResetPasswordResponse("Password has been reset successfully."));
+    }
+
+    [HttpPost("invite")]
+    [Authorize(Roles = "Landlord")]
+    public async Task<IActionResult> Invite(InviteUserRequest request)
+    {
+        var invitedByAccountId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        var result = await _accountService.InviteAsync(request, invitedByAccountId);
+        if (result is null)
+        {
+            return Conflict(new { message = "Email is already registered." });
+        }
+
+        return CreatedAtAction(nameof(Invite), new { email = result.Email }, result);
+    }
+
+    [HttpPost("accept-invite")]
+    public async Task<IActionResult> AcceptInvite(AcceptInviteRequest request)
+    {
+        var result = await _accountService.AcceptInviteAsync(request);
+
+        return result.Status switch
+        {
+            AcceptInviteStatus.NotFound => NotFound(new { message = "Invite not found." }),
+            AcceptInviteStatus.InvalidOrExpired => BadRequest(new { message = "Invite is invalid, already used, or expired." }),
+            _ => Ok(result.Response)
+        };
     }
 }

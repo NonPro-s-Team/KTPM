@@ -43,6 +43,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
     ?? throw new InvalidOperationException("Jwt configuration section is missing.");
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
+builder.Services.Configure<InviteOptions>(builder.Configuration.GetSection(InviteOptions.SectionName));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
