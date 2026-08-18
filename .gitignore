@@ -1,26 +1,21 @@
-# .NET
-**/bin/
-**/obj/
-**/.vs/
+## .NET
+bin/
+obj/
 *.user
+appsettings.json
 appsettings.Development.json
 
-# Node
-node_modules/
 
-# Environment
+## Node / frontend
+node_modules/
+dist/
 .env
 .env.local
 
-# IDE
+## Editor/OS
+.vs/
+.vscode/
 .idea/
-*.swp
-*.swo
-*~
-
-# OS
-Thumbs.db
 .DS_Store
 
-# Test results
-**/TestResults/
+

@@ -1,84 +1,27 @@
-import { LoaderCircle, type LucideIcon } from "lucide-react";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes } from 'react'
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
-export type ButtonSize = "sm" | "md";
-
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  loading?: boolean;
-  leadingIcon?: LucideIcon;
-  trailingIcon?: LucideIcon;
-  children: ReactNode;
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'outline'
 }
 
 export function Button({
-  variant = "primary",
-  size = "md",
-  loading = false,
-  leadingIcon: LeadingIcon,
-  trailingIcon: TrailingIcon,
-  disabled,
-  className = "",
+  variant = 'primary',
+  className = '',
   children,
-  type = "button",
-  ...props
+  ...rest
 }: ButtonProps) {
-  return (
-    <button
-      type={type}
-      className={`button button--${variant} button--${size} ${className}`}
-      disabled={disabled || loading}
-      aria-busy={loading || undefined}
-      {...props}
-    >
-      {loading ? (
-        <LoaderCircle
-          className="button__spinner"
-          size={16}
-          aria-hidden="true"
-        />
-      ) : LeadingIcon ? (
-        <LeadingIcon size={16} aria-hidden="true" />
-      ) : null}
-      <span>{children}</span>
-      {TrailingIcon && !loading ? (
-        <TrailingIcon size={16} aria-hidden="true" />
-      ) : null}
-      {loading ? <span className="sr-only">Đang xử lý</span> : null}
-    </button>
-  );
-}
+  const base =
+    'inline-flex items-center gap-1.5 rounded-control px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2'
+  const variants = {
+    primary:
+      'bg-primary text-white hover:bg-(--color-primary-hover)',
+    outline:
+      'border border-border bg-surface text-text-primary hover:bg-bg',
+  }
 
-export interface IconButtonProps extends Omit<
-  ButtonHTMLAttributes<HTMLButtonElement>,
-  "children"
-> {
-  icon: LucideIcon;
-  label: string;
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-}
-
-export function IconButton({
-  icon: Icon,
-  label,
-  variant = "ghost",
-  size = "md",
-  className = "",
-  type = "button",
-  ...props
-}: IconButtonProps) {
   return (
-    <button
-      type={type}
-      className={`icon-button icon-button--${variant} icon-button--${size} ${className}`}
-      aria-label={label}
-      title={label}
-      {...props}
-    >
-      <Icon size={18} aria-hidden="true" />
+    <button className={`${base} ${variants[variant]} ${className}`} {...rest}>
+      {children}
     </button>
-  );
+  )
 }

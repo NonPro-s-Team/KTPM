@@ -1,22 +1,24 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react'
 
-export type BadgeTone = "success" | "info" | "warning" | "danger" | "neutral";
-
-export interface BadgeProps {
-  children: ReactNode;
-  tone?: BadgeTone;
-  withDot?: boolean;
+interface BadgeProps {
+  children: ReactNode
+  color?: string
+  background?: string
+  className?: string
 }
 
 export function Badge({
   children,
-  tone = "neutral",
-  withDot = true,
+  color = 'var(--color-primary)',
+  background = 'var(--color-primary-soft)',
+  className = '',
 }: BadgeProps) {
   return (
-    <span className={`badge badge--${tone}`}>
-      {withDot ? <span className="badge__dot" aria-hidden="true" /> : null}
+    <span
+      className={`inline-flex items-center rounded-pill px-2.5 py-1 text-xs font-semibold ${className}`}
+      style={{ color, background }}
+    >
       {children}
     </span>
-  );
+  )
 }

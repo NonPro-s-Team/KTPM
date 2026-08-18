@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TroConnect.Api/TroConnect.Api.csproj" />
+  </Folder>
+</Solution>
