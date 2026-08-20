@@ -1,0 +1,60 @@
+spring:
+  datasource:
+    password:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: oopshuyvu@gmail.com
+    password: vmmb jajk izol vmac
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+jwt:
+  secret: green-juice-hub-secret-key-must-be-at-least-32-characters
+
+google:
+  client-id: 249529136685-3rfj6v3n0gl1aqjotch0lk1pgi9r7abp.apps.googleusercontent.com
+  recaptcha-secret: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+
+app:
+  sepay:
+    merchant-id: SP-TEST-DH935BAB
+    secret-key: spsk_test_P3MqB47zBgcesmcZNsFZRFrV1XzCm7KD
+    api-key: a7f3c9e2b4d81f6a0e5c7b2d9f4a3e8c1b6d0f2a5e7c9b3d4f8a1e6c2b7d0f3
+  mail:
+    shop-email: oopshuyvu@gmail.com
+ghn:
+  token: bf423246-64f6-11f1-9753-025d30e7fa67
+  shop-id: 6483687
+  base-url: https://online-gateway.ghn.vn
+  order-base-url: ${GHN_ORDER_BASE_URL:https://dev-online-gateway.ghn.vn}
+  from-district-id: 1454
+  from-ward-code: "21201"
+  service-type-id: 2
+  webhook-token: 55b08740c1ffe46b86ea203cce68cad7debe96a6447b86e9
+
+logging:
+  level:
+    root: INFO
+    com.greenjuicehub: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+
+vnpay:
+  return-url: http://localhost:5173/payment/vnpay/result
+  ipn-url:  https://boarishly-ruthenious-versie.ngrok-free.dev/api/payment/vnpay/ipn
+  tmn-code: CYVAY8D1
+  hash-secret: 6VWURSRQBLV4X26RVB1DBCBJSJ839Z9C
+
+gemini:
+  api-key: ${GEMINI_API_KEY}

@@ -1,0 +1,22 @@
+import api from "./axiosConfig";
+
+export const getProducts = (params) =>
+  api.get("/products", { params });
+
+export const getProductBySlug = (slug) =>
+  api.get(`/products/${slug}`);
+
+export const getCategories = () =>
+  api.get("/products/categories");
+
+export const getFlavors = () =>
+  api.get("/products/flavors");
+
+export const getSizes = () =>
+  api.get("/products/sizes");
+
+export const getTags = () => 
+  api.get("/products/tags").then(r => r.data);
+
+export const getDealCategories = () =>
+  api.get("/products/deal-categories").then(r => r.data);

@@ -1,0 +1,1168 @@
+// src/pages/orders/OrderDetailPage.jsx
+import orderApi from '@/api/orderApi'
+import { useEffect, useState, useRef } from 'react'
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom'
+import useOrderStore from '@/store/useOrderStore'
+import {
+  fmt, formatDate, PAYMENT_STATUS, PAYMENT_METHOD,
+  StatusBadge, Icon,
+  BANK_NAME, ACCOUNT_NUMBER, ACCOUNT_NAME, getQrUrl,
+  CANCELLED_BY, formatCountdown, getSecondsUntil,
+} from './orderHelpers'
+import useCartStore from '@/store/useCartStore'
+import ReviewFormPopup from '@/components/product/ReviewFormPopup'
+import paymentApi from '@/api/paymentApi'
+
+// ── Order Status Stepper ───────────────────────────────────────────
+const STATUS_STEPS = [
+  { key: 'PENDING', label: 'Đã đặt hàng' },
+  { key: 'CONFIRMED', label: 'Đã xác nhận' },
+  { key: 'SHIPPING', label: 'Đang giao' },
+  { key: 'DELIVERED', label: 'Hoàn tất' },
+]
+
+function OrderStepper({ status, cancelledBy }) {
+  if (status === 'CANCELLED') {
+    const cfg = CANCELLED_BY[cancelledBy] || CANCELLED_BY.CUSTOMER
+    return (
+      <div
+        className="flex items-center gap-2 px-4 py-3 rounded-[var(--radius-md)]"
+        style={{ background: cfg.bg, border: `1px solid ${cfg.border}` }}
+      >
+        <span className="text-base">{cfg.icon}</span>
+        <p className="text-sm font-semibold" style={{ color: cfg.color }}>
+          {cfg.shortLabel}
+        </p>
+      </div>
+    )
+  }
+
+  const currentIdx = STATUS_STEPS.findIndex(s => s.key === status)
+
+  return (
+    <div className="flex items-start gap-0 w-full">
+      {STATUS_STEPS.map((step, idx) => {
+        const done = idx <= currentIdx
+        const active = idx === currentIdx
+        const isLast = idx === STATUS_STEPS.length - 1
+        return (
+          <div key={step.key} className="flex flex-col items-center flex-1">
+            <div className="flex items-center w-full">
+              <div className="flex-1 h-0.5 transition-all" style={{
+                background: idx === 0 ? 'transparent' : done ? 'var(--color-primary)' : 'var(--color-border-subtle)',
+              }} />
+              <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all" style={{
+                background: done ? 'var(--color-primary)' : 'var(--color-bg-muted)',
+                border: active ? '2.5px solid var(--color-primary)' : done ? 'none' : '1.5px solid var(--color-border-subtle)',
+                boxShadow: active ? '0 0 0 3px var(--color-primary-subtle)' : 'none',
+              }}>
+                {done && !active && (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                )}
+                {active && <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#fff' }} />}
+                {!done && !active && <div className="w-2 h-2 rounded-full" style={{ background: 'var(--color-border-subtle)' }} />}
+              </div>
+              <div className="flex-1 h-0.5 transition-all" style={{
+                background: isLast ? 'transparent' : idx < currentIdx ? 'var(--color-primary)' : 'var(--color-border-subtle)',
+              }} />
+            </div>
+            <p
+              className="mt-2 text-center leading-tight"
+              style={{
+                fontSize: 'clamp(10px, 2.5vw, 12px)',
+                color: done ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                fontWeight: active ? 600 : done ? 500 : 400,
+              }}
+            >
+              {step.label}
+            </p>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ── Payment Modal ──────────────────────────────────────────────────
+function PaymentModal({ order, onClose }) {
+  const [copied, setCopied] = useState(false)
+  const [qrLoaded, setQrLoaded] = useState(false)
+  const [qrError, setQrError] = useState(false)
+  const [showQr, setShowQr] = useState(true)
+  const [paid, setPaid] = useState(false)
+  const [closing, setClosing] = useState(false)
+  const { fetchOrderDetail } = useOrderStore()
+  const paidRef = useRef(false)
+
+  const [vnpayLoading, setVnpayLoading] = useState(false)
+
+  const handleVnpayRedirect = async () => {
+    setVnpayLoading(true)
+    try {
+      const res = await paymentApi.createVnpayUrl(order.id)
+      window.location.href = res.data.paymentUrl
+    } catch {
+      setVnpayLoading(false)
+    }
+  }
+
+  const [timeLeft, setTimeLeft] = useState(() => getSecondsUntil(order.expiresAt))
+  const [expired, setExpired] = useState(false)
+  const expiredHandledRef = useRef(false)
+
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape' && !paid) onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose, paid])
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (paidRef.current) return
+      try {
+        const res = await orderApi.getOrderDetail(order.id)
+        if (res.data.paymentStatus === 'PAID') {
+          paidRef.current = true
+          setPaid(true)
+          clearInterval(interval)
+          setTimeout(() => {
+            setClosing(true)
+            setTimeout(async () => {
+              await fetchOrderDetail(order.id)
+              onClose()
+            }, 400)
+          }, 2500)
+        }
+      } catch { }
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    if (!order.expiresAt || paid) return
+    const tick = () => {
+      const diff = getSecondsUntil(order.expiresAt)
+      if (diff <= 0) {
+        setTimeLeft(0)
+        if (!expiredHandledRef.current) {
+          expiredHandledRef.current = true
+          setExpired(true)
+        }
+        return
+      }
+      setTimeLeft(diff)
+    }
+    tick()
+    const interval = setInterval(tick, 1000)
+    return () => clearInterval(interval)
+  }, [order.expiresAt, paid])
+
+  useEffect(() => {
+    if (!expired) return
+    const handleExpired = async () => {
+      try { await fetchOrderDetail(order.id) }
+      finally { setTimeout(() => onClose(), 1500) }
+    }
+    handleExpired()
+  }, [expired])
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(order.orderCode)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const qrUrl = getQrUrl(order.totalAmount, order.orderCode)
+  const showCountdown = !paid && order.expiresAt
+  const urgentCountdown = timeLeft !== null && timeLeft < 300
+
+  return (
+    <div
+      onClick={paid ? undefined : onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{
+        background: 'rgba(0,0,0,0.45)',
+        backdropFilter: 'blur(4px)',
+        animation: closing ? 'fadeOut 0.4s ease forwards' : 'fadeIn 0.2s ease',
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        className="relative w-full max-w-sm rounded-[var(--radius-lg)] overflow-hidden shadow-2xl"
+        style={{
+          background: 'var(--color-bg-elevated)',
+          animation: 'slideUp 0.25s cubic-bezier(0.16,1,0.3,1)',
+          maxHeight: '85dvh',
+          overflowY: 'auto',
+        }}
+      >
+        {/* Header */}
+        <div
+          className="flex items-center justify-between px-5 py-4"
+          style={{
+            borderBottom: '1px solid var(--color-border-subtle)',
+            background: paid ? '#f0fdf4' : '#fef3c7',
+            transition: 'background 0.4s ease',
+          }}
+        >
+          <div className="flex items-center gap-2">
+            {paid ? (
+              <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{
+                  position: 'absolute', width: 36, height: 36, borderRadius: '50%',
+                  background: '#dcfce7',
+                  animation: 'osm-ripple 1.2s ease-out 0.1s both',
+                }} />
+                <div style={{
+                  position: 'relative', width: 32, height: 32, borderRadius: '50%',
+                  background: '#16a34a',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  animation: 'osm-circle-in 0.4s cubic-bezier(0.34,1.3,0.64,1) both',
+                }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline className="osm-check" points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+              </div>
+            ) : (
+              <span style={{ fontSize: 18 }}>⏳</span>
+            )}
+            <div>
+              <p className="text-sm font-semibold" style={{
+                color: paid ? '#16a34a' : '#92400e',
+                transition: 'color 0.3s ease',
+              }}>
+                {paid ? 'Thanh toán thành công!' : 'Chờ thanh toán'}
+              </p>
+              <p className="text-xs font-mono mt-0.5" style={{ color: paid ? '#16a34a99' : '#b45309' }}>
+                {paid ? 'Đang cập nhật đơn hàng...' : `#${order.orderCode}`}
+              </p>
+            </div>
+          </div>
+          {!paid && (
+            <button
+              onClick={onClose}
+              className="w-7 h-7 flex items-center justify-center rounded-full cursor-pointer transition-colors"
+              style={{ background: '#fde68a', color: '#92400e' }}
+              onMouseEnter={e => e.currentTarget.style.background = '#fcd34d'}
+              onMouseLeave={e => e.currentTarget.style.background = '#fde68a'}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          )}
+        </div>
+
+        {/* Countdown bar */}
+        {showCountdown && (
+          <div
+            className="flex items-center justify-center gap-2 px-5 py-2.5"
+            style={{
+              background: expired ? '#fee2e2' : urgentCountdown ? '#fff7ed' : 'var(--color-bg-muted)',
+              borderBottom: '1px solid var(--color-border-subtle)',
+              transition: 'background 0.3s ease',
+            }}
+          >
+            {expired ? (
+              <p className="text-xs font-semibold" style={{ color: '#dc2626' }}>
+                ⏱️ Đơn đã hết hạn thanh toán, đang cập nhật...
+              </p>
+            ) : (
+              <>
+                <span style={{ fontSize: 13 }}>⏱️</span>
+                <p className="text-xs" style={{ color: urgentCountdown ? '#c2410c' : 'var(--color-text-secondary)' }}>
+                  Hết hạn sau{' '}
+                  <span className="font-mono font-bold">{formatCountdown(timeLeft)}</span>
+                </p>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Body */}
+        {paid ? (
+          <div className="flex flex-col items-center gap-4 px-6 py-8" style={{ animation: 'fadeIn 0.4s ease' }}>
+            <div style={{
+              width: 72, height: 72, borderRadius: '50%',
+              background: '#dcfce7',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+            <div className="text-center">
+              <p className="font-bold text-base mb-1" style={{ color: '#16a34a' }}>Đã nhận được thanh toán!</p>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                Chúng tôi đã nhận được tiền chuyển khoản của bạn.<br />
+                Đơn hàng sẽ được xác nhận và xử lý sớm nhất.
+              </p>
+            </div>
+            <div
+              className="w-full flex justify-between items-center px-4 py-3 rounded-[var(--radius-md)]"
+              style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}
+            >
+              <span className="text-sm" style={{ color: '#16a34a' }}>Số tiền đã thanh toán</span>
+              <span className="font-bold text-sm" style={{ color: '#16a34a' }}>{fmt(order.totalAmount)}</span>
+            </div>
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Tự động chuyển về đơn hàng...</p>
+          </div>
+        ) : expired ? (
+          <div className="flex flex-col items-center gap-4 px-6 py-8" style={{ animation: 'fadeIn 0.4s ease' }}>
+            <div style={{
+              width: 72, height: 72, borderRadius: '50%',
+              background: '#fee2e2',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <span style={{ fontSize: 32 }}>⏱️</span>
+            </div>
+            <div className="text-center">
+              <p className="font-bold text-base mb-1" style={{ color: '#dc2626' }}>Đơn đã hết hạn thanh toán</p>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                Đơn hàng sẽ sớm được hệ thống tự động huỷ.<br />
+                Bạn có thể đặt lại đơn hàng mới.
+              </p>
+            </div>
+          </div>
+        ) : order.paymentMethod === 'VNPAY' ? (
+          <div className="p-5 flex flex-col items-center gap-4">
+            <div
+              className="w-16 h-16 rounded-[var(--radius-md)] flex items-center justify-center"
+              style={{ background: '#f0f9ff', border: '1px solid #bae6fd' }}
+            >
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0369a1" strokeWidth="1.5" strokeLinecap="round">
+                <rect x="1" y="4" width="22" height="16" rx="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>
+                Thanh toán qua VNPay
+              </p>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                Bạn sẽ được chuyển sang cổng thanh toán VNPay để hoàn tất giao dịch.
+              </p>
+            </div>
+            <div
+              className="w-full flex justify-between items-center px-3 py-2.5 rounded-[var(--radius-md)]"
+              style={{ background: 'var(--color-primary-subtle)', border: '1.5px solid var(--color-primary)' }}
+            >
+              <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Số tiền thanh toán</span>
+              <span className="font-bold text-sm" style={{ color: 'var(--color-primary)' }}>
+                {fmt(order.totalAmount)}
+              </span>
+            </div>
+            <button
+              onClick={handleVnpayRedirect}
+              disabled={vnpayLoading}
+              className="w-full py-3 rounded-[var(--radius-md)] text-sm font-semibold text-white cursor-pointer disabled:opacity-60 transition-opacity"
+              style={{ background: '#0f6abf' }}
+            >
+              {vnpayLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                  Đang chuyển hướng...
+                </span>
+              ) : (
+                '🔒 Thanh toán ngay với VNPay'
+              )}
+            </button>
+            <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
+              Giao dịch được bảo mật bởi VNPay
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="px-5 pt-4">
+              <div
+                className="flex rounded-[var(--radius-md)] overflow-hidden"
+                style={{ border: '1px solid var(--color-border-subtle)', background: 'var(--color-bg-muted)' }}
+              >
+                {[{ key: true, label: '📷 Quét QR' }, { key: false, label: '🏦 Thủ công' }].map(({ key, label }) => (
+                  <button
+                    key={String(key)}
+                    onClick={() => setShowQr(key)}
+                    className="flex-1 py-2 text-xs font-medium cursor-pointer transition-all"
+                    style={{
+                      background: showQr === key ? 'var(--color-primary)' : 'transparent',
+                      color: showQr === key ? '#fff' : 'var(--color-text-secondary)',
+                    }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-5 flex flex-col gap-4">
+              {showQr ? (
+                <div className="flex flex-col items-center gap-3">
+                  <div
+                    className="rounded-[var(--radius-md)] overflow-hidden flex items-center justify-center"
+                    style={{ width: 220, height: qrLoaded ? 'auto' : 220, background: '#fff', border: '1.5px solid var(--color-border-subtle)' }}
+                  >
+                    {qrError ? (
+                      <div className="flex flex-col items-center gap-2 p-4 text-center">
+                        <span style={{ fontSize: 28 }}>⚠️</span>
+                        <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Không tải được QR</p>
+                      </div>
+                    ) : (
+                      <>
+                        {!qrLoaded && (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="w-6 h-6 rounded-full border-2 animate-spin"
+                              style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
+                          </div>
+                        )}
+                        <img src={qrUrl} alt="VietQR"
+                          style={{ width: 220, display: qrLoaded ? 'block' : 'none' }}
+                          onLoad={() => setQrLoaded(true)}
+                          onError={() => setQrError(true)}
+                        />
+                      </>
+                    )}
+                  </div>
+                  <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
+                    Hỗ trợ tất cả app ngân hàng Việt Nam
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2.5">
+                  {[
+                    { label: 'Ngân hàng', value: BANK_NAME },
+                    { label: 'Số tài khoản', value: ACCOUNT_NUMBER, mono: true },
+                    { label: 'Chủ tài khoản', value: ACCOUNT_NAME },
+                    { label: 'Số tiền', value: fmt(order.totalAmount), highlight: true },
+                  ].map(({ label, value, mono, highlight }) => (
+                    <div key={label} className="flex justify-between items-center py-1.5"
+                      style={{ borderBottom: '0.5px solid var(--color-border-subtle)' }}>
+                      <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{label}</span>
+                      <span className={`text-sm font-semibold ${mono ? 'font-mono' : ''}`}
+                        style={{ color: highlight ? 'var(--color-primary)' : 'var(--color-text-primary)' }}>
+                        {value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div
+                className="flex justify-between items-center px-3 py-2.5 rounded-[var(--radius-md)]"
+                style={{ background: 'var(--color-primary-subtle)', border: '1.5px solid var(--color-primary)' }}
+              >
+                <div>
+                  <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Nội dung chuyển khoản</p>
+                  <p className="font-mono font-bold text-sm mt-0.5" style={{ color: 'var(--color-primary)' }}>
+                    {order.orderCode}
+                  </p>
+                </div>
+                <button
+                  onClick={handleCopy}
+                  className="text-xs font-medium px-3 py-1.5 rounded-[var(--radius-sm)] cursor-pointer transition-all flex-shrink-0"
+                  style={{ background: copied ? '#16a34a' : 'var(--color-primary)', color: '#fff' }}
+                >
+                  {copied ? '✓ Đã copy' : 'Copy'}
+                </button>
+              </div>
+
+              <p className="text-xs text-center" style={{ color: '#b45309' }}>
+                ⚠️ Ghi đúng nội dung để đơn được xác nhận tự động
+              </p>
+            </div>
+          </>
+        )}
+      </div>
+
+      <style>{`
+        @keyframes fadeIn   { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes fadeOut  { from { opacity: 1 } to { opacity: 0 } }
+        @keyframes slideUp  { from { opacity: 0; transform: translateY(16px) scale(0.97) } to { opacity: 1; transform: translateY(0) scale(1) } }
+        @keyframes osm-ripple {
+          0%   { transform: scale(0.8); opacity: 0.4; }
+          100% { transform: scale(2.4); opacity: 0; }
+        }
+        @keyframes osm-circle-in {
+          from { transform: scale(0); }
+          to   { transform: scale(1); }
+        }
+        .osm-check {
+          stroke-dasharray: 60;
+          stroke-dashoffset: 60;
+          animation: osm-check-draw 0.4s ease 0.3s forwards;
+        }
+        @keyframes osm-check-draw {
+          from { stroke-dashoffset: 60; }
+          to   { stroke-dashoffset: 0; }
+        }
+      `}</style>
+    </div>
+  )
+}
+
+// ── Cancel Modal ───────────────────────────────────────────────────
+const CANCEL_REASONS = [
+  'Tôi muốn thay đổi sản phẩm / biến thể',
+  'Tôi muốn thay đổi địa chỉ giao hàng',
+  'Tôi tìm được giá tốt hơn ở nơi khác',
+  'Tôi đặt nhầm sản phẩm',
+  'Giao hàng quá lâu',
+  'Lý do khác',
+]
+
+function CancelModal({ onConfirm, onClose, cancelling, isPaid }) {
+  const [selected, setSelected] = useState(null)
+  const [custom, setCustom] = useState('')
+
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose])
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  const isOther = selected === 'Lý do khác'
+  const reason = isOther ? custom.trim() : selected
+  const canSubmit = selected && (!isOther || custom.trim().length > 0)
+
+  return (
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)', animation: 'fadeIn 0.2s ease' }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        className="w-full max-w-sm rounded-[var(--radius-lg)] overflow-hidden shadow-2xl"
+        style={{
+          background: 'var(--color-bg-elevated)',
+          animation: 'slideUp 0.25s cubic-bezier(0.16,1,0.3,1)',
+          maxHeight: '85dvh',
+          overflowY: 'auto',
+        }}
+      >
+        <div
+          className="flex items-center justify-between px-5 py-4"
+          style={{ borderBottom: '1px solid var(--color-border-subtle)', background: '#fef2f2' }}
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#fee2e2' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2.5" strokeLinecap="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                <path d="M10 11v6M14 11v6" />
+                <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+              </svg>
+            </div>
+            <p className="text-sm font-semibold" style={{ color: '#dc2626' }}>Huỷ đơn hàng</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 flex items-center justify-center rounded-full cursor-pointer transition-colors"
+            style={{ background: '#fee2e2', color: '#dc2626' }}
+            onMouseEnter={e => e.currentTarget.style.background = '#fecaca'}
+            onMouseLeave={e => e.currentTarget.style.background = '#fee2e2'}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="px-5 py-4 flex flex-col gap-3">
+          {isPaid && (
+            <div
+              className="flex gap-2.5 px-3 py-3 rounded-[var(--radius-md)]"
+              style={{ background: '#fff7ed', border: '1px solid #fed7aa' }}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c2410c" strokeWidth="2.5" strokeLinecap="round" className="flex-shrink-0 mt-0.5">
+                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              <div>
+                <p className="text-xs font-semibold mb-0.5" style={{ color: '#c2410c' }}>
+                  Bạn đã thanh toán đơn này
+                </p>
+                <p className="text-xs leading-relaxed" style={{ color: '#92400e' }}>
+                  Sau khi huỷ, đơn sẽ chuyển sang trạng thái <strong>chờ hoàn tiền</strong>.
+                  Đội ngũ hỗ trợ sẽ liên hệ và hoàn tiền cho bạn trong vòng 1–3 ngày làm việc.
+                </p>
+              </div>
+            </div>
+          )}
+
+          <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            Vui lòng chọn lý do huỷ đơn để chúng tôi cải thiện dịch vụ tốt hơn.
+          </p>
+
+          <div className="flex flex-col gap-1.5">
+            {CANCEL_REASONS.map((r) => (
+              <button
+                key={r}
+                onClick={() => { setSelected(r); setCustom('') }}
+                className="flex items-center gap-2.5 px-3 py-2.5 rounded-[var(--radius-md)] text-left text-sm cursor-pointer transition-all"
+                style={{
+                  border: selected === r ? '1.5px solid #ef4444' : '1px solid var(--color-border-subtle)',
+                  background: selected === r ? '#fef2f2' : 'transparent',
+                  color: selected === r ? '#dc2626' : 'var(--color-text-primary)',
+                }}
+              >
+                <div
+                  className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center transition-all"
+                  style={{
+                    border: selected === r ? '2px solid #ef4444' : '1.5px solid var(--color-border-subtle)',
+                    background: selected === r ? '#ef4444' : 'transparent',
+                  }}
+                >
+                  {selected === r && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                </div>
+                {r}
+              </button>
+            ))}
+          </div>
+
+          {isOther && (
+            <textarea
+              autoFocus
+              rows={3}
+              placeholder="Nhập lý do của bạn..."
+              value={custom}
+              onChange={e => setCustom(e.target.value)}
+              className="w-full px-3 py-2 text-sm rounded-[var(--radius-md)] resize-none transition-colors"
+              style={{
+                border: '1px solid var(--color-border-subtle)',
+                background: 'var(--color-bg-muted)',
+                color: 'var(--color-text-primary)',
+                outline: 'none',
+              }}
+              onFocus={e => e.currentTarget.style.borderColor = '#ef4444'}
+              onBlur={e => e.currentTarget.style.borderColor = 'var(--color-border-subtle)'}
+            />
+          )}
+        </div>
+
+        <div className="px-5 pb-5 flex gap-2">
+          <button
+            onClick={onClose}
+            className="flex-1 py-2.5 rounded-[var(--radius-md)] text-sm font-medium cursor-pointer transition-colors"
+            style={{
+              background: 'var(--color-bg-muted)',
+              border: '1px solid var(--color-border-subtle)',
+              color: 'var(--color-text-secondary)',
+            }}
+          >
+            Giữ đơn
+          </button>
+          <button
+            onClick={() => canSubmit && !cancelling && onConfirm(reason)}
+            disabled={!canSubmit || cancelling}
+            className="flex-1 py-2.5 rounded-[var(--radius-md)] text-sm font-semibold text-white cursor-pointer disabled:opacity-40 transition-opacity"
+            style={{ background: '#ef4444' }}
+          >
+            {cancelling ? 'Đang huỷ...' : isPaid ? 'Huỷ & yêu cầu hoàn tiền' : 'Xác nhận huỷ'}
+          </button>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes fadeIn  { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(16px) scale(0.97) } to { opacity: 1; transform: translateY(0) scale(1) } }
+      `}</style>
+    </div>
+  )
+}
+
+// ── Refund Pending Info Banner ─────────────────────────────────────
+function RefundPendingBanner() {
+  return (
+    <div
+      className="mt-3 flex gap-2.5 px-3 py-3 rounded-[var(--radius-md)]"
+      style={{ background: '#fff7ed', border: '1px solid #fed7aa' }}
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c2410c" strokeWidth="2.5" strokeLinecap="round" className="flex-shrink-0 mt-0.5">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </svg>
+      <p className="text-xs leading-relaxed" style={{ color: '#92400e' }}>
+        Chúng tôi đang xử lý hoàn tiền cho bạn.
+        Vui lòng chờ <strong>1–3 ngày làm việc</strong> để nhận lại tiền.
+        Nếu cần hỗ trợ, hãy liên hệ chúng tôi.
+      </p>
+    </div>
+  )
+}
+
+// ── Sidebar tóm tắt ────────────────────────────────────────────────
+function OrderSummary({ o, onCancel, cancelling, onConfirmDelivered, confirming }) {
+  const navigate = useNavigate()
+  const [showPaymentModal, setShowPaymentModal] = useState(false)
+  const [showCancelModal, setShowCancelModal] = useState(false)
+
+  const canPay = ['BANK_TRANSFER', 'MOMO', 'VNPAY'].includes(o.paymentMethod)
+    && o.paymentStatus === 'PENDING'
+    && o.status !== 'CANCELLED'
+
+  const canCancel = o.status === 'PENDING'
+
+  return (
+    <>
+      {/* lg+: sticky sidebar | mobile: flat card */}
+      <div className="lg:sticky lg:top-[84px] flex flex-col gap-4">
+        <div
+          className="rounded-[var(--radius-lg)] overflow-hidden"
+          style={{ background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border-subtle)' }}
+        >
+          <div className="px-5 py-4" style={{ borderBottom: '1px solid var(--color-border-subtle)' }}>
+            <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>Tóm tắt</p>
+          </div>
+
+          <div className="px-5 py-4 flex flex-col gap-2.5 text-sm">
+            <div className="flex justify-between">
+              <span style={{ color: 'var(--color-text-secondary)' }}>Tạm tính</span>
+              <span>{fmt(o.subtotal)}</span>
+            </div>
+            {o.discountAmount > 0 && (
+              <div className="flex justify-between">
+                <span style={{ color: 'var(--color-text-secondary)' }}>
+                  Giảm giá {o.promoCode && <span className="font-mono">({o.promoCode})</span>}
+                </span>
+                <span style={{ color: '#16a34a' }}>-{fmt(o.discountAmount)}</span>
+              </div>
+            )}
+            <div className="flex justify-between">
+              <span style={{ color: 'var(--color-text-secondary)' }}>Phí vận chuyển</span>
+              <span style={{ color: o.shippingFee === 0 ? '#16a34a' : 'inherit' }}>
+                {o.shippingFee === 0 ? 'Miễn phí' : fmt(o.shippingFee)}
+              </span>
+            </div>
+            <div
+              className="flex justify-between pt-2.5 font-semibold text-base"
+              style={{ borderTop: '1px solid var(--color-border-subtle)' }}
+            >
+              <span>Tổng cộng</span>
+              <span style={{ color: 'var(--color-primary)' }}>{fmt(o.totalAmount)}</span>
+            </div>
+          </div>
+
+          <div className="px-5 pb-4 flex flex-col gap-1.5">
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Phương thức thanh toán</p>
+            <p className="text-sm font-medium" style={{ color: 'var(--color-text-primary)' }}>
+              {PAYMENT_METHOD[o.paymentMethod] || o.paymentMethod}
+            </p>
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs font-medium" style={{ color: PAYMENT_STATUS[o.paymentStatus]?.color || '#6b7280' }}>
+                {PAYMENT_STATUS[o.paymentStatus]?.label || o.paymentStatus}
+              </p>
+              {canPay && (
+                <button
+                  onClick={() => setShowPaymentModal(true)}
+                  className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-[var(--radius-md)] cursor-pointer transition-all flex-shrink-0"
+                  style={{ background: '#fef3c7', color: '#92400e', border: '1px solid #fde68a' }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#fde68a'}
+                  onMouseLeave={e => e.currentTarget.style.background = '#fef3c7'}
+                >
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                    <line x1="1" y1="10" x2="23" y2="10" />
+                  </svg>
+                  Thanh toán ngay
+                </button>
+              )}
+            </div>
+
+            {o.paymentStatus === 'REFUND_PENDING' && <RefundPendingBanner />}
+          </div>
+
+          <div className="px-5 pb-5 flex flex-col gap-2">
+            {/* Mobile: 2 nút ngang để tiết kiệm chiều cao */}
+            <div className="flex gap-2 lg:flex-col">
+              <button
+                onClick={() => navigate('/orders')}
+                className="flex-1 py-2.5 rounded-[var(--radius-md)] text-sm font-medium cursor-pointer transition-colors"
+                style={{ background: 'var(--color-bg-muted)', border: '1px solid var(--color-border-subtle)', color: 'var(--color-text-secondary)' }}
+              >
+                Về danh sách đơn
+              </button>
+              <button
+                onClick={() => navigate('/products')}
+                className="flex-1 py-2.5 rounded-[var(--radius-md)] text-sm font-semibold text-white cursor-pointer transition-colors"
+                style={{ background: 'var(--color-primary)' }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              >
+                Tiếp tục mua sắm
+              </button>
+            </div>
+
+            {o.status === 'SHIPPING' && (
+              <button
+                onClick={onConfirmDelivered}
+                disabled={confirming}
+                className="w-full py-2.5 rounded-[var(--radius-md)] text-sm font-semibold text-white cursor-pointer disabled:opacity-50 transition-all active:scale-[0.98]"
+                style={{ background: '#16a34a' }}
+              >
+                {confirming ? 'Đang xác nhận...' : '✓ Đã nhận được hàng'}
+              </button>
+            )}
+
+            {canCancel && (
+              <button
+                onClick={() => setShowCancelModal(true)}
+                disabled={cancelling}
+                className="w-full py-2 text-sm font-medium cursor-pointer disabled:opacity-50 rounded-[var(--radius-md)] transition-colors"
+                style={{ color: '#ef4444', background: '#ef444410', border: '1px solid #ef444425' }}
+              >
+                {cancelling ? 'Đang huỷ...' : 'Huỷ đơn hàng'}
+              </button>
+            )}
+          </div>
+
+          {o.status === 'CANCELLED' && (() => {
+            const cfg = CANCELLED_BY[o.cancelledBy] || CANCELLED_BY.CUSTOMER
+            const detailText = cfg.detail ?? o.cancelReason
+            if (!detailText) return null
+            return (
+              <div
+                className="mx-5 mb-5 px-3 py-2.5 rounded-[var(--radius-md)]"
+                style={{ background: cfg.bg, border: `1px solid ${cfg.border}` }}
+              >
+                <p className="text-xs font-medium mb-0.5" style={{ color: cfg.color }}>
+                  {o.cancelledBy === 'SYSTEM' ? `${cfg.icon} ${cfg.label}` : 'Lý do huỷ'}
+                </p>
+                <p className="text-xs" style={{ color: cfg.detailColor }}>{detailText}</p>
+              </div>
+            )
+          })()}
+        </div>
+      </div>
+
+      {showPaymentModal && (
+        <PaymentModal order={o} onClose={() => setShowPaymentModal(false)} />
+      )}
+
+      {showCancelModal && (
+        <CancelModal
+          cancelling={cancelling}
+          isPaid={o.paymentStatus === 'PAID'}
+          onClose={() => setShowCancelModal(false)}
+          onConfirm={async (reason) => {
+            await onCancel(reason)
+            setShowCancelModal(false)
+          }}
+        />
+      )}
+    </>
+  )
+}
+
+// ── Page ───────────────────────────────────────────────────────────
+export default function OrderDetailPage() {
+  const { orderId } = useParams()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const fromCheckout = location.state?.fromCheckout
+
+  const { currentOrder, loading, error, fetchOrderDetail, cancelOrder } = useOrderStore()
+  const [cancelling, setCancelling] = useState(false)
+  const [confirming, setConfirming] = useState(false)
+  const [reviewItems, setReviewItems] = useState(null)
+
+  const { addItem } = useCartStore()
+
+  useEffect(() => { fetchOrderDetail(orderId) }, [orderId])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-[var(--color-primary)] border-t-transparent animate-spin" />
+      </div>
+    )
+  }
+
+  if (error || !currentOrder) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3">
+        <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{error || 'Không tìm thấy đơn hàng'}</p>
+        <button onClick={() => navigate('/orders')} className="text-sm underline cursor-pointer" style={{ color: 'var(--color-primary)' }}>
+          Về danh sách đơn hàng
+        </button>
+      </div>
+    )
+  }
+
+  const o = currentOrder
+  const addr = o.shippingAddress
+
+  const handleCancel = async (reason) => {
+    setCancelling(true)
+    try {
+      await cancelOrder(o.id, reason)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setCancelling(false)
+    }
+  }
+
+  const handleConfirmDelivered = async () => {
+    setConfirming(true)
+    try {
+      await orderApi.confirmDelivered(o.id)
+      await fetchOrderDetail(orderId)
+
+      const updatedOrder = useOrderStore.getState().currentOrder
+      const unreviewed = updatedOrder?.items
+        ?.filter(i => !i.hasReviewed && i.productSlug)
+        ?.map(i => ({
+          productId: i.productId,
+          variantId: i.variantId,
+          orderId: updatedOrder.id,
+          productName: i.productName,
+          variantName: i.variantName,
+          imageUrl: i.imageUrl,
+          quantity: i.quantity,
+        })) ?? []
+
+      if (unreviewed.length > 0) setReviewItems(unreviewed)
+    } catch (e) {
+      console.error(e?.response?.data?.message ?? 'Có lỗi xảy ra')
+    } finally {
+      setConfirming(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen" style={{ background: 'var(--color-bg-surface)' }}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 sm:py-8">
+
+        {/* Breadcrumb */}
+        <nav
+          className="flex items-center gap-1.5 text-sm mb-4 sm:mb-5 overflow-x-auto whitespace-nowrap"
+          style={{ color: 'var(--color-text-muted)' }}
+        >
+          <Link to="/" className="hover:text-[var(--color-primary)] transition-colors shrink-0">Trang chủ</Link>
+          <span className="opacity-50">/</span>
+          <Link to="/orders" className="hover:text-[var(--color-primary)] transition-colors shrink-0">Đơn hàng của tôi</Link>
+          <span className="opacity-50">/</span>
+          <span className="font-mono font-medium truncate" style={{ color: 'var(--color-text-primary)' }}>{o.orderCode}</span>
+        </nav>
+
+        {/* Header */}
+        <div className="flex items-start justify-between gap-3 mb-5 sm:mb-6">
+          <div className="min-w-0">
+            <h1
+              className="font-bold leading-tight"
+              style={{
+                fontSize: 'clamp(1.2rem, 4vw, 1.6rem)',
+                letterSpacing: '-0.02em',
+                color: 'var(--color-text-primary)',
+                fontFamily: '"Be Vietnam Pro", "Inter", system-ui, sans-serif',
+              }}
+            >
+              Đơn hàng{' '}
+              <span className="font-mono" style={{ color: 'var(--color-primary)' }}>{o.orderCode}</span>
+            </h1>
+            <p className="text-xs sm:text-sm mt-1" style={{ color: 'var(--color-text-muted)' }}>
+              Đặt lúc {formatDate(o.createdAt)}
+            </p>
+          </div>
+          <div className="flex-shrink-0 mt-0.5">
+            <StatusBadge status={o.status} />
+          </div>
+        </div>
+
+        {fromCheckout && o.status !== 'CANCELLED' && (
+          <div
+            className="mb-4 sm:mb-5 px-4 py-3 rounded-[var(--radius-md)] text-sm"
+            style={{ background: '#16a34a15', border: '1px solid #16a34a30', color: '#16a34a' }}
+          >
+            🎉 Đặt hàng thành công! Chúng tôi sẽ xác nhận đơn của bạn sớm nhất.
+          </div>
+        )}
+
+        {/*
+          Mobile  (<lg): single column, sidebar xuống dưới
+          Desktop (lg+): 2 cột, sidebar sticky bên phải
+        */}
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-start">
+
+          {/* ── Main column ── */}
+          <div className="w-full lg:flex-1 lg:min-w-0 flex flex-col gap-4 sm:gap-5">
+
+            {/* Stepper */}
+            <div
+              className="rounded-[var(--radius-lg)] p-4 sm:p-5"
+              style={{ background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border-subtle)' }}
+            >
+              <p className="text-sm font-semibold mb-4 sm:mb-5" style={{ color: 'var(--color-text-primary)' }}>
+                Trạng thái đơn hàng
+              </p>
+              <OrderStepper status={o.status} cancelledBy={o.cancelledBy} />
+            </div>
+
+            {/* Sản phẩm */}
+            <div
+              className="rounded-[var(--radius-lg)] overflow-hidden"
+              style={{ background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border-subtle)' }}
+            >
+              <div className="px-4 sm:px-5 py-3.5 sm:py-4" style={{ borderBottom: '1px solid var(--color-border-subtle)' }}>
+                <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+                  Sản phẩm ({o.items?.length})
+                </p>
+              </div>
+              <div className="divide-y" style={{ borderColor: 'var(--color-border-subtle)' }}>
+                {o.items?.map((item) => (
+                  <div key={item.id} className="flex items-start sm:items-center gap-3 px-4 sm:px-5 py-3 sm:py-3.5">
+                    <img
+                      src={item.imageUrl || '/placeholder.png'}
+                      alt={item.productName}
+                      className="rounded-[var(--radius-sm)] object-cover flex-shrink-0"
+                      style={{
+                        width: 'clamp(48px, 12vw, 56px)',
+                        height: 'clamp(48px, 12vw, 56px)',
+                        border: '1px solid var(--color-border-subtle)',
+                      }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium leading-snug" style={{ color: 'var(--color-text-primary)' }}>
+                        {item.productName}
+                      </p>
+                      {item.variantName && (
+                        <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>{item.variantName}</p>
+                      )}
+                      <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-secondary)' }}>
+                        {fmt(item.unitPrice)} × {item.quantity}
+                      </p>
+                      {/* Subtotal inline trên mobile */}
+                      <p className="text-sm font-semibold mt-1 sm:hidden" style={{ color: 'var(--color-text-primary)' }}>
+                        {fmt(item.subtotal)}
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+                      {/* Subtotal ẩn trên mobile, hiện trên sm+ */}
+                      <p className="text-sm font-semibold hidden sm:block" style={{ color: 'var(--color-text-primary)' }}>
+                        {fmt(item.subtotal)}
+                      </p>
+                      {o.status === 'DELIVERED' && (
+                        <div className="flex flex-row sm:flex-col gap-1">
+                          <button
+                            onClick={async () => {
+                              try {
+                                await addItem(item.productId, item.variantId, item.quantity ?? 1)
+                                window.dispatchEvent(new CustomEvent('cart:item-added', {
+                                  detail: { imageUrl: item.imageUrl ?? null }
+                                }))
+                              } catch { }
+                            }}
+                            className="text-xs font-medium px-2.5 py-1 rounded-[var(--radius-md)] cursor-pointer transition-all"
+                            style={{
+                              background: 'var(--color-bg-muted)',
+                              color: 'var(--color-text-secondary)',
+                              border: '1px solid var(--color-border-subtle)',
+                            }}
+                          >
+                            Mua lại
+                          </button>
+                          {!item.hasReviewed && item.productSlug && (
+                            <button
+                              onClick={() => setReviewItems([{
+                                productId: item.productId,
+                                variantId: item.variantId,
+                                orderId: o.id,
+                                productName: item.productName,
+                                variantName: item.variantName,
+                                imageUrl: item.imageUrl,
+                                quantity: item.quantity,
+                              }])}
+                              className="text-xs font-medium px-2.5 py-1 rounded-[var(--radius-md)] cursor-pointer transition-all"
+                              style={{
+                                background: 'var(--color-primary-subtle)',
+                                color: 'var(--color-primary)',
+                                border: '1px solid var(--color-primary)',
+                              }}
+                            >
+                              Đánh giá
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Địa chỉ */}
+            <div
+              className="rounded-[var(--radius-lg)] p-4 sm:p-5"
+              style={{ background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border-subtle)' }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--color-text-muted)' }}>
+                Địa chỉ giao hàng
+              </p>
+              <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{addr?.fullName}</p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-secondary)' }}>
+                {addr?.phone}{addr?.email ? ` · ${addr.email}` : ''}
+              </p>
+              <p className="text-xs mt-1.5 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+                {addr?.detail}, {addr?.ward}, {addr?.district}, {addr?.province}
+              </p>
+              {o.note && (
+                <p className="text-xs mt-2 italic" style={{ color: 'var(--color-text-muted)' }}>Ghi chú: {o.note}</p>
+              )}
+            </div>
+
+          </div>
+
+          {/* ── Sidebar ── */}
+          <div className="w-full lg:w-80 lg:flex-shrink-0">
+            <OrderSummary
+              o={o}
+              onCancel={handleCancel}
+              cancelling={cancelling}
+              onConfirmDelivered={handleConfirmDelivered}
+              confirming={confirming}
+            />
+          </div>
+
+        </div>
+      </div>
+
+      {reviewItems && reviewItems.length > 0 && (
+        <ReviewFormPopup
+          items={reviewItems}
+          onClose={() => {
+            setReviewItems(null)
+            fetchOrderDetail(orderId)
+          }}
+          onSuccess={(justDoneItems) => {
+            setReviewItems(prev => {
+              if (!prev) return null
+              const doneKeys = new Set(
+                (justDoneItems ?? []).map(i => `${i.productId}:${i.variantId ?? ''}`)
+              )
+              const remaining = prev.filter(
+                i => !doneKeys.has(`${i.productId}:${i.variantId ?? ''}`)
+              )
+              return remaining.length > 0 ? remaining : null
+            })
+          }}
+        />
+      )}
+    </div>
+  )
+}

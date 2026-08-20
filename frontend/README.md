@@ -1,37 +1,16 @@
-# RevenuePulse AI — Funnels Dashboard
+# React + Vite
 
-Pixel-close recreation of the "Funnels" page from a SaaS analytics dashboard
-reference screenshot. Static mock data only — no backend.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Stack
+Currently, two official plugins are available:
 
-Vite + React 19 + TypeScript, Tailwind CSS 4 (design tokens in
-`src/index.css`), `lucide-react` icons, `recharts` for the trend chart and
-sparklines, `@fontsource/inter` for a self-hosted Inter font. Vitest +
-React Testing Library for tests, oxlint for linting.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Install & run
+## React Compiler
 
-```bash
-npm install
-npm run dev       # dev server
-npm run build     # type-check + production build
-npm run preview   # preview the production build
-npm run lint       # oxlint
-npm run test       # vitest run
-```
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Structure
+## Expanding the ESLint configuration
 
-```
-src/
-  data/funnelsMockData.ts   # all page copy/numbers, transcribed from the reference
-  types/funnel.ts           # shared types for the mock data
-  lib/formatters.ts         # number/percent formatting, trend color helper
-  components/ui/            # generic primitives (Card, Badge, Button, Sparkline, ...)
-  components/layout/        # AppShell, Sidebar, TopBar
-  components/funnels/       # page-specific sections (KPI row, funnel card, charts, ...)
-  pages/FunnelsPage.tsx      # assembles the sections
-tests/
-  FunnelsPage.smoke.test.tsx
-```
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

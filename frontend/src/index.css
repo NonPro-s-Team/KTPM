@@ -1,110 +1,331 @@
-@import 'tailwindcss';
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/600.css';
-@import '@fontsource/inter/700.css';
-@import '@fontsource/inter/800.css';
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+/* ============================================================
+   GREEN JUICE HUB — Design Tokens
+   Tailwind v4 @theme block
+   ============================================================ */
 
-:root {
-  /* Nền */
-  --color-bg: #f6f6f9;
-  --color-surface: #ffffff;
-  --color-border: #ececf1;
-  --color-border-subtle: #f1f1f4;
+@theme {
+  /* --- Brand colors --- */
+  --color-brand-50:  #f0faf4;
+  --color-brand-100: #d6f2e2;
+  --color-brand-200: #aee4c6;
+  --color-brand-300: #76cfa3;
+  --color-brand-400: #3db57c;
+  --color-brand-500: #1a9a5e;
+  --color-brand-600: #1a6b3c; /* primary */
+  --color-brand-700: #155430;
+  --color-brand-800: #103f24;
+  --color-brand-900: #0a2a18;
 
-  /* Chữ */
-  --color-text-primary: #13141b;
-  --color-text-secondary: #6b7280;
-  --color-text-muted: #9ca3af;
+  /* --- Neutral --- */
+  --color-neutral-0:   #ffffff;
+  --color-neutral-50:  #f8faf8;
+  --color-neutral-100: #f0f4f0;
+  --color-neutral-200: #e2eae2;
+  --color-neutral-300: #c8d8c8;
+  --color-neutral-400: #9ab09a;
+  --color-neutral-500: #6b856b;
+  --color-neutral-600: #4a5e4a;
+  --color-neutral-700: #334433;
+  --color-neutral-800: #1e2e1e;
+  --color-neutral-900: #111811;
 
-  /* Thương hiệu / accent chính (tím-indigo) */
-  --color-primary: #6d5ae6;
-  --color-primary-hover: #5c4bd6;
-  --color-primary-soft: #efecfd;
+  /* --- Semantic (dùng trong code, tự đổi theo theme) --- */
+  --color-bg-base:      var(--color-neutral-0);
+  --color-bg-surface:   var(--color-neutral-50);
+  --color-bg-elevated:  var(--color-neutral-0);
+  --color-bg-muted:     var(--color-neutral-100);
 
-  /* Accent phụ */
-  --color-teal: #2dd4bf;
-  --color-blue: #3b82f6;
-  --color-success: #16a34a;
-  --color-danger: #ef4444;
-  --color-danger-soft: #fee2e2;
+  --color-text-primary:   var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-500);
+  --color-text-muted:     var(--color-neutral-400);
+  --color-text-inverse:   var(--color-neutral-0);
 
-  --font-sans:
-    'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --color-border-subtle:  var(--color-neutral-200);
+  --color-border-default: var(--color-neutral-300);
+  --color-border-strong:  var(--color-neutral-400);
 
-  --radius-card: 16px;
-  --radius-control: 10px;
-  --radius-pill: 999px;
+  --color-primary:         var(--color-brand-600);
+  --color-primary-hover:   var(--color-brand-700);
+  --color-primary-subtle:  var(--color-brand-50);
+  --color-primary-muted:   var(--color-brand-100);
 
-  --shadow-card:
-    0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+  /* --- Typography --- */
+  --font-sans:    'Be Vietnam Pro', sans-serif;
+  --font-display: 'Syne', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
 
-  --sidebar-width: 260px;
-  --page-padding: 32px;
-  --grid-gap: 24px;
-  --card-padding: 22px;
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.8125rem; /* 13px */
+  --text-base: 0.9375rem; /* 15px */
+  --text-md:   1rem;      /* 16px */
+  --text-lg:   1.125rem;  /* 18px */
+  --text-xl:   1.25rem;   /* 20px */
+  --text-2xl:  1.5rem;    /* 24px */
+  --text-3xl:  1.875rem;  /* 30px */
+  --text-4xl:  2.25rem;   /* 36px */
+
+  /* --- Spacing scale (thêm vào Tailwind mặc định) --- */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+
+  /* --- Border radius --- */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-2xl:  32px;
+  --radius-pill: 9999px;
+
+  /* --- Shadow --- */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.04);
+  --shadow-glow: 0 0 0 3px var(--color-brand-200);
+
+  /* --- Transition --- */
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+  --duration-fast:   150ms;
+  --duration-base:   250ms;
+  --duration-slow:   400ms;
+  --duration-liquid: 550ms;
+
+  /* --- Z-index --- */
+  --z-base:    1;
+  --z-nav:     10;
+  --z-header:  20;
+  --z-overlay: 30;
+  --z-modal:   40;
+  --z-toast:   50;
 }
 
-@theme inline {
-  --color-bg: var(--color-bg);
-  --color-surface: var(--color-surface);
-  --color-border: var(--color-border);
-  --color-border-subtle: var(--color-border-subtle);
-  --color-text-primary: var(--color-text-primary);
-  --color-text-secondary: var(--color-text-secondary);
-  --color-text-muted: var(--color-text-muted);
-  --color-primary: var(--color-primary);
-  --color-primary-hover: var(--color-primary-hover);
-  --color-primary-soft: var(--color-primary-soft);
-  --color-teal: var(--color-teal);
-  --color-blue: var(--color-blue);
-  --color-success: var(--color-success);
-  --color-danger: var(--color-danger);
-  --color-danger-soft: var(--color-danger-soft);
-  --font-sans: var(--font-sans);
-  --radius-card: var(--radius-card);
-  --radius-control: var(--radius-control);
-  --radius-pill: var(--radius-pill);
-  --shadow-card: var(--shadow-card);
+/* ============================================================
+   DARK THEME — ghi đè semantic tokens
+   ============================================================ */
+.dark {
+  --color-bg-base:      var(--color-neutral-900);
+  --color-bg-surface:   var(--color-neutral-800);
+  --color-bg-elevated:  var(--color-neutral-700);
+  --color-bg-muted:     color-mix(in srgb, var(--color-neutral-800) 80%, var(--color-neutral-900));
+
+  --color-text-primary:   var(--color-neutral-50);
+  --color-text-secondary: var(--color-neutral-400);
+  --color-text-muted:     var(--color-neutral-500);
+  --color-text-inverse:   var(--color-neutral-900);
+
+  --color-border-subtle:  color-mix(in srgb, var(--color-neutral-700) 60%, transparent);
+  --color-border-default: var(--color-neutral-700);
+  --color-border-strong:  var(--color-neutral-600);
+
+  --color-primary:        var(--color-brand-400);
+  --color-primary-hover:  var(--color-brand-300);
+  --color-primary-subtle: color-mix(in srgb, var(--color-brand-900) 60%, transparent);
+  --color-primary-muted:  var(--color-brand-800);
+
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,0.5);
+  --shadow-glow: 0 0 0 3px var(--color-brand-800);
 }
 
-* {
-  box-sizing: border-box;
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-bg-surface);
+    color: var(--color-text-primary);
+    transition: background-color var(--duration-base) var(--ease-smooth),
+                color var(--duration-base) var(--ease-smooth);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-default);
+    border-radius: var(--radius-pill);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-border-strong); }
+
+  /* Selection */
+  ::selection {
+    background: var(--color-primary-muted);
+    color: var(--color-brand-800);
+  }
+
+  * { border-color: var(--color-border-subtle); }
 }
 
-html,
-body,
-#root {
-  height: 100%;
+/* ============================================================
+   UTILITY CLASSES — dùng trong component
+   ============================================================ */
+@layer utilities {
+  .bg-base     { background-color: var(--color-bg-base); }
+  .bg-surface  { background-color: var(--color-bg-surface); }
+  .bg-elevated { background-color: var(--color-bg-elevated); }
+  .bg-muted    { background-color: var(--color-bg-muted); }
+
+  .text-primary   { color: var(--color-text-primary); }
+  .text-secondary { color: var(--color-text-secondary); }
+  .text-muted-fg  { color: var(--color-text-muted); }
+
+  .border-subtle  { border-color: var(--color-border-subtle); }
+  .border-default { border-color: var(--color-border-default); }
+
+  .font-display { font-family: var(--font-display); }
+
+  .transition-theme {
+    transition: background-color var(--duration-base) var(--ease-smooth),
+                color var(--duration-base) var(--ease-smooth),
+                border-color var(--duration-base) var(--ease-smooth);
+  }
+}
+.dark nav[data-glass] {
+  background: rgba(30, 46, 30, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+}
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  color: var(--color-text-primary);
-  background: var(--color-bg);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.animate-fade-slide-up {
+  animation: fadeSlideUp 0.4s ease both;
+}
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.tabular-nums {
-  font-feature-settings: 'tnum';
-  font-variant-numeric: tabular-nums;
+.animate-scale-in {
+  animation: scale-in 0.35s ease-out both;
 }
 
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-  border-radius: 4px;
+/* ============================================================
+   SCROLL REVEAL ANIMATIONS
+   ============================================================ */
+
+/* Base state — ẩn trước khi reveal */
+.sr {
+  opacity: 0;
+  will-change: opacity, transform;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+/* Các kiểu reveal */
+.sr-up        { transform: translateY(40px); }
+.sr-up-sm     { transform: translateY(20px); }
+.sr-left      { transform: translateX(-36px); }
+.sr-right     { transform: translateX(36px); }
+.sr-scale     { transform: scale(0.92); }
+.sr-scale-sm  { transform: scale(0.96); }
+
+/* Trạng thái "đã reveal" */
+.sr.is-visible {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s var(--ease-out),
+    transform 0.6s var(--ease-out);
+}
+
+/* Stagger delay helpers */
+.sr-delay-1 { transition-delay: 80ms !important; }
+.sr-delay-2 { transition-delay: 160ms !important; }
+.sr-delay-3 { transition-delay: 240ms !important; }
+.sr-delay-4 { transition-delay: 320ms !important; }
+
+/* Spring easing cho cards */
+.sr.sr-spring.is-visible {
+  transition:
+    opacity 0.55s var(--ease-out),
+    transform 0.55s var(--ease-spring);
+}
+
+/* Shimmer accent line trên section headings */
+@keyframes shimmer-slide {
+  from { background-position: -200% center; }
+  to   { background-position: 200% center; }
+}
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    var(--color-brand-300) 40%,
+    var(--color-primary) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-slide 3s linear infinite;
+}
+
+/* Floating badge animation trong hero */
+@keyframes float-badge {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-4px); }
+}
+.animate-float {
+  animation: float-badge 3s var(--ease-smooth) infinite;
+}
+
+/* Pulse ring cho stats */
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 40%, transparent); }
+  70%  { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.animate-pulse-ring {
+  animation: pulse-ring 2.5s var(--ease-smooth) infinite;
+}
+
+/* Gradient line dưới section title */
+.section-title-line::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-brand-300));
+  border-radius: var(--radius-pill);
+  transition: width 0.4s var(--ease-spring);
+}
+.section-title-line:hover::after {
+  width: 80px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
