@@ -1,0 +1,174 @@
+{
+  "info": {
+    "_postman_id": "c4a3c656-0ccd-4ced-ab9f-0da9c9be2210",
+    "name": "Green Juice Hub API",
+    "description": "Collection kiểm thử API cho Green Juice Hub (Sprint 2 — QLPT-210). Dùng chung với Environment \"GreenJuiceHub\". Auth (folder này) là phần khởi tạo: Login/Refresh/Logout tự động set access_token/refresh_token/role vào Environment. Các module còn lại (Product, Cart, Order, Payment, Promotion, Review, Admin, Shipping, Webhook — theo Phụ lục A, Kế hoạch kiểm thử) sẽ được nhóm bổ sung tiếp theo phân công (Thiện phụ trách build collection).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40745280",
+    "_collection_link": "https://go.postman.co/collection/40745280-c4a3c656-0ccd-4ced-ab9f-0da9c9be2210?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code là 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    const data = pm.response.json();",
+                  "    pm.test(\"Response chứa accessToken\", function () {",
+                  "        pm.expect(data).to.have.property(\"accessToken\");",
+                  "    });",
+                  "    if (data.accessToken) pm.environment.set(\"access_token\", data.accessToken);",
+                  "    if (data.refreshToken) pm.environment.set(\"refresh_token\", data.refreshToken);",
+                  "    if (data.role) pm.environment.set(\"role\", data.role);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              },
+              "listen": "test"
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"{{identifier}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Đăng nhập bằng identifier (email/SĐT/username) + password. Endpoint public — xem SecurityConfig.permitAll(). Test script tự động lưu accessToken/refreshToken/role vào Environment \"GreenJuiceHub\"."
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code là 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    const data = pm.response.json();",
+                  "    if (data.accessToken) pm.environment.set(\"access_token\", data.accessToken);",
+                  "    if (data.refreshToken) pm.environment.set(\"refresh_token\", data.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              },
+              "listen": "test"
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{refresh_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/refresh",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "refresh"
+              ]
+            },
+            "description": "Lấy accessToken mới từ refreshToken. Header Authorization phải mang refresh_token (không phải access_token) — xem AuthController.refresh(). Test script tự động cập nhật access_token/refresh_token."
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code là 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.environment.set(\"access_token\", \"\");",
+                  "    pm.environment.set(\"refresh_token\", \"\");",
+                  "    pm.environment.set(\"role\", \"\");",
+                  "}"
+                ]
+              },
+              "listen": "test"
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Đăng xuất — thu hồi access token hiện tại. Kế thừa Authorization: Bearer {{access_token}} từ Collection. Test script tự động xoá access_token/refresh_token/role khỏi Environment sau khi logout thành công."
+          },
+          "response": []
+        }
+      ],
+      "description": "Xác thực — AuthController (/api/auth). Login/Refresh là public (permitAll trong SecurityConfig)."
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  }
+}
