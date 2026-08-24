@@ -32,3 +32,7 @@
 
     # Database
     *.sql.bak
+
+# Postman local reports may contain short-lived access/refresh tokens
+postman/results/*
+!postman/results/.gitkeep
