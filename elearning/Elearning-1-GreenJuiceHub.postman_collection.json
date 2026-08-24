@@ -1,0 +1,290 @@
+{
+  "info": {
+    "_postman_id": "6eddfb5a-3cf3-4b6e-9a1a-1ac9c67eb730",
+    "name": "ELearning 1 - Green Juice Hub REST API (Products)",
+    "description": "Bản collection rút gọn phục vụ bài ELearning 1: Thiết lập REST API của project trên Postman. Collection minh họa module Product với 7 API GET công khai, không cần đăng nhập và không cần import Environment riêng.\n\nCách chạy: khởi tạo MySQL bằng database/schema.sql và database/seed.sql, chạy Redis và backend tại http://localhost:8081, import file này vào Postman, sau đó Run collection theo đúng thứ tự từ 01 đến 07.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Product REST API",
+      "description": "Các REST API công khai của ProductController, tương ứng module sản phẩm trong backend.",
+      "item": [
+        {
+          "name": "01 - List products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response là Page và có content array', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property('content');",
+                  "  pm.expect(body.content).to.be.an('array');",
+                  "});",
+                  "const body = pm.response.json();",
+                  "if (body.content && body.content.length > 0 && body.content[0].slug) {",
+                  "  pm.collectionVariables.set('sampleProductSlug', body.content[0].slug);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products?page=0&size=12",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "12"
+                }
+              ]
+            },
+            "description": "GET /api/products — lấy danh sách sản phẩm dạng phân trang. Request này tự lưu slug của sản phẩm đầu tiên để request 02 sử dụng."
+          },
+          "response": []
+        },
+        {
+          "name": "02 - Get product detail by slug",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response có variants array', () => pm.expect(pm.response.json()).to.have.property('variants'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products/{{sampleProductSlug}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "{{sampleProductSlug}}"
+              ]
+            },
+            "description": "GET /api/products/{slug} — lấy chi tiết sản phẩm. Hãy chạy request 01 trước để sampleProductSlug được tạo tự động."
+          },
+          "response": []
+        },
+        {
+          "name": "03 - List tags",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response là array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products/tags",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "tags"
+              ]
+            },
+            "description": "GET /api/products/tags — lấy danh sách nhãn sản phẩm."
+          },
+          "response": []
+        },
+        {
+          "name": "04 - List categories",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response là array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "categories"
+              ]
+            },
+            "description": "GET /api/products/categories — lấy danh sách danh mục sản phẩm."
+          },
+          "response": []
+        },
+        {
+          "name": "05 - List flavors",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response là array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products/flavors",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "flavors"
+              ]
+            },
+            "description": "GET /api/products/flavors — lấy danh sách hương vị."
+          },
+          "response": []
+        },
+        {
+          "name": "06 - List sizes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response là array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products/sizes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "sizes"
+              ]
+            },
+            "description": "GET /api/products/sizes — lấy danh sách kích cỡ."
+          },
+          "response": []
+        },
+        {
+          "name": "07 - List deal categories",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response là array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products/deal-categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "deal-categories"
+              ]
+            },
+            "description": "GET /api/products/deal-categories — lấy danh sách danh mục đang có ưu đãi."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "sampleProductSlug",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

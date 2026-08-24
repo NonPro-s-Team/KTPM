@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:green_juice_hub_test;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;NON_KEYWORDS=VALUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  data:
+    redis:
+      repositories:
+        enabled: false
+  task:
+    scheduling:
+      enabled: false
+
+logging:
+  level:
+    root: WARN
+    com.greenjuicehub: WARN
