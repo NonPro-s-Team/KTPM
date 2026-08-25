@@ -94,6 +94,20 @@ class ReviewServiceImplTest {
     }
 
     @Test
+    void replyReviewClearsReplyWhenNull() {
+        Review review = Review.builder().id(1L).reply("Old reply").build();
+        ReviewResponse response = ReviewResponse.builder().id(1L).build();
+
+        when(reviewRepository.findById(1L)).thenReturn(Optional.of(review));
+        when(reviewRepository.save(review)).thenReturn(review);
+        when(reviewMapper.toResponse(review)).thenReturn(response);
+
+        reviewService.replyReview(1L, null);
+
+        assertThat(review.getReply()).isNull();
+        assertThat(review.getRepliedAt()).isNull();
+    }
+    @Test
     void createReviewRejectsWhenOrderNotFoundForUser() {
         CreateReviewRequest request = new CreateReviewRequest();
         request.setOrderId(1L);
