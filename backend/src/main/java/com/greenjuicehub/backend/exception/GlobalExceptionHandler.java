@@ -3,8 +3,10 @@ package com.greenjuicehub.backend.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -28,6 +30,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorBody(400, message));
     }
 
+    // 1. Xử lý lỗi thiếu @RequestParam (Lỗi làm bạn bị HTTP 500 ban đầu)
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<Map<String, Object>> handleMissingParams(MissingServletRequestParameterException ex) {
+        String message = String.format("Thiếu tham số bắt buộc: '%s'", ex.getParameterName());
+        return ResponseEntity.badRequest().body(errorBody(400, message));
+    }
+
+    // 2. (Khuyên dùng) Xử lý lỗi truyền sai kiểu dữ liệu (vd: truyền productId="abc" thay vì số)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, Object>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String message = String.format("Tham số '%s' nhận giá trị không hợp lệ", ex.getName());
+        return ResponseEntity.badRequest().body(errorBody(400, message));
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneral(Exception ex) {
         log.error("Unhandled exception: {}", ex.getMessage(), ex);  // ← thêm dòng này
