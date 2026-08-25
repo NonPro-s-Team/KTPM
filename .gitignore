@@ -9,6 +9,9 @@
     frontend/.vite/
 
     # Backend
+    backend/.env
+    backend/Dockerfile
+    backend/docker-compose.yml
     backend/target/
     backend/.env
     backend/src/main/resources/application-local.yml
