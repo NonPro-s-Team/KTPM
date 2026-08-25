@@ -7,6 +7,9 @@ import com.greenjuicehub.backend.service.auth.TokenBlacklistService;
 import com.greenjuicehub.backend.service.review.IReviewService;
 import com.greenjuicehub.backend.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -69,17 +72,40 @@ class ReviewControllerMockMvcIntegrationTest {
                         && request.getRating() == (byte) 5));
     }
 
-    @Test
-    void createReviewRejectsInvalidRatingBeforeCallingService() throws Exception {
+    // BVA cho field rating (miền hợp lệ [1,5]): biên dưới 0(invalid)/1(valid)/2(valid)
+    // và biên trên 4(valid)/5(valid)/6(invalid) — theo đúng bộ giá trị BVA đã thiết kế
+    // ở QLPT-274, áp dụng ở đúng tầng validation thật sự chạy (Controller/DTO).
+
+    @ParameterizedTest(name = "rating={0} bị từ chối với message \"{1}\"")
+    @CsvSource({
+            "0, rating: Rating tối thiểu là 1 sao",
+            "6, rating: Rating tối đa là 5 sao"
+    })
+    void createReviewRejectsRatingOutsideBoundary(int rating, String expectedMessage) throws Exception {
         mockMvc.perform(post("/api/reviews")
                         .with(customer(42L))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"productId\":10,\"orderId\":1,\"rating\":9}"))
+                        .content("{\"productId\":10,\"orderId\":1,\"rating\":" + rating + "}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value("rating: Rating tối đa là 5 sao"));
+                .andExpect(jsonPath("$.message").value(expectedMessage));
 
         verify(reviewService, never()).createReview(any(), any());
+    }
+
+    @ParameterizedTest(name = "rating={0} hợp lệ, đi tới service")
+    @ValueSource(ints = {1, 2, 4, 5})
+    void createReviewAcceptsRatingWithinBoundary(int rating) throws Exception {
+        when(reviewService.createReview(eq(42L), any())).thenReturn(
+                ReviewResponse.builder().id(1L).productId(10L).rating((byte) rating).build());
+
+        mockMvc.perform(post("/api/reviews")
+                        .with(customer(42L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"productId\":10,\"orderId\":1,\"rating\":" + rating + "}"))
+                .andExpect(status().isOk());
+
+        verify(reviewService).createReview(eq(42L), argThat(request -> request.getRating() == (byte) rating));
     }
 
     @Test

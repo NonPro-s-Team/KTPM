@@ -1,0 +1,3 @@
+.\mvnw.cmd clean test "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"
+
+.\mvnw.cmd test "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"

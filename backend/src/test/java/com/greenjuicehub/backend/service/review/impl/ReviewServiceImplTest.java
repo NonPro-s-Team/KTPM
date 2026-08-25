@@ -15,6 +15,7 @@ import com.greenjuicehub.backend.repository.OrderRepository;
 import com.greenjuicehub.backend.repository.ProductRepository;
 import com.greenjuicehub.backend.repository.ReviewRepository;
 import com.greenjuicehub.backend.repository.UserRepository;
+import com.greenjuicehub.backend.service.review.impl.ReviewServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -24,8 +25,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import java.util.Collections;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -165,6 +166,54 @@ class ReviewServiceImplTest {
         verify(reviewRepository, never()).save(any());
     }
 
+    @Test
+    void createReviewRejectsWhenUserNotFound() {
+        CreateReviewRequest request = new CreateReviewRequest();
+        request.setOrderId(1L);
+        request.setProductId(10L);
+        request.setRating((byte) 5);
+
+        Order order = Order.builder().id(1L).status(Order.OrderStatus.DELIVERED).build();
+        Product product = Product.builder().id(10L).build();
+        OrderItem item = OrderItem.builder().product(product).build();
+
+        when(orderRepository.findByIdAndUserId(1L, 99L)).thenReturn(Optional.of(order));
+        when(reviewRepository.existsByProductIdAndUserIdAndOrderId(10L, 99L, 1L)).thenReturn(false);
+        when(orderItemRepository.findAllByOrderIdWithDetails(1L)).thenReturn(List.of(item));
+        when(userRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> reviewService.createReview(99L, request))
+                .isInstanceOf(AppException.class)
+                .hasMessage("Người dùng không tồn tại");
+
+        verify(reviewRepository, never()).save(any());
+    }
+
+    @Test
+    void createReviewRejectsWhenProductNotFound() {
+        CreateReviewRequest request = new CreateReviewRequest();
+        request.setOrderId(1L);
+        request.setProductId(10L);
+        request.setRating((byte) 5);
+
+        Order order = Order.builder().id(1L).status(Order.OrderStatus.DELIVERED).build();
+        Product product = Product.builder().id(10L).build();
+        OrderItem item = OrderItem.builder().product(product).build();
+        User user = User.builder().id(99L).name("Vu").build();
+
+        when(orderRepository.findByIdAndUserId(1L, 99L)).thenReturn(Optional.of(order));
+        when(reviewRepository.existsByProductIdAndUserIdAndOrderId(10L, 99L, 1L)).thenReturn(false);
+        when(orderItemRepository.findAllByOrderIdWithDetails(1L)).thenReturn(List.of(item));
+        when(userRepository.findById(99L)).thenReturn(Optional.of(user));
+        when(productRepository.findById(10L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> reviewService.createReview(99L, request))
+                .isInstanceOf(AppException.class)
+                .hasMessage("Sản phẩm không tồn tại");
+
+        verify(reviewRepository, never()).save(any());
+    }
+
     // ── getProductReviews / hasReviewed / getProductRating ──────────────────
 
     @Test
@@ -258,6 +307,29 @@ class ReviewServiceImplTest {
         assertThatThrownBy(() -> reviewService.toggleApprove(1L))
                 .isInstanceOf(AppException.class)
                 .hasMessage("Không tìm thấy đánh giá");
+    }
+
+    @Test
+    void toggleApproveFallsBackToZeroDefaultsWhenProductHasNoRatingsLeft() {
+        // Phủ nhánh else của 2 ternary trong updateProductRating():
+        // avg != null ? ... : 0.0f  và  count != null ? count : 0
+        Product product = Product.builder().id(10L).build();
+        Review review = Review.builder().id(1L).product(product).isApproved(false).build();
+        ReviewResponse response = ReviewResponse.builder().id(1L).build();
+
+        when(reviewRepository.findById(1L)).thenReturn(Optional.of(review));
+        when(reviewRepository.save(review)).thenReturn(review);
+        when(productRepository.findById(10L)).thenReturn(Optional.of(product));
+        when(reviewRepository.calculateAvgRating(10L)).thenReturn(null);
+        when(reviewRepository.countApprovedByProductId(10L)).thenReturn(null);
+        when(reviewMapper.toResponse(review)).thenReturn(response);
+
+        reviewService.toggleApprove(1L);
+
+        ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
+        verify(productRepository).save(captor.capture());
+        assertThat(captor.getValue().getAvgRating()).isEqualTo(0.0f);
+        assertThat(captor.getValue().getReviewCount()).isEqualTo(0);
     }
 
     @Test
