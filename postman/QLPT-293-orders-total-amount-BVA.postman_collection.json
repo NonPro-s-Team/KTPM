@@ -1,0 +1,167 @@
+{
+  "info": {
+    "_postman_id": "d3cc3571-d385-4ff5-bc24-f172d2a48d61",
+    "name": "QLPT-293 - BVA orders.total_amount",
+    "description": "BVA cho orders.total_amount (DECIMAL(12,2)). Source thực tế không nhận totalAmount trong DTO; backend phải tự tính subtotal - discountAmount + shippingFee. Chạy cả collection theo đúng thứ tự. Các đơn tạo thành công được tự hủy để hoàn tồn kho.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{access_token}}", "type": "string" }]
+  },
+  "event": [{
+    "listen": "prerequest",
+    "script": {
+      "type": "text/javascript",
+      "exec": [
+        "if (pm.request.method === 'POST' && pm.request.url.toString().includes('/api/orders/buy-now')) {",
+        "  pm.expect(pm.collectionVariables.get('access_token'), 'Hãy chạy cả collection từ SETUP-01').to.not.be.empty;",
+        "  pm.expect(pm.collectionVariables.get('variant_id'), 'SETUP-04 phải lấy được variant').to.not.be.empty;",
+        "  pm.expect(pm.collectionVariables.get('address_id'), 'SETUP-02 phải lấy được địa chỉ').to.not.be.empty;",
+        "}"
+      ]
+    }
+  }],
+  "item": [
+    {
+      "name": "00 - Setup",
+      "item": [
+        {
+          "name": "SETUP-01 - Login CUSTOMER",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.expect(b.accessToken, 'accessToken').to.be.a('string').and.not.empty;",
+            "pm.collectionVariables.set('access_token', b.accessToken);"
+          ]}}],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"identifier\": \"{{customer_identifier}}\",\n  \"password\": \"{{customer_password}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "SETUP-02 - Lấy addressId",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.expect(b, 'Danh sách địa chỉ').to.be.an('array').and.not.empty;",
+            "pm.collectionVariables.set('address_id', b[0].id);"
+          ]}}],
+          "request": { "method": "GET", "url": "{{base_url}}/api/users/me/addresses" }
+        },
+        {
+          "name": "SETUP-03 - Lấy productSlug",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.expect(b.content, 'Danh sách sản phẩm').to.be.an('array').and.not.empty;",
+            "pm.collectionVariables.set('product_slug', b.content[0].slug);"
+          ]}}],
+          "request": { "auth": { "type": "noauth" }, "method": "GET", "url": "{{base_url}}/api/products?page=0&size=1" }
+        },
+        {
+          "name": "SETUP-04 - Lấy variant còn tồn kho nhiều nhất",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "const variants = (b.variants || []).filter(v => Number(v.stockQty) > 0).sort((a,c) => Number(c.stockQty)-Number(a.stockQty));",
+            "pm.expect(variants, 'Cần ít nhất một variant còn hàng').to.not.be.empty;",
+            "const v = variants[0];",
+            "pm.collectionVariables.set('variant_id', v.id);",
+            "pm.collectionVariables.set('unit_price', v.salePrice == null ? v.originalPrice : v.salePrice);",
+            "pm.collectionVariables.set('stock_qty', v.stockQty);"
+          ]}}],
+          "request": { "auth": { "type": "noauth" }, "method": "GET", "url": "{{base_url}}/api/products/{{product_slug}}" }
+        }
+      ]
+    },
+    {
+      "name": "01 - BVA total_amount",
+      "item": [
+        {
+          "name": "TC-01 - Normal: quantity=1, backend tự tính tổng",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+            "if (pm.response.code === 200) {",
+            "  const b = pm.response.json(); const expected = Number(b.subtotal)-Number(b.discountAmount)+Number(b.shippingFee);",
+            "  pm.test('totalAmount = subtotal - discount + shipping', () => pm.expect(Number(b.totalAmount)).to.eql(expected));",
+            "  pm.test('totalAmount > 0', () => pm.expect(Number(b.totalAmount)).to.be.above(0));",
+            "  pm.test('Tối đa 2 chữ số thập phân', () => pm.expect(Math.round(Number(b.totalAmount)*100)/100).to.eql(Number(b.totalAmount)));",
+            "  pm.sendRequest({url: pm.collectionVariables.get('base_url')+'/api/orders/'+b.id+'/cancel', method:'PATCH', header:{Authorization:'Bearer '+pm.collectionVariables.get('access_token'),'Content-Type':'application/json'}, body:{mode:'raw',raw:'{\"reason\":\"Postman BVA cleanup\"}'}}, function(){});",
+            "}"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"variantId\": {{variant_id}},\n  \"quantity\": 1,\n  \"addressId\": {{address_id}},\n  \"paymentMethod\": \"COD\",\n  \"note\": \"QLPT-293 TC-01\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/buy-now" }
+        },
+        {
+          "name": "TC-02 - Boundary 0: quantity=0 phải bị chặn",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+            "pm.test('Không trả về order thành công', () => { const b=pm.response.json(); pm.expect(b.orderCode).to.be.undefined; });"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"variantId\": {{variant_id}},\n  \"quantity\": 0,\n  \"addressId\": {{address_id}},\n  \"paymentMethod\": \"COD\",\n  \"note\": \"QLPT-293 TC-02\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/buy-now" }
+        },
+        {
+          "name": "TC-03 - Dưới biên: quantity=-1 phải bị chặn",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+            "pm.test('Không trả về order thành công', () => { const b=pm.response.json(); pm.expect(b.orderCode).to.be.undefined; });"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"variantId\": {{variant_id}},\n  \"quantity\": -1,\n  \"addressId\": {{address_id}},\n  \"paymentMethod\": \"COD\",\n  \"note\": \"QLPT-293 TC-03\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/buy-now" }
+        },
+        {
+          "name": "TC-04 - Security: client chèn totalAmount=0 phải bị bỏ qua",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+            "if (pm.response.code === 200) { const b=pm.response.json(); const e=Number(b.subtotal)-Number(b.discountAmount)+Number(b.shippingFee);",
+            "pm.test('Không tin totalAmount=0 từ client', () => { pm.expect(Number(b.totalAmount)).to.eql(e); pm.expect(Number(b.totalAmount)).to.be.above(0); });",
+            "pm.sendRequest({url:pm.collectionVariables.get('base_url')+'/api/orders/'+b.id+'/cancel',method:'PATCH',header:{Authorization:'Bearer '+pm.collectionVariables.get('access_token'),'Content-Type':'application/json'},body:{mode:'raw',raw:'{\"reason\":\"Postman BVA cleanup\"}'}},function(){}); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"variantId\": {{variant_id}},\n  \"quantity\": 1,\n  \"addressId\": {{address_id}},\n  \"paymentMethod\": \"COD\",\n  \"totalAmount\": 0,\n  \"note\": \"QLPT-293 TC-04\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/buy-now" }
+        },
+        {
+          "name": "TC-05 - Security: client chèn totalAmount âm phải bị bỏ qua",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+            "if (pm.response.code === 200) { const b=pm.response.json(); const e=Number(b.subtotal)-Number(b.discountAmount)+Number(b.shippingFee);",
+            "pm.test('Không tin totalAmount âm từ client', () => { pm.expect(Number(b.totalAmount)).to.eql(e); pm.expect(Number(b.totalAmount)).to.be.above(0); });",
+            "pm.sendRequest({url:pm.collectionVariables.get('base_url')+'/api/orders/'+b.id+'/cancel',method:'PATCH',header:{Authorization:'Bearer '+pm.collectionVariables.get('access_token'),'Content-Type':'application/json'},body:{mode:'raw',raw:'{\"reason\":\"Postman BVA cleanup\"}'}},function(){}); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"variantId\": {{variant_id}},\n  \"quantity\": 1,\n  \"addressId\": {{address_id}},\n  \"paymentMethod\": \"COD\",\n  \"totalAmount\": -1,\n  \"note\": \"QLPT-293 TC-05\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/buy-now" }
+        },
+        {
+          "name": "TC-06 - Upper boundary: client chèn 9999999999.99 phải bị bỏ qua",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+            "if (pm.response.code === 200) { const b=pm.response.json(); const e=Number(b.subtotal)-Number(b.discountAmount)+Number(b.shippingFee);",
+            "pm.test('Không tin giá trị max từ client', () => { pm.expect(Number(b.totalAmount)).to.eql(e); pm.expect(Number(b.totalAmount)).to.not.eql(9999999999.99); });",
+            "pm.test('Giá trị lưu nằm trong DECIMAL(12,2)', () => pm.expect(Number(b.totalAmount)).to.be.at.most(9999999999.99));",
+            "pm.sendRequest({url:pm.collectionVariables.get('base_url')+'/api/orders/'+b.id+'/cancel',method:'PATCH',header:{Authorization:'Bearer '+pm.collectionVariables.get('access_token'),'Content-Type':'application/json'},body:{mode:'raw',raw:'{\"reason\":\"Postman BVA cleanup\"}'}},function(){}); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"variantId\": {{variant_id}},\n  \"quantity\": 1,\n  \"addressId\": {{address_id}},\n  \"paymentMethod\": \"COD\",\n  \"totalAmount\": 9999999999.99,\n  \"note\": \"QLPT-293 TC-06\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/buy-now" }
+        },
+        {
+          "name": "TC-07 - Trên biên nghiệp vụ: quantity vượt tồn kho",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+            "pm.test('Không tạo order vượt tồn kho', () => { const b=pm.response.json(); pm.expect(b.orderCode).to.be.undefined; });"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"variantId\": {{variant_id}},\n  \"quantity\": 2147483647,\n  \"addressId\": {{address_id}},\n  \"paymentMethod\": \"COD\",\n  \"note\": \"QLPT-293 TC-07\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/buy-now" }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8081", "type": "string" },
+    { "key": "customer_identifier", "value": "seed.user001@greenjuicehub.local", "type": "string" },
+    { "key": "customer_password", "value": "password", "type": "string" },
+    { "key": "access_token", "value": "", "type": "string" },
+    { "key": "address_id", "value": "", "type": "string" },
+    { "key": "product_slug", "value": "", "type": "string" },
+    { "key": "variant_id", "value": "", "type": "string" },
+    { "key": "unit_price", "value": "", "type": "string" },
+    { "key": "stock_qty", "value": "", "type": "string" }
+  ]
+}

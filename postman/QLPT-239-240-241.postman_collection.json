@@ -1,0 +1,2049 @@
+{
+  "info": {
+    "_postman_id": "5a893843-dc57-4e48-8cc2-239240241000",
+    "name": "Green Juice Hub - QLPT-239 Order, QLPT-240 Payment & Webhook, QLPT-241 Shipping",
+    "description": "Collection sinh từ source code backend/frontend. Chạy 00 - Setup trước. Các request làm thay đổi dữ liệu chỉ dùng trên database local/test. PAY-07/PAY-09 cần điền sepay_api_key. Luồng admin state transition dùng pending_order_id lấy từ seed và sẽ làm thay đổi trạng thái đơn đó.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "00 - Setup",
+      "item": [
+        {
+          "name": "SETUP-01 - Login as CUSTOMER (seed_user_001)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data.accessToken, 'accessToken').to.be.a('string').and.not.empty;",
+                  "  pm.collectionVariables.set('customer_access_token', data.accessToken);",
+                  "  pm.collectionVariables.set('customer_refresh_token', data.refreshToken || '');",
+                  "  pm.collectionVariables.set('access_token', data.accessToken);",
+                  "  pm.collectionVariables.set('refresh_token', data.refreshToken || '');",
+                  "  pm.collectionVariables.set('role', data.role || 'CUSTOMER');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"{{customer_identifier}}\",\n  \"password\": \"{{customer_password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Đăng nhập tài khoản CUSTOMER có sẵn trong database/seed.sql. Token được lưu ở collection scope, không cần import Environment riêng."
+          },
+          "response": []
+        },
+        {
+          "name": "SETUP-03 - Login as ADMIN (seed_admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data.accessToken, 'accessToken').to.be.a('string').and.not.empty;",
+                  "  pm.collectionVariables.set('admin_access_token', data.accessToken);",
+                  "  pm.collectionVariables.set('admin_refresh_token', data.refreshToken || '');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"{{admin_identifier}}\",\n  \"password\": \"{{admin_password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Đăng nhập ADMIN seed và lưu token riêng, nhờ đó request ADMIN và CUSTOMER có thể chạy liên tiếp mà không phải đổi Environment."
+          },
+          "response": []
+        },
+        {
+          "name": "SETUP-03 - Load CUSTOMER address",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "const data = pm.response.json();",
+                  "const list = Array.isArray(data) ? data : (data.content || []);",
+                  "pm.expect(list.length, 'Seed customer needs an address').to.be.above(0);",
+                  "if (list.length) pm.collectionVariables.set('address_id', list[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "addresses"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SETUP-04 - Load active product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "const body = pm.response.json();",
+                  "const products = body.content || body;",
+                  "const p = products[0];",
+                  "pm.expect(p, 'Seed needs a product').to.be.an('object');",
+                  "if (p) { pm.collectionVariables.set('product_id', p.id); pm.collectionVariables.set('product_slug', p.slug); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/products?page=0&size=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SETUP-05 - Load active product variant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "const p=pm.response.json();",
+                  "const variants=p.variants||[]; const v=variants.find(x=>x.isActive!==false && Number(x.stockQty)>5)||variants[0];",
+                  "pm.expect(v, 'Seed product needs an active variant').to.be.an('object');",
+                  "if(v) pm.collectionVariables.set('variant_id',v.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_slug}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "{{product_slug}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SETUP-06 - Load existing CUSTOMER orders",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "const b=pm.response.json(); const a=b.content||[];",
+                  "const any=a[0], pending=a.find(o=>o.status==='PENDING'), shipping=a.find(o=>o.status==='SHIPPING'), delivered=a.find(o=>o.status==='DELIVERED');",
+                  "if(any){pm.collectionVariables.set('order_id',any.id);pm.collectionVariables.set('order_code',any.orderCode);pm.collectionVariables.set('order_total',any.totalAmount);}",
+                  "if(pending) pm.collectionVariables.set('pending_order_id',pending.id);",
+                  "if(shipping) pm.collectionVariables.set('shipping_order_id',shipping.id);",
+                  "if(delivered) pm.collectionVariables.set('delivered_order_id',delivered.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders?page=0&size=50",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "50"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "QLPT-239 - Order",
+      "item": [
+        {
+          "name": "ORD-01 - Place order from empty/unknown cart items (negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Rejected unknown cart item',()=>pm.expect(pm.response.code).to.be.oneOf([400,404]));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cartItemIds\": [\n    999999999\n  ],\n  \"addressId\": \"{{address_id}}\",\n  \"paymentMethod\": \"COD\",\n  \"promoCode\": null,\n  \"note\": \"Negative cart case\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Ca đặt hàng khi giỏ rỗng/ID item không thuộc giỏ. Backend phải từ chối."
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-02 - Buy now (creates reusable PENDING order)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "const o=pm.response.json(); pm.expect(o.status).to.eql('PENDING'); pm.collectionVariables.set('created_order_id',o.id); pm.collectionVariables.set('created_order_code',o.orderCode); pm.collectionVariables.set('created_order_total',o.totalAmount);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"variantId\": \"{{variant_id}}\",\n  \"quantity\": 1,\n  \"addressId\": \"{{address_id}}\",\n  \"paymentMethod\": \"COD\",\n  \"promoCode\": null,\n  \"note\": \"Postman QLPT-239\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/buy-now",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "buy-now"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-03 - List my orders",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "const b=pm.response.json(); pm.expect(b.content).to.be.an('array');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "PENDING",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-04 - Get order detail",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get('created_order_id')));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/{{created_order_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "{{created_order_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-05 - Status counts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/status-counts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "status-counts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-06 - Apply invalid promo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Invalid promo rejected',()=>pm.expect(pm.response.code).to.be.oneOf([400,404]));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"promoCode\": \"POSTMAN-NOT-EXIST\",\n  \"cartItemIds\": [\n    999999999\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/apply-promo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "apply-promo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-07 - Confirm delivered while PENDING (invalid transition)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/{{created_order_id}}/confirm-delivered",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "{{created_order_id}}",
+                "confirm-delivered"
+              ]
+            },
+            "description": "Kiểm tra state machine không cho nhảy PENDING -> DELIVERED."
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-08 - Cancel PENDING order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "pm.expect(pm.response.json().status).to.eql('CANCELLED');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Postman test cancellation\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/{{created_order_id}}/cancel",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "{{created_order_id}}",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-09 - Cancel the same order again (invalid state)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Duplicate cancel\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/{{created_order_id}}/cancel",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "{{created_order_id}}",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-10 - Buy now with quantity 0",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"variantId\": \"{{variant_id}}\",\n  \"quantity\": 0,\n  \"addressId\": \"{{address_id}}\",\n  \"paymentMethod\": \"COD\",\n  \"promoCode\": null,\n  \"note\": \"Postman QLPT-239\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/buy-now",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "buy-now"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-11 - Buy now with negative quantity",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"variantId\": \"{{variant_id}}\",\n  \"quantity\": -1,\n  \"addressId\": \"{{address_id}}\",\n  \"paymentMethod\": \"COD\",\n  \"promoCode\": null,\n  \"note\": \"Postman QLPT-239\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/buy-now",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "buy-now"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-12 - Buy now with very large quantity",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"variantId\": \"{{variant_id}}\",\n  \"quantity\": 2147483647,\n  \"addressId\": \"{{address_id}}\",\n  \"paymentMethod\": \"COD\",\n  \"promoCode\": null,\n  \"note\": \"Postman QLPT-239\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/buy-now",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "buy-now"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-13 - Admin: PENDING -> CONFIRMED",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "pm.expect(pm.response.json().status).to.eql('CONFIRMED');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CONFIRMED\",\n  \"cancelReason\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/orders/{{pending_order_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "orders",
+                "{{pending_order_id}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-14 - Admin: CONFIRMED -> SHIPPING",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "pm.expect(pm.response.json().status).to.eql('SHIPPING');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"SHIPPING\",\n  \"cancelReason\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/orders/{{pending_order_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "orders",
+                "{{pending_order_id}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-15 - Admin: SHIPPING -> PENDING (invalid reverse)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PENDING\",\n  \"cancelReason\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/orders/{{pending_order_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "orders",
+                "{{pending_order_id}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ORD-16 - Customer confirms SHIPPING -> DELIVERED",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "pm.expect(pm.response.json().status).to.eql('DELIVERED');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/{{pending_order_id}}/confirm-delivered",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "{{pending_order_id}}",
+                "confirm-delivered"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "QLPT-240 - Payment & Webhook",
+      "item": [
+        {
+          "name": "PAY-01 - Create BANK_TRANSFER order for webhook",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "const o=pm.response.json(); pm.collectionVariables.set('webhook_order_id',o.id); pm.collectionVariables.set('webhook_order_code',o.orderCode); pm.collectionVariables.set('webhook_order_total',o.totalAmount);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"variantId\": \"{{variant_id}}\",\n  \"quantity\": 1,\n  \"addressId\": \"{{address_id}}\",\n  \"paymentMethod\": \"BANK_TRANSFER\",\n  \"promoCode\": null,\n  \"note\": \"Webhook test order\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/buy-now",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "buy-now"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PAY-02 - Create VNPay payment URL",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "pm.expect(pm.response.json().paymentUrl).to.be.a('string');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{webhook_order_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payment/vnpay/create-url",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payment",
+                "vnpay",
+                "create-url"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PAY-03 - VNPay return with missing/invalid signature",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payment/vnpay/return?vnp_TxnRef={{webhook_order_code}}&vnp_ResponseCode=00&vnp_SecureHash=invalid",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payment",
+                "vnpay",
+                "return"
+              ],
+              "query": [
+                {
+                  "key": "vnp_TxnRef",
+                  "value": "{{webhook_order_code}}"
+                },
+                {
+                  "key": "vnp_ResponseCode",
+                  "value": "00"
+                },
+                {
+                  "key": "vnp_SecureHash",
+                  "value": "invalid"
+                }
+              ]
+            },
+            "description": "Endpoint trả kết quả verify; chữ ký giả không được đánh dấu thanh toán thành công."
+          },
+          "response": []
+        },
+        {
+          "name": "PAY-04 - VNPay IPN with missing/invalid signature",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "pm.expect(pm.response.json().RspCode).not.to.eql('00');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payment/vnpay/ipn?vnp_TxnRef={{webhook_order_code}}&vnp_ResponseCode=00&vnp_SecureHash=invalid",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payment",
+                "vnpay",
+                "ipn"
+              ],
+              "query": [
+                {
+                  "key": "vnp_TxnRef",
+                  "value": "{{webhook_order_code}}"
+                },
+                {
+                  "key": "vnp_ResponseCode",
+                  "value": "00"
+                },
+                {
+                  "key": "vnp_SecureHash",
+                  "value": "invalid"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PAY-05 - SePay webhook without API key",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{$timestamp}}\",\n  \"gateway\": \"Vietcombank\",\n  \"transactionDate\": \"2026-08-25 10:00:00\",\n  \"accountNumber\": \"1234567890\",\n  \"subAccount\": null,\n  \"transferType\": \"in\",\n  \"transferAmount\": \"{{created_order_total}}\",\n  \"accumulated\": 0,\n  \"code\": null,\n  \"content\": \"Thanh toan {{created_order_code}}\",\n  \"referenceCode\": \"PM-{{$timestamp}}\",\n  \"description\": \"Postman SePay webhook\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/webhooks/sepay",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "webhooks",
+                "sepay"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PAY-06 - SePay webhook malformed/insufficient payload",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "apikey {{sepay_api_key}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transferType\": \"in\",\n  \"content\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/webhooks/sepay",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "webhooks",
+                "sepay"
+              ]
+            },
+            "description": "Controller hiện không Bean Validation; service bỏ qua payload thiếu order code và vẫn trả 200 để tránh retry."
+          },
+          "response": []
+        },
+        {
+          "name": "PAY-07 - SePay valid webhook (manual key required)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "apikey {{sepay_api_key}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{$timestamp}}\",\n  \"gateway\": \"Vietcombank\",\n  \"transactionDate\": \"2026-08-25 10:00:00\",\n  \"accountNumber\": \"1234567890\",\n  \"subAccount\": null,\n  \"transferType\": \"in\",\n  \"transferAmount\": \"{{webhook_order_total}}\",\n  \"accumulated\": 0,\n  \"code\": null,\n  \"content\": \"Thanh toan {{webhook_order_code}}\",\n  \"referenceCode\": \"PM-{{$timestamp}}\",\n  \"description\": \"Postman SePay webhook\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/webhooks/sepay",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "webhooks",
+                "sepay"
+              ]
+            },
+            "description": "Điền sepay_api_key đúng cấu hình backend. Sau request, PAY-08 xác nhận paymentStatus=PAID."
+          },
+          "response": []
+        },
+        {
+          "name": "PAY-08 - Verify order paid after webhook",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "if(pm.collectionVariables.get('sepay_api_key')) pm.expect(pm.response.json().paymentStatus).to.eql('PAID');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/{{webhook_order_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "{{webhook_order_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PAY-09 - Replay identical SePay webhook (idempotency)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "apikey {{sepay_api_key}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{$timestamp}}\",\n  \"gateway\": \"Vietcombank\",\n  \"transactionDate\": \"2026-08-25 10:00:00\",\n  \"accountNumber\": \"1234567890\",\n  \"subAccount\": null,\n  \"transferType\": \"in\",\n  \"transferAmount\": \"{{webhook_order_total}}\",\n  \"accumulated\": 0,\n  \"code\": null,\n  \"content\": \"Thanh toan {{webhook_order_code}}\",\n  \"referenceCode\": \"PM-IDEMPOTENT-001\",\n  \"description\": \"Postman SePay webhook\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/webhooks/sepay",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "webhooks",
+                "sepay"
+              ]
+            },
+            "description": "Gửi lặp để kiểm tra không cộng tiền hoặc cập nhật trạng thái lần hai."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "QLPT-241 - Shipping & Shipping Fee",
+      "item": [
+        {
+          "name": "SHIP-01 - List provinces",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "const a=pm.response.json(); pm.expect(a).to.be.an('array'); if(a.length) pm.collectionVariables.set('province_id',a[0].ProvinceID || a[0].province_id || a[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/shipping/provinces",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "provinces"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SHIP-02 - List districts by province",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "const a=pm.response.json(); pm.expect(a).to.be.an('array'); if(a.length) pm.collectionVariables.set('district_id',a[0].DistrictID || a[0].district_id || a[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/shipping/districts?provinceId={{province_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "districts"
+              ],
+              "query": [
+                {
+                  "key": "provinceId",
+                  "value": "{{province_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SHIP-03 - List wards by district",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "pm.expect(pm.response.json()).to.be.an('array');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/shipping/wards?districtId={{district_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "wards"
+              ],
+              "query": [
+                {
+                  "key": "districtId",
+                  "value": "{{district_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SHIP-04 - Calculate shipping fee (Buy Now)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+                  "const fee=Number(pm.response.json().shippingFee); pm.expect(fee).to.be.at.least(0); pm.collectionVariables.set('shipping_fee',fee);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"addressId\": \"{{address_id}}\",\n  \"variantId\": \"{{variant_id}}\",\n  \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/shipping-fee",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "shipping-fee"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SHIP-05 - Calculate fee with missing address",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"addressId\": 999999999,\n  \"variantId\": \"{{variant_id}}\",\n  \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/shipping-fee",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "shipping-fee"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SHIP-06 - Districts with invalid province ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', () => pm.expect(pm.response.code).to.be.within(200, 299));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/shipping/districts?provinceId=-1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "districts"
+              ],
+              "query": [
+                {
+                  "key": "provinceId",
+                  "value": "-1"
+                }
+              ]
+            },
+            "description": "GhnService bắt lỗi upstream và hiện trả danh sách rỗng."
+          },
+          "response": []
+        },
+        {
+          "name": "SHIP-07 - Shipping fee without token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Authentication required',()=>pm.expect(pm.response.code).to.be.oneOf([401,403]));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"addressId\": \"{{address_id}}\",\n  \"variantId\": \"{{variant_id}}\",\n  \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/shipping-fee",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "shipping-fee"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "customer_identifier",
+      "value": "seed.user001@greenjuicehub.local",
+      "type": "string"
+    },
+    {
+      "key": "customer_password",
+      "value": "password",
+      "type": "string"
+    },
+    {
+      "key": "admin_identifier",
+      "value": "seed.admin@greenjuicehub.local",
+      "type": "string"
+    },
+    {
+      "key": "admin_password",
+      "value": "password",
+      "type": "string"
+    },
+    {
+      "key": "customer_access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "address_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "variant_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "product_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "product_slug",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "order_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "order_code",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "order_total",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "pending_order_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "shipping_order_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "delivered_order_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "created_order_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "created_order_code",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "created_order_total",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "webhook_order_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "webhook_order_code",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "webhook_order_total",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sepay_api_key",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "province_id",
+      "value": "202",
+      "type": "string"
+    },
+    {
+      "key": "district_id",
+      "value": "1454",
+      "type": "string"
+    },
+    {
+      "key": "shipping_fee",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
