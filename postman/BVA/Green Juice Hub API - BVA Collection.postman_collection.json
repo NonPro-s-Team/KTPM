@@ -1,0 +1,1428 @@
+{
+  "info": {
+    "_postman_id": "e0ff865f-74fe-4d12-a78e-8dd9da31c246",
+    "name": "Green Juice Hub API - BVA Collection",
+    "description": "Collection rieng cho cac test case Boundary Value Analysis (BVA) thuoc Task QLPT-281 (nguoi phu trach: Hien) - Sprint 4, gom 2 Subtask: [QLPT-286](https://hientm0978.atlassian.net/browse/QLPT-286) BVA so dien thoai (users.phone / addresses.phone) va [QLPT-287](https://hientm0978.atlassian.net/browse/QLPT-287) BVA ma OTP (do dai + het han).\n\n## Chay nhanh\n1. Backend chay local tai `http://localhost:8081`, DB da co seed data (`database/seed.sql`).\n2. Import collection nay (da tu chua bien can thiet, khong can Environment rieng).\n3. Chay `00 - Setup` truoc (lay access_token cho nhom 02).\n4. Chay lan luot `01`, `02`, `03`. Cac case trong `03` co tien to `MANUAL-` can thao tac tay (xem console log server de lay ma OTP that, dat bien `runManualOtpCases=true`).\n5. Sau khi kiem tra xong nhom `02`, co the chay `99 - Optional Cleanup` (dat `runCleanup=true`) de xoa cac address test, tranh vuot qua gioi han 5 dia chi/user.\n\n## Phat hien quan trong da ap dung vao test case (xem chi tiet trong Claude Project, doc Sprint4-BVA-Testing.md muc 6)\n- Rang buoc `users.phone` la REGEX `^(0[3|5|7|8|9])+([0-9]{8})$` qua `/auth/send-otp`, KHONG phai do dai 1-15.\n- Rang buoc `addresses.phone` la REGEX KHAC: `^(0|\\+84)[0-9]{8,10}$`, bien la so chu so SAU TIEN TO (8-10).\n- `otp_verifications.otp_code` khong co @Size, luon so sanh bang gia tri that (equals) - case 'sai do dai' thuc chat la 'sai gia tri'.\n- Dau `+` trong regex send-otp co the cho phep lap nhom dau so - xem case `PHONE-REG-BUG-01` (nghi van bug).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40745280",
+    "_collection_link": "https://go.postman.co/collection/40745280-e0ff865f-74fe-4d12-a78e-8dd9da31c246?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "[BVA] Hien - Auth & User: BVA cho so dien thoai & ma OTP",
+      "item": [
+        {
+          "name": "00 - Setup",
+          "item": [
+            {
+              "name": "SETUP-01 - Login seed customer (lay access_token cho case dia chi)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 200 (dang nhap thanh cong)\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Nhan duoc access_token va luu vao collection variable cho folder 02\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.accessToken).to.be.a(\"string\").and.not.empty;",
+                      "    pm.collectionVariables.set(\"access_token\", json.accessToken);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifier\": \"{{seed_identifier}}\",\n  \"password\": \"{{seed_password}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "01 - QLPT-286a: BVA so dien thoai qua /auth/send-otp (users.phone)",
+          "item": [
+            {
+              "name": "PHONE-REG-01 - Rong (min-1)",
+              "event": [
+                {
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code la 400 (Bad Request)\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Tra ve loi validate cho truong phone rong (min-1, khong hop le)\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(400);",
+                      "    pm.expect(json.message).to.include(\"phone:\");",
+                      "    pm.expect(json.message).to.match(/trống|không hợp lệ/);",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  },
+                  "listen": "test"
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/send-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "send-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "PHONE-REG-02 - Dung dinh dang VN (nom, sinh ngau nhien)",
+              "event": [
+                {
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "function randomDigits(n) {",
+                      "    let s = \"\";",
+                      "    for (let i = 0; i < n; i++) {",
+                      "        s += Math.floor(Math.random() * 10);",
+                      "    }",
+                      "    return s;",
+                      "}",
+                      "",
+                      "const validPrefixes = [\"3\", \"5\", \"7\", \"8\", \"9\"];",
+                      "const prefix = validPrefixes[Math.floor(Math.random() * validPrefixes.length)];",
+                      "const phone = \"0\" + prefix + randomDigits(8);",
+                      "",
+                      "pm.collectionVariables.set(\"nomPhone\", phone);",
+                      "console.log(\"PHONE-REG-02: so dien thoai ngau nhien hop le = \" + phone);"
+                    ]
+                  },
+                  "listen": "prerequest"
+                },
+                {
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 200 (OTP gui thanh cong)\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Body xac nhan gui OTP thanh cong cho so vua sinh ngau nhien\", function () {",
+                      "    const json = pm.response.json();",
+                      "    const phone = pm.collectionVariables.get(\"nomPhone\");",
+                      "    pm.expect(json.success).to.be.true;",
+                      "    pm.expect(json.message).to.include(phone);",
+                      "    // Luu y: Java field 'isNewUser' (@Getter Lombok -> isNewUser()) bi Jackson bo tien to \"is\" khi serialize => JSON key thuc te la \"newUser\", khong phai \"isNewUser\"",
+                      "    pm.expect(json.newUser).to.be.true;",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  },
+                  "listen": "test"
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{nomPhone}}\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/send-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "send-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "PHONE-REG-03 - Sai dau so (prefix khong hop le)",
+              "event": [
+                {
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 400 (Bad Request)\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Bao loi do dau so khong hop le (01 khong thuoc [3,5,7,8,9])\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(400);",
+                      "    pm.expect(json.message).to.eql(\"phone: Số điện thoại không hợp lệ\");",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  },
+                  "listen": "test"
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"0112345678\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/send-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "send-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "PHONE-REG-04 - Thieu 1 so sau dau so (9 ky tu, min-1)",
+              "event": [
+                {
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 400 (Bad Request)\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Bao loi do thieu 1 so sau dau so (9 ky tu, min-1)\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(400);",
+                      "    pm.expect(json.message).to.eql(\"phone: Số điện thoại không hợp lệ\");",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  },
+                  "listen": "test"
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"091234567\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/send-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "send-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "PHONE-REG-05 - Du 1 so sau dau so (11 ky tu, max+1)",
+              "event": [
+                {
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code la 400 (Bad Request)\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Bao loi do du 1 so sau dau so (11 ky tu, max+1)\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(400);",
+                      "    pm.expect(json.message).to.eql(\"phone: Số điện thoại không hợp lệ\");",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  },
+                  "listen": "test"
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"09123456789\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/send-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "send-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "PHONE-REG-06 - Chua ky tu khong phai so",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code la 400 (Bad Request)\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Bao loi do chua ky tu khong phai so\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(400);",
+                      "    pm.expect(json.message).to.eql(\"phone: Số điện thoại không hợp lệ\");",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"0912345abc\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/send-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "send-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "PHONE-REG-BUG-01 - [Nghi van bug] Lap nhom dau so (dau + trong regex)",
+              "event": [
+                {
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 200 hoac 429 (429 neu chay lai trong vong 60s cho cung so nay)\", function () {",
+                      "    pm.expect([200, 429]).to.include(pm.response.code);",
+                      "});",
+                      "",
+                      "if (pm.response.code === 200) {",
+                      "    pm.test(\"[BUG] Server CHAP NHAN so 12 ky tu do dau '+' trong regex cho lap nhom tien to (0[3|5|7|8|9])\", function () {",
+                      "        const json = pm.response.json();",
+                      "        pm.expect(json.success).to.be.true;",
+                      "    });",
+                      "    console.warn(\"BUG XAC NHAN (QLPT-286a): API /auth/send-otp chap nhan so dien thoai '090912345678' (12 ky tu, khong dung 10 so chuan VN) vi regex (0[3|5|7|8|9])+([0-9]{8}) cho phep lap nhieu lan nhom tien to 2 ky tu.\");",
+                      "} else {",
+                      "    pm.test(\"Bi rate-limit do da gui OTP cho so nay trong 60s truoc (khong anh huong ket luan bug)\", function () {",
+                      "        const json = pm.response.json();",
+                      "        pm.expect(json.status).to.eql(429);",
+                      "    });",
+                      "}",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  },
+                  "listen": "test"
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"090912345678\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/send-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "send-otp"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "description": "QLPT-286. Day la duong DUY NHAT ghi vao users.phone (qua send-otp REGISTER + verify-otp). Rang buoc that la REGEX ^(0\\[3|5|7|8|9\\])+(\\[0-9\\]{8})$, KHONG phai do dai 1-15 nhu mo ta Jira ban dau (xem Sprint4-BVA-Testing.md muc 6)."
+        },
+        {
+          "name": "02 - QLPT-286b: BVA so dien thoai qua POST /users/me/addresses (addresses.phone)",
+          "item": [
+            {
+              "name": "ADDR-PHONE-01 - 7 so sau tien to 0 (min-1)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 400 (Bad Request)\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Bao loi do thieu 1 so sau tien to 0 (7 so, min-1)\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(400);",
+                      "    pm.expect(json.message).to.eql(\"phone: Số điện thoại không hợp lệ\");",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Nguyen Van BVA Test\",\n  \"phone\": \"01234567\",\n  \"province\": \"Ha Noi\",\n  \"district\": \"Cau Giay\",\n  \"ward\": \"Dich Vong\",\n  \"detail\": \"So 1 duong Test\",\n  \"isDefault\": false\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ADDR-PHONE-02 - 8 so sau tien to 0 (min)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 201 (Created)\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Tao address thanh cong voi 8 so sau tien to 0 (min)\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.phone).to.eql(\"012345678\");",
+                      "    pm.expect(json.id).to.be.a(\"number\");",
+                      "    pm.collectionVariables.set(\"addrPhoneMinId\", json.id);",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Nguyen Van BVA Test\",\n  \"phone\": \"012345678\",\n  \"province\": \"Ha Noi\",\n  \"district\": \"Cau Giay\",\n  \"ward\": \"Dich Vong\",\n  \"detail\": \"So 1 duong Test\",\n  \"isDefault\": false\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ADDR-PHONE-03 - 9 so sau tien to 0 (nom)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 201 (Created)\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Tao address thanh cong voi 9 so sau tien to 0 (nom)\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.phone).to.eql(\"0123456789\");",
+                      "    pm.expect(json.id).to.be.a(\"number\");",
+                      "    pm.collectionVariables.set(\"addrPhoneNomId\", json.id);",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Nguyen Van BVA Test\",\n  \"phone\": \"0123456789\",\n  \"province\": \"Ha Noi\",\n  \"district\": \"Cau Giay\",\n  \"ward\": \"Dich Vong\",\n  \"detail\": \"So 1 duong Test\",\n  \"isDefault\": false\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ADDR-PHONE-04 - 10 so sau tien to 0 (max)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 201 (Created)\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Tao address thanh cong voi 10 so sau tien to 0 (max)\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.phone).to.eql(\"01234567890\");",
+                      "    pm.expect(json.id).to.be.a(\"number\");",
+                      "    pm.collectionVariables.set(\"addrPhoneMaxId\", json.id);",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Nguyen Van BVA Test\",\n  \"phone\": \"01234567890\",\n  \"province\": \"Ha Noi\",\n  \"district\": \"Cau Giay\",\n  \"ward\": \"Dich Vong\",\n  \"detail\": \"So 1 duong Test\",\n  \"isDefault\": false\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ADDR-PHONE-05 - 11 so sau tien to 0 (max+1)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 400 (Bad Request)\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Bao loi do du 1 so sau tien to 0 (11 so, max+1)\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(400);",
+                      "    pm.expect(json.message).to.eql(\"phone: Số điện thoại không hợp lệ\");",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Nguyen Van BVA Test\",\n  \"phone\": \"012345678901\",\n  \"province\": \"Ha Noi\",\n  \"district\": \"Cau Giay\",\n  \"ward\": \"Dich Vong\",\n  \"detail\": \"So 1 duong Test\",\n  \"isDefault\": false\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ADDR-PHONE-06 - Tien to +84, 8 so sau (min, hop le)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 201 (Created)\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Tao address thanh cong voi tien to +84, 8 so sau (min, hop le)\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.phone).to.eql(\"+8412345678\");",
+                      "    pm.expect(json.id).to.be.a(\"number\");",
+                      "    pm.collectionVariables.set(\"addrPhonePlus84Id\", json.id);",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Nguyen Van BVA Test\",\n  \"phone\": \"+8412345678\",\n  \"province\": \"Ha Noi\",\n  \"district\": \"Cau Giay\",\n  \"ward\": \"Dich Vong\",\n  \"detail\": \"So 1 duong Test\",\n  \"isDefault\": false\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ADDR-PHONE-07 - Tien to +84, 11 so sau (max+1)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 400 (Bad Request)\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Bao loi do tien to +84 nhung du 1 so (11 so sau, max+1)\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(400);",
+                      "    pm.expect(json.message).to.eql(\"phone: Số điện thoại không hợp lệ\");",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fullName\": \"Nguyen Van BVA Test\",\n  \"phone\": \"+8412345678901\",\n  \"province\": \"Ha Noi\",\n  \"district\": \"Cau Giay\",\n  \"ward\": \"Dich Vong\",\n  \"detail\": \"So 1 duong Test\",\n  \"isDefault\": false\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "description": "QLPT-286. Rang buoc that: regex ^(0|\\+84)[0-9]{8,10}$ (khac voi regex cua users.phone). Bien that su la SO CHU SO SAU TIEN TO (8-10), khong phai tong do dai chuoi. Can chay '00 - Setup' truoc de co access_token. Moi lan chay case 201 se TAO address moi (toi da 5 dia chi/user) -> dung folder '99 - Optional Cleanup' de xoa sau khi kiem tra xong."
+        },
+        {
+          "name": "03 - QLPT-287: BVA ma OTP (do dai + het han)",
+          "item": [
+            {
+              "name": "OTP-SETUP - Gui OTP cho so test ngau nhien (tao ban ghi OTP that)",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "function randomDigits(n) {",
+                      "    let s = \"\";",
+                      "    for (let i = 0; i < n; i++) {",
+                      "        s += Math.floor(Math.random() * 10);",
+                      "    }",
+                      "    return s;",
+                      "}",
+                      "",
+                      "const validPrefixes = [\"3\", \"5\", \"7\", \"8\", \"9\"];",
+                      "const prefix = validPrefixes[Math.floor(Math.random() * validPrefixes.length)];",
+                      "const phone = \"0\" + prefix + randomDigits(8);",
+                      "",
+                      "pm.collectionVariables.set(\"otpTestPhone\", phone);",
+                      "console.log(\"OTP-SETUP: so dien thoai test OTP = \" + phone);"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 200 (OTP gui thanh cong)\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Body xac nhan gui OTP thanh cong, tao ban ghi OTP that trong DB\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.success).to.be.true;",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{otpTestPhone}}\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/send-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "send-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "OTP-LEN-05 - Verify ma 5 ky tu (sai do dai)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 400 (Bad Request)\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Sai OTP (that chat la sai gia tri, khong phai sai do dai) - lan sai 1/3, con 2 lan thu\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(400);",
+                      "    pm.expect(json.message).to.eql(\"OTP không đúng, còn 2 lần thử\");",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{otpTestPhone}}\",\n  \"otpCode\": \"12345\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/verify-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "OTP-LEN-06 - Verify ma 6 ky tu nhung SAI gia tri",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 400 (Bad Request)\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Sai gia tri OTP (000000) - lan sai 2/3, con 1 lan thu\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(400);",
+                      "    pm.expect(json.message).to.eql(\"OTP không đúng, còn 1 lần thử\");",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{otpTestPhone}}\",\n  \"otpCode\": \"000000\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/verify-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "OTP-LEN-07 - Verify ma 7 ky tu (sai do dai)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code la 429 - day la lan sai OTP thu 3/3 lien tiep cho cung so, KICH HOAT KHOA 15 phut (khong con la 400 don thuan)\", function () {",
+                      "    pm.response.to.have.status(429);",
+                      "});",
+                      "",
+                      "pm.test(\"Bao loi khoa do nhap sai OTP qua 3 lan\", function () {",
+                      "    const json = pm.response.json();",
+                      "    pm.expect(json.status).to.eql(429);",
+                      "    pm.expect(json.message).to.eql(\"Nhập sai OTP quá 3 lần, vui lòng thử lại sau 15 phút\");",
+                      "});",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{otpTestPhone}}\",\n  \"otpCode\": \"1234567\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/verify-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "MANUAL-OTP-VALID - Verify dung ma (lay tu console log server)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.collectionVariables.get(\"runManualOtpCases\") === \"true\") {",
+                      "    pm.test(\"Status code la 200 (verify dung OTP thanh cong)\", function () {",
+                      "        pm.response.to.have.status(200);",
+                      "    });",
+                      "",
+                      "    pm.test(\"Body xac nhan verify OTP thanh cong\", function () {",
+                      "        const json = pm.response.json();",
+                      "        pm.expect(json.success).to.be.true;",
+                      "        pm.expect(json.message).to.eql(\"Xác nhận OTP thành công\");",
+                      "        pm.expect(json.tempToken).to.be.a(\"string\").and.not.empty;",
+                      "    });",
+                      "} else {",
+                      "    console.log(\"MANUAL-OTP-VALID: bo qua - dat runManualOtpCases=true va manualOtpCode dung (xem console server) de kich hoat assertion\");",
+                      "}",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{otpTestPhone}}\",\n  \"otpCode\": \"{{manualOtpCode}}\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/verify-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "MANUAL-OTP-EXPIRY-01 - Verify ngay TRUOC khi het han (con hieu luc)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.collectionVariables.get(\"runManualOtpCases\") === \"true\") {",
+                      "    pm.test(\"Status code la 200 (OTP con hieu luc, verify thanh cong)\", function () {",
+                      "        pm.response.to.have.status(200);",
+                      "    });",
+                      "",
+                      "    pm.test(\"Body xac nhan verify OTP thanh cong truoc khi het han\", function () {",
+                      "        const json = pm.response.json();",
+                      "        pm.expect(json.success).to.be.true;",
+                      "        pm.expect(json.message).to.eql(\"Xác nhận OTP thành công\");",
+                      "    });",
+                      "} else {",
+                      "    console.log(\"MANUAL-OTP-EXPIRY-01: bo qua - dat runManualOtpCases=true va manualOtpCode dung de kich hoat assertion\");",
+                      "}",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{otpTestPhone}}\",\n  \"otpCode\": \"{{manualOtpCode}}\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/verify-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "MANUAL-OTP-EXPIRY-02 - Verify SAU khi het han 5 phut",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.collectionVariables.get(\"runManualOtpCases\") === \"true\") {",
+                      "    pm.test(\"Status code la 400 (OTP het han hoac da dung)\", function () {",
+                      "        pm.response.to.have.status(400);",
+                      "    });",
+                      "",
+                      "    pm.test(\"Bao loi OTP khong hop le hoac da het han\", function () {",
+                      "        const json = pm.response.json();",
+                      "        pm.expect(json.status).to.eql(400);",
+                      "        pm.expect(json.message).to.eql(\"OTP không hợp lệ hoặc đã hết hạn\");",
+                      "    });",
+                      "} else {",
+                      "    console.log(\"MANUAL-OTP-EXPIRY-02: bo qua - dat runManualOtpCases=true, cho qua 5 phut ke tu OTP-SETUP roi moi chay case nay de kich hoat assertion\");",
+                      "}",
+                      "",
+                      "pm.test(\"Thoi gian phan hoi duoi 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"{{otpTestPhone}}\",\n  \"otpCode\": \"{{manualOtpCode}}\",\n  \"type\": \"REGISTER\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/verify-otp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "description": "QLPT-287. Luu y: otp_verifications.otp_code KHONG co @Size validation, he thong luon sinh 6 so va so sanh bang equals(). Vi vay 3 case OTP-LEN-05/06/07 thuc chat deu that bai vi SAI GIA TRI, khong phai sai do dai. Cac case MANUAL-* can dong tay: xem console server de lay ma that, dat runManualOtpCases=true."
+        },
+        {
+          "name": "99 - Optional Cleanup",
+          "item": [
+            {
+              "name": "CLEANUP-01 - Xoa address ADDR-PHONE-02 (min)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses/{{addrPhoneMinId}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses",
+                    "{{addrPhoneMinId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CLEANUP-02 - Xoa address ADDR-PHONE-03 (nom)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses/{{addrPhoneNomId}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses",
+                    "{{addrPhoneNomId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CLEANUP-03 - Xoa address ADDR-PHONE-04 (max)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses/{{addrPhoneMaxId}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses",
+                    "{{addrPhoneMaxId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CLEANUP-04 - Xoa address ADDR-PHONE-06 (+84)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/me/addresses/{{addrPhonePlus84Id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "addresses",
+                    "{{addrPhonePlus84Id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "description": "Dat bien collection 'runCleanup'=true roi chay folder nay de xoa cac address da tao boi folder 02, tranh vuot qua gioi han 5 dia chi/user khi chay lai nhieu lan. Mac dinh bo qua (runCleanup=false)."
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "seed_identifier",
+      "value": "seed.user001@greenjuicehub.local"
+    },
+    {
+      "key": "seed_password",
+      "value": "password"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "nomPhone",
+      "value": ""
+    },
+    {
+      "key": "otpTestPhone",
+      "value": ""
+    },
+    {
+      "key": "manualOtpCode",
+      "value": ""
+    },
+    {
+      "key": "runManualOtpCases",
+      "value": "false"
+    },
+    {
+      "key": "runCleanup",
+      "value": "false"
+    },
+    {
+      "key": "addrPhoneMinId",
+      "value": ""
+    },
+    {
+      "key": "addrPhoneNomId",
+      "value": ""
+    },
+    {
+      "key": "addrPhoneMaxId",
+      "value": ""
+    },
+    {
+      "key": "addrPhonePlus84Id",
+      "value": ""
+    }
+  ]
+}
