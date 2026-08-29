@@ -36,14 +36,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorBody(400, message));
     }
 
-    // 1. Xử lý lỗi thiếu @RequestParam (Lỗi làm bạn bị HTTP 500 ban đầu)
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<Map<String, Object>> handleMissingParams(MissingServletRequestParameterException ex) {
         String message = String.format("Thiếu tham số bắt buộc: '%s'", ex.getParameterName());
         return ResponseEntity.badRequest().body(errorBody(400, message));
     }
 
-    // 2. (Khuyên dùng) Xử lý lỗi truyền sai kiểu dữ liệu (vd: truyền productId="abc" thay vì số)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, Object>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         String message = String.format("Tham số '%s' nhận giá trị không hợp lệ", ex.getName());
