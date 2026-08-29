@@ -52,10 +52,11 @@ public class AuthMapper {
     /**
      * OtpResponse thành công khi gửi OTP
      */
-    public OtpResponse toSendOtpResponse(String phone, boolean isNewUser, boolean hasPassword) {
+    public OtpResponse toSendOtpResponse(String phone, boolean isNewUser, boolean hasPassword, String otpCode) {
         return OtpResponse.builder()
                 .success(true)
                 .message("Đã gửi OTP đến " + phone)
+                .otpCode(otpCode)
                 .isNewUser(isNewUser)
                 .hasPassword(hasPassword)
                 .build();
