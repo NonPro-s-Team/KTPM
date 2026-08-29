@@ -1,0 +1,541 @@
+{
+  "info": {
+    "_postman_id": "e0ff865f-74fe-4d12-a78e-8dd9da31c246",
+    "name": "Green Juice Hub API - BVA Collection",
+    "description": "Collection rieng cho cac test case Boundary Value Analysis (BVA) thuoc Task QLPT-281 (nguoi phu trach: Hien) - Sprint 4, gom 2 Subtask: [QLPT-286](https://hientm0978.atlassian.net/browse/QLPT-286) BVA so dien thoai (users.phone / addresses.phone) va [QLPT-287](https://hientm0978.atlassian.net/browse/QLPT-287) BVA ma OTP (do dai + het han).\n\n## Chay nhanh\n1. Backend chay local tai `http://localhost:8081`, DB da co seed data (`database/seed.sql`).\n2. Import collection nay (da tu chua bien can thiet, khong can Environment rieng).\n3. Chay `00 - Setup` truoc (lay access_token cho nhom 02).\n4. Chay lan luot `01`, `02`, `03`. Cac case trong `03` co tien to `MANUAL-` can thao tac tay (xem console log server de lay ma OTP that, dat bien `runManualOtpCases=true`).\n5. Sau khi kiem tra xong nhom `02`, co the chay `99 - Optional Cleanup` (dat `runCleanup=true`) de xoa cac address test, tranh vuot qua gioi han 5 dia chi/user.\n\n## Phat hien quan trong da ap dung vao test case (xem chi tiet trong Claude Project, doc Sprint4-BVA-Testing.md muc 6)\n- Rang buoc `users.phone` la REGEX `^(0[3|5|7|8|9])+([0-9]{8})$` qua `/auth/send-otp`, KHONG phai do dai 1-15.\n- Rang buoc `addresses.phone` la REGEX KHAC: `^(0|\\+84)[0-9]{8,10}$`, bien la so chu so SAU TIEN TO (8-10).\n- `otp_verifications.otp_code` khong co @Size, luon so sanh bang gia tri that (equals) - case 'sai do dai' thuc chat la 'sai gia tri'.\n- Dau `+` trong regex send-otp co the cho phep lap nhom dau so - xem case `PHONE-REG-BUG-01` (nghi van bug).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40745280",
+    "_collection_link": "https://go.postman.co/collection/40745280-e0ff865f-74fe-4d12-a78e-8dd9da31c246?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "[BVA] Hien - So dien thoai & OTP",
+      "item": [
+        {
+          "name": "So dien thoai",
+          "item": [
+            {
+              "name": "TC-01 / null",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\t\"phone\": null\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: null  \nInput length: 0\n\nExpected HTTP status: 400"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-02 / empty",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\": \"\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: \"\"  \nInput length: 0\n\nExpected HTTP status: 400"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-03 / blank",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\": \"   \"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: \" \"  \nInput length: 3\n\nExpected HTTP status: 400"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-04 / Boundary - 1",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\": \"091234567\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: \"091234567\"  \nInput length: 9\n\nExpected HTTP status: 400"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-05 / Boundary",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\": \"0912345678\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: \"0912345678\"  \nInput length: 10\n\nExpected HTTP status: 200"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-06 / Boundary + 1",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\": \"09123456789\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: \"09123456789\"  \nInput length: 11\n\nExpected HTTP status: 400"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-07 / Invalid partition",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\": \"0212345678\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: \"0212345678\"  \nInput length: 10\n\nExpected HTTP status: 400"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-08 / Invalid partition",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\": \"091234567A\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: \"091234567A\"  \nInput length: 10\n\nExpected HTTP status: 400"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-09 / Unexpected valid length",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\": \"090912345678\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: \"090912345678\"  \nInput length: 12\n\nExpected HTTP status: 200"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-10 / Unexpected valid character",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\": \"0|12345678\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: \"0|12345678\"  \nInput length: 10\n\nExpected HTTP status: 200"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-11 / Unexpected larger valid length",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\": \"09090912345678\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/check-account",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "check-account"
+                  ]
+                },
+                "description": "Test data: \"09090912345678\"  \nInput length: 14\n\nExpected HTTP status: 200"
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  "const testCases = {\r",
+                  "    \"TC-01 / null\": {\r",
+                  "        expectedStatus: 400,\r",
+                  "        type: \"invalid\"\r",
+                  "    },\r",
+                  "\r",
+                  "    \"TC-02 / empty\": {\r",
+                  "        expectedStatus: 400,\r",
+                  "        type: \"invalid\"\r",
+                  "    },\r",
+                  "\r",
+                  "    \"TC-03 / blank\": {\r",
+                  "        expectedStatus: 400,\r",
+                  "        type: \"invalid\"\r",
+                  "    },\r",
+                  "\r",
+                  "    \"TC-04 / Boundary - 1\": {\r",
+                  "        expectedStatus: 400,\r",
+                  "        type: \"invalid\"\r",
+                  "    },\r",
+                  "\r",
+                  "    \"TC-05 / Boundary\": {\r",
+                  "        expectedStatus: 200,\r",
+                  "        type: \"valid\"\r",
+                  "    },\r",
+                  "\r",
+                  "    \"TC-06 / Boundary + 1\": {\r",
+                  "        expectedStatus: 400,\r",
+                  "        type: \"invalid\"\r",
+                  "    },\r",
+                  "\r",
+                  "    \"TC-07 / Invalid partition\": {\r",
+                  "        expectedStatus: 400,\r",
+                  "        type: \"invalid\"\r",
+                  "    },\r",
+                  "\r",
+                  "    \"TC-08 / Invalid partition\": {\r",
+                  "        expectedStatus: 400,\r",
+                  "        type: \"invalid\"\r",
+                  "    },\r",
+                  "\r",
+                  "    \"TC-09 / Unexpected valid length\": {\r",
+                  "        expectedStatus: 400,\r",
+                  "        type: \"invalid\"\r",
+                  "    },\r",
+                  "\r",
+                  "    \"TC-10 / Unexpected valid character\": {\r",
+                  "        expectedStatus: 400,\r",
+                  "        type: \"invalid\"\r",
+                  "    },\r",
+                  "\r",
+                  "    \"TC-11 / Unexpected larger valid length\": {\r",
+                  "        expectedStatus: 400,\r",
+                  "        type: \"invalid\"\r",
+                  "    }\r",
+                  "};\r",
+                  "\r",
+                  "const requestName = pm.info.requestName;\r",
+                  "const tc = testCases[requestName];\r",
+                  "\r",
+                  "if (tc) {\r",
+                  "\r",
+                  "    pm.test(\r",
+                  "        `${requestName} - Expected HTTP ${tc.expectedStatus}`,\r",
+                  "        function () {\r",
+                  "            pm.expect(pm.response.code)\r",
+                  "                .to.eql(tc.expectedStatus);\r",
+                  "        }\r",
+                  "    );\r",
+                  "\r",
+                  "    pm.test(\r",
+                  "        `${requestName} - Không được trả 500`,\r",
+                  "        function () {\r",
+                  "            pm.expect(pm.response.code)\r",
+                  "                .to.not.eql(500);\r",
+                  "        }\r",
+                  "    );\r",
+                  "\r",
+                  "    let body = {};\r",
+                  "\r",
+                  "    try {\r",
+                  "        body = pm.response.json();\r",
+                  "    } catch (e) {\r",
+                  "        body = {};\r",
+                  "    }\r",
+                  "\r",
+                  "    if (tc.type === \"invalid\") {\r",
+                  "\r",
+                  "        pm.test(\r",
+                  "            `${requestName} - Có validation error`,\r",
+                  "            function () {\r",
+                  "                pm.expect(body)\r",
+                  "                    .to.have.property(\"message\");\r",
+                  "\r",
+                  "                pm.expect(body.message)\r",
+                  "                    .to.include(\"phone\");\r",
+                  "            }\r",
+                  "        );\r",
+                  "\r",
+                  "    }\r",
+                  "\r",
+                  "    if (tc.type === \"valid\") {\r",
+                  "\r",
+                  "        pm.test(\r",
+                  "            `${requestName} - Trả AccountCheckResponse`,\r",
+                  "            function () {\r",
+                  "                pm.expect(body)\r",
+                  "                    .to.have.property(\"exists\");\r",
+                  "\r",
+                  "                pm.expect(body)\r",
+                  "                    .to.have.property(\"hasPassword\");\r",
+                  "\r",
+                  "                pm.expect(body)\r",
+                  "                    .to.have.property(\"newUser\");\r",
+                  "            }\r",
+                  "        );\r",
+                  "\r",
+                  "    }\r",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "OTP",
+          "item": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "seed_identifier",
+      "value": "seed.user001@greenjuicehub.local"
+    },
+    {
+      "key": "seed_password",
+      "value": "password"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "nomPhone",
+      "value": ""
+    },
+    {
+      "key": "otpTestPhone",
+      "value": ""
+    },
+    {
+      "key": "manualOtpCode",
+      "value": ""
+    },
+    {
+      "key": "runManualOtpCases",
+      "value": "false"
+    },
+    {
+      "key": "runCleanup",
+      "value": "false"
+    },
+    {
+      "key": "addrPhoneMinId",
+      "value": ""
+    },
+    {
+      "key": "addrPhoneNomId",
+      "value": ""
+    },
+    {
+      "key": "addrPhoneMaxId",
+      "value": ""
+    },
+    {
+      "key": "addrPhonePlus84Id",
+      "value": ""
+    }
+  ]
+}
