@@ -96,7 +96,7 @@ public class AuthServiceImpl implements IAuthService {
                     .map(User::getHasPassword).orElse(false);
         }
 
-        return authMapper.toSendOtpResponse(phone, isNewUser, hasPassword);
+        return authMapper.toSendOtpResponse(phone, isNewUser, hasPassword, otpCode);
     }
 
     // ==================== XÁC NHẬN OTP ====================
