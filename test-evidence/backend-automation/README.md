@@ -8,7 +8,6 @@ Results of the actual 2026-08-30 Maven run: 45 task tests passed. Full backend: 
 - `02-service-cases.png`: 30 service unit test cases.
 - `02-controller-cases.png`: 15 MockMvc integration cases.
 - `maven-summary.txt`: actual Maven test summary lines.
-- `JIRA-COMMENT.md`: suggested completion comment (not posted).
 - `results.json`: case results extracted from Surefire XML.
 - `summary.html` / `details.html`: readable generated reports.
 - `com.*.txt`: original Surefire text reports for the complete backend run.
