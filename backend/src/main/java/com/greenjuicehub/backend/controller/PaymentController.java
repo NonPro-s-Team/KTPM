@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -24,12 +25,13 @@ public class PaymentController {
     // ─────────────────────────────────────────────────────────────────────────
     @PostMapping("/vnpay/create-url")
     public ResponseEntity<?> createVnpayUrl(
+            @AuthenticationPrincipal Long userId,
             @RequestBody Map<String, Long> body,
             HttpServletRequest request
     ) {
         Long orderId  = body.get("orderId");
         String clientIp = vnpayService.getClientIp(request);
-        String paymentUrl = vnpayService.createPaymentUrl(orderId, clientIp);
+        String paymentUrl = vnpayService.createPaymentUrl(userId, orderId, clientIp);
 
         return ResponseEntity.ok(Map.of("paymentUrl", paymentUrl));
     }

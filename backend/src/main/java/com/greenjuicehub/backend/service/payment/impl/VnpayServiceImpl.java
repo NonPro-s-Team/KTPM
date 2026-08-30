@@ -37,10 +37,14 @@ public class VnpayServiceImpl implements IVnpayService {
     // ─────────────────────────────────────────────────────────────────────────
 
     @Override
-    public String createPaymentUrl(Long orderId, String clientIp) {
+    public String createPaymentUrl(Long userId, Long orderId, String clientIp) {
         // 1. Lấy order
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy đơn hàng"));
+
+        if (order.getUser() == null || !Objects.equals(order.getUser().getId(), userId)) {
+            throw new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy đơn hàng");
+        }
 
         // 2. Kiểm tra trạng thái
         if (order.getPaymentStatus() == Order.PaymentStatus.PAID) {

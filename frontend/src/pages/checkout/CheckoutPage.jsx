@@ -1081,7 +1081,7 @@ function PromoInput({ promoPayload, onApplied, onCleared, subtotal }) {
 // ── Order summary ───────────────────────────────────────────────────────────
 function OrderSummary({ items, subtotal, discount, shipping, shippingLoading, total }) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3" data-testid="order-summary">
       <div className="flex flex-col gap-2 pb-3" style={{ borderBottom: '1px solid var(--color-border-subtle)' }}>
         {items.map((item) => {
           const price = item.salePrice ?? item.originalPrice
@@ -1414,7 +1414,7 @@ export default function CheckoutPage() {
                 <SectionTitle icon={<Icon.Wallet />} title="Phương thức thanh toán" />
                 <div className="flex flex-col gap-2">
                   {PAYMENT_METHODS.map((method) => (
-                    <label key={method.id}
+                    <label key={method.id} data-testid={`payment-${method.id}`}
                       className="flex items-center gap-3 p-3 rounded-[var(--radius-md)] cursor-pointer transition-all"
                       style={{
                         border: paymentMethod === method.id ? '1.5px solid var(--color-primary)' : '1.5px solid var(--color-border-subtle)',
@@ -1470,7 +1470,7 @@ export default function CheckoutPage() {
                 />
               </Card>
 
-              <button onClick={handleSubmit}
+              <button onClick={handleSubmit} data-testid="place-order-button"
                 disabled={placing || vnpayLoading || !addressId || displayItems.length === 0 || shippingLoading || displayShipping === null}
                 className="w-full py-3.5 rounded-[var(--radius-md)] font-semibold text-sm text-white flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ background: 'var(--color-primary)' }}

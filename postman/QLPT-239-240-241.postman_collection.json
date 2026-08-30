@@ -151,12 +151,14 @@
               ]
             },
             "url": {
-              "raw": "{{base_url}}/api/addresses",
+              "raw": "{{base_url}}/api/users/me/addresses",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "api",
+                "users",
+                "me",
                 "addresses"
               ]
             }

@@ -8,8 +8,14 @@ frontend/.env.development
 frontend/dist/
 frontend/.vite/
 
+# CodeceptJS / Playwright
+e2e/node_modules/
+e2e/output/*
+!e2e/output/.gitkeep
+
 # Backend
 backend/target/
+.m2/
 backend/.env
 backend/src/main/resources/application-local.yml
 backend/src/main/resources/application-local.properties
@@ -29,6 +35,9 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# Local evidence upload archives
+test-evidence/*.zip
 
 # Database backups and local data dumps
 *.sql.bak

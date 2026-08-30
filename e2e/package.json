@@ -1,0 +1,14 @@
+{
+  "name": "green-juice-hub-e2e",
+  "private": true,
+  "scripts": {
+    "test": "codeceptjs run --steps",
+    "test:checkout": "codeceptjs run tests/checkout_test.js --steps",
+    "test:headed": "cross-env E2E_SHOW_BROWSER=true codeceptjs run --steps"
+  },
+  "devDependencies": {
+    "codeceptjs": "^3.7.5",
+    "cross-env": "^10.0.0",
+    "playwright": "^1.55.0"
+  }
+}
