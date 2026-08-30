@@ -3,6 +3,7 @@ name: CI - Build and Test
 on:
   push:
     branches:
+      - develop
       - main
 
   pull_request:
@@ -25,4 +26,5 @@ jobs:
           cache: maven
 
       - name: Build and run tests
+        working-directory: backend
         run: mvn clean test
