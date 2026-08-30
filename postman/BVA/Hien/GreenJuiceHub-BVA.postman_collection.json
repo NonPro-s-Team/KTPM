@@ -1394,7 +1394,142 @@
             },
             {
               "name": "OTP sends/day",
-              "item": []
+              "item": [
+                {
+                  "name": "TC10 - Send #9 / Boundary -1",
+                  "item": [
+                    {
+                      "name": "send otp tc10",
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{   \r\n    \"phone\": \"{{otp_phone_tc10}}\", \r\n    \"type\": \"{{otp_type}}\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{base_url}}/api/auth/send-otp",
+                          "host": [
+                            "{{base_url}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "send-otp"
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                },
+                {
+                  "name": "TC11 - Send #10 / Boundary",
+                  "item": [
+                    {
+                      "name": "send otp tc11",
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{   \r\n    \"phone\": \"{{otp_phone_tc11}}\", \r\n    \"type\": \"{{otp_type}}\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{base_url}}/api/auth/send-otp",
+                          "host": [
+                            "{{base_url}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "send-otp"
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                },
+                {
+                  "name": "TC12 - Send #11 / Boundary +1",
+                  "item": [
+                    {
+                      "name": "send otp tc12",
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{   \r\n    \"phone\": \"{{otp_phone_tc12}}\", \r\n    \"type\": \"{{otp_type}}\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{base_url}}/api/auth/send-otp",
+                          "host": [
+                            "{{base_url}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "send-otp"
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                }
+              ],
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const requestName = pm.info.requestName.toLowerCase();\r\n\r\n/**\r\n * Sinh phone hợp lệ cho dữ liệu test.\r\n */\r\nfunction generatePhone() {\r\n\r\n    const prefixes = [\r\n        \"038\",\r\n        \"082\",\r\n        \"085\",\r\n        \"087\",\r\n        \"094\",\r\n        \"096\",\r\n        \"097\",\r\n        \"098\"\r\n    ];\r\n\r\n    const prefix =\r\n        prefixes[Math.floor(Math.random() * prefixes.length)];\r\n\r\n    const suffix =\r\n        Math.floor(Math.random() * 10000000)\r\n            .toString()\r\n            .padStart(7, \"0\");\r\n\r\n    return prefix + suffix;\r\n}\r\n\r\n\r\n/**\r\n * Default OTP type\r\n */\r\nif (!pm.environment.get(\"otp_type\")) {\r\n    pm.environment.set(\"otp_type\", \"REGISTER\");\r\n}\r\n\r\n\r\n/* =========================================\r\n   TC10 - gửi tới lần thứ 9\r\n   ========================================= */\r\n\r\nif (requestName === \"send otp tc10\") {\r\n\r\n    const count =\r\n        parseInt(\r\n            pm.environment.get(\"send_count_tc10\") || \"0\",\r\n            10\r\n        );\r\n\r\n    /**\r\n     * Chỉ sinh phone ở lần đầu.\r\n     *\r\n     * Các lần loop tiếp theo phải giữ nguyên\r\n     * cùng một phone để counter tăng đúng.\r\n     */\r\n    if (count === 0) {\r\n\r\n        const phone = generatePhone();\r\n\r\n        pm.environment.set(\r\n            \"otp_phone_tc10\",\r\n            phone\r\n        );\r\n\r\n        console.log(\"===== TC10 START =====\");\r\n        console.log(\"Phone:\", phone);\r\n        console.log(\"Target: SEND #9\");\r\n    }\r\n}\r\n\r\n\r\n/* =========================================\r\n   TC11 - gửi tới lần thứ 10\r\n   ========================================= */\r\n\r\nelse if (requestName === \"send otp tc11\") {\r\n\r\n    const count =\r\n        parseInt(\r\n            pm.environment.get(\"send_count_tc11\") || \"0\",\r\n            10\r\n        );\r\n\r\n    if (count === 0) {\r\n\r\n        const phone = generatePhone();\r\n\r\n        pm.environment.set(\r\n            \"otp_phone_tc11\",\r\n            phone\r\n        );\r\n\r\n        console.log(\"===== TC11 START =====\");\r\n        console.log(\"Phone:\", phone);\r\n        console.log(\"Target: SEND #10\");\r\n    }\r\n}\r\n\r\n\r\n/* =========================================\r\n   TC12 - gửi tới lần thứ 11\r\n   ========================================= */\r\n\r\nelse if (requestName === \"send otp tc12\") {\r\n\r\n    const count =\r\n        parseInt(\r\n            pm.environment.get(\"send_count_tc12\") || \"0\",\r\n            10\r\n        );\r\n\r\n    if (count === 0) {\r\n\r\n        const phone = generatePhone();\r\n\r\n        pm.environment.set(\r\n            \"otp_phone_tc12\",\r\n            phone\r\n        );\r\n\r\n        console.log(\"===== TC12 START =====\");\r\n        console.log(\"Phone:\", phone);\r\n        console.log(\"Target: SEND #11\");\r\n    }\r\n}"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const requestName = pm.info.requestName.toLowerCase();\r\n\r\nlet json = {};\r\n\r\ntry {\r\n    json = pm.response.json();\r\n} catch (e) {\r\n    json = {};\r\n}\r\n\r\n\r\n/* =========================================================\r\n   TC10\r\n   Boundary -1\r\n   Send #9\r\n   ========================================================= */\r\n\r\nif (requestName === \"send otp tc10\") {\r\n\r\n    let count =\r\n        parseInt(\r\n            pm.environment.get(\"send_count_tc10\") || \"0\",\r\n            10\r\n        );\r\n\r\n    count++;\r\n\r\n    pm.environment.set(\r\n        \"send_count_tc10\",\r\n        count.toString()\r\n    );\r\n\r\n    console.log(\r\n        `TC10 → Send #${count} → HTTP ${pm.response.code}`\r\n    );\r\n\r\n\r\n    /**\r\n     * Từ send #1 → #8 là bước chuẩn bị state.\r\n     */\r\n    if (count < 9) {\r\n\r\n        pm.test(\r\n            `TC10 setup - Send #${count} thành công`,\r\n            function () {\r\n                pm.response.to.have.status(200);\r\n            }\r\n        );\r\n\r\n        /**\r\n         * Cho Runner chạy lại chính request này.\r\n         */\r\n        pm.execution.setNextRequest(\r\n            pm.info.requestName\r\n        );\r\n    }\r\n\r\n\r\n    /**\r\n     * SEND #9\r\n     * Boundary -1\r\n     */\r\n    else if (count === 9) {\r\n\r\n        pm.test(\r\n            \"TC10 - Boundary -1 - Send #9 vẫn được phép\",\r\n            function () {\r\n\r\n                pm.expect(pm.response.code)\r\n                    .to.eql(200);\r\n\r\n                pm.expect(json.success)\r\n                    .to.eql(true);\r\n            }\r\n        );\r\n\r\n        console.log(\r\n            \"TC10 PASS → Send #9 vẫn thành công\"\r\n        );\r\n\r\n        /**\r\n         * Reset để lần Run Again sau\r\n         * sinh phone mới.\r\n         */\r\n        pm.environment.unset(\r\n            \"send_count_tc10\"\r\n        );\r\n    }\r\n}\r\n\r\n\r\n/* =========================================================\r\n   TC11\r\n   Boundary\r\n   Send #10\r\n   ========================================================= */\r\n\r\nelse if (requestName === \"send otp tc11\") {\r\n\r\n    let count =\r\n        parseInt(\r\n            pm.environment.get(\"send_count_tc11\") || \"0\",\r\n            10\r\n        );\r\n\r\n    count++;\r\n\r\n    pm.environment.set(\r\n        \"send_count_tc11\",\r\n        count.toString()\r\n    );\r\n\r\n    console.log(\r\n        `TC11 → Send #${count} → HTTP ${pm.response.code}`\r\n    );\r\n\r\n\r\n    if (count < 10) {\r\n\r\n        pm.test(\r\n            `TC11 setup - Send #${count} thành công`,\r\n            function () {\r\n                pm.response.to.have.status(200);\r\n            }\r\n        );\r\n\r\n        pm.execution.setNextRequest(\r\n            pm.info.requestName\r\n        );\r\n    }\r\n\r\n\r\n    /**\r\n     * SEND #10\r\n     * Đúng boundary\r\n     */\r\n    else if (count === 10) {\r\n\r\n        pm.test(\r\n            \"TC11 - Boundary - Send #10 vẫn được phép\",\r\n            function () {\r\n\r\n                pm.expect(pm.response.code)\r\n                    .to.eql(200);\r\n\r\n                pm.expect(json.success)\r\n                    .to.eql(true);\r\n            }\r\n        );\r\n\r\n        console.log(\r\n            \"TC11 PASS → Send #10 vẫn thành công\"\r\n        );\r\n\r\n        pm.environment.unset(\r\n            \"send_count_tc11\"\r\n        );\r\n    }\r\n}\r\n\r\n\r\n/* =========================================================\r\n   TC12\r\n   Boundary +1\r\n   Send #11\r\n   ========================================================= */\r\n\r\nelse if (requestName === \"send otp tc12\") {\r\n\r\n    let count =\r\n        parseInt(\r\n            pm.environment.get(\"send_count_tc12\") || \"0\",\r\n            10\r\n        );\r\n\r\n    count++;\r\n\r\n    pm.environment.set(\r\n        \"send_count_tc12\",\r\n        count.toString()\r\n    );\r\n\r\n    console.log(\r\n        `TC12 → Send #${count} → HTTP ${pm.response.code}`\r\n    );\r\n\r\n\r\n    /**\r\n     * Send #1 → #10 đều phải được phép.\r\n     */\r\n    if (count <= 10) {\r\n\r\n        pm.test(\r\n            `TC12 setup - Send #${count} thành công`,\r\n            function () {\r\n\r\n                pm.expect(pm.response.code)\r\n                    .to.eql(200);\r\n            }\r\n        );\r\n\r\n        /**\r\n         * Chưa đạt #11 → loop lại.\r\n         */\r\n        pm.execution.setNextRequest(\r\n            pm.info.requestName\r\n        );\r\n    }\r\n\r\n\r\n    /**\r\n     * SEND #11\r\n     * Boundary +1\r\n     */\r\n    else if (count === 11) {\r\n\r\n        pm.test(\r\n            \"TC12 - Boundary +1 - Send #11 phải bị từ chối\",\r\n            function () {\r\n\r\n                /**\r\n                 * SRS chỉ quy định phải từ chối;\r\n                 * tài liệu hiện tại chưa đặc tả\r\n                 * chính xác 400 hay 429.\r\n                 */\r\n                pm.expect(pm.response.code)\r\n                    .to.be.within(400, 499);\r\n            }\r\n        );\r\n\r\n        console.log(\r\n            \"TC12 RESULT:\",\r\n            pm.response.code,\r\n            json.message\r\n        );\r\n\r\n        pm.environment.unset(\r\n            \"send_count_tc12\"\r\n        );\r\n    }\r\n}"
+                    ]
+                  }
+                }
+              ]
             },
             {
               "name": "lock duration",
