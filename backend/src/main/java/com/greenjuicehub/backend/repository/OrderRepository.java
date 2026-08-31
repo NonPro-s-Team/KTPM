@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Lock;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
@@ -37,6 +39,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     /** Tìm Order theo code */
     Optional<Order> findByOrderCode(String orderCode);
+
+    /** Serialize payment callbacks for the same order to preserve idempotency. */
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select o from Order o where o.orderCode = :code")
+    Optional<Order> findByOrderCodeForUpdate(@Param("code") String code);
 
     // ── Dashboard ─────────────────────────────────────────────────────────────
 

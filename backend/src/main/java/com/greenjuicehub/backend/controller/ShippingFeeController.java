@@ -8,6 +8,7 @@ import com.greenjuicehub.backend.exception.AppException;
 import com.greenjuicehub.backend.repository.*;
 import com.greenjuicehub.backend.service.shipping.GhnService;
 import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -34,13 +36,16 @@ public class ShippingFeeController {
     @PostMapping("/shipping-fee")
     public ResponseEntity<ShippingFeeResponse> calculateShippingFee(
             @AuthenticationPrincipal Long userId,
-            @RequestBody ShippingFeeRequest request
+            @Valid @RequestBody ShippingFeeRequest request
     ) {
         // 1. Lấy địa chỉ → district_id + ward_code
         var address = addressRepository.findById(request.getAddressId())
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND,
                         "Địa chỉ không tồn tại"));
 
+        if (userId == null || address.getUser() == null || !Objects.equals(address.getUser().getId(), userId)) {
+            throw new AppException(HttpStatus.NOT_FOUND, "Địa chỉ không tồn tại");
+        }
         if (address.getDistrictId() == null || address.getWardCode() == null) {
             // Địa chỉ cũ chưa có GHN data → fallback
             return ResponseEntity.ok(ShippingFeeResponse.builder()

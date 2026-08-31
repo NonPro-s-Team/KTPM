@@ -39,7 +39,7 @@ class SePayWebhookServiceImplTest {
 
         service.handlePayment(request);
 
-        verify(orderRepository, never()).findByOrderCode("GJH-ABC12345");
+        verify(orderRepository, never()).findByOrderCodeForUpdate("GJH-ABC12345");
     }
 
     @Test
@@ -48,13 +48,13 @@ class SePayWebhookServiceImplTest {
 
         service.handlePayment(request);
 
-        verify(orderRepository, never()).findByOrderCode(org.mockito.ArgumentMatchers.anyString());
+        verify(orderRepository, never()).findByOrderCodeForUpdate(org.mockito.ArgumentMatchers.anyString());
     }
 
     @Test
     void rejectsUnderpayment() {
         Order order = order(Order.PaymentStatus.PENDING);
-        when(orderRepository.findByOrderCode("GJH-ABC12345")).thenReturn(Optional.of(order));
+        when(orderRepository.findByOrderCodeForUpdate("GJH-ABC12345")).thenReturn(Optional.of(order));
 
         service.handlePayment(request("in", "pay gjh-abc12345 now", "149999"));
 
@@ -66,7 +66,7 @@ class SePayWebhookServiceImplTest {
     void ignoresUnsupportedPaymentMethod() {
         Order order = order(Order.PaymentStatus.PENDING);
         Payment payment = payment(order, Payment.PaymentMethod.COD);
-        when(orderRepository.findByOrderCode("GJH-ABC12345")).thenReturn(Optional.of(order));
+        when(orderRepository.findByOrderCodeForUpdate("GJH-ABC12345")).thenReturn(Optional.of(order));
         when(paymentRepository.findTopByOrderIdOrderByCreatedAtDesc(11L)).thenReturn(Optional.of(payment));
 
         service.handlePayment(request("in", "GJH-ABC12345", "150000"));
@@ -79,7 +79,7 @@ class SePayWebhookServiceImplTest {
     void marksBankTransferPaidAndIsIdempotent() {
         Order order = order(Order.PaymentStatus.PENDING);
         Payment payment = payment(order, Payment.PaymentMethod.BANK_TRANSFER);
-        when(orderRepository.findByOrderCode("GJH-ABC12345")).thenReturn(Optional.of(order));
+        when(orderRepository.findByOrderCodeForUpdate("GJH-ABC12345")).thenReturn(Optional.of(order));
         when(paymentRepository.findTopByOrderIdOrderByCreatedAtDesc(11L)).thenReturn(Optional.of(payment));
         SePayWebhookRequest request = request("in", "Thanh toan GJH-ABC12345", "150000");
 
@@ -99,6 +99,26 @@ class SePayWebhookServiceImplTest {
     private Order order(Order.PaymentStatus status) {
         return Order.builder().id(11L).orderCode("GJH-ABC12345")
                 .totalAmount(new BigDecimal("150000")).paymentStatus(status).build();
+    }
+
+    @Test
+    void malformedAmountIsIgnoredBeforeDatabaseAccess() {
+        SePayWebhookRequest request = request("in", "GJH-ABC12345", "0");
+        service.handlePayment(request);
+        request.setTransferAmount(null);
+        service.handlePayment(request);
+        org.mockito.Mockito.verifyNoInteractions(orderRepository, paymentRepository);
+    }
+
+    @Test
+    void cancelledOrderCannotBeMarkedPaidByWebhook() {
+        Order order = order(Order.PaymentStatus.PENDING);
+        order.setStatus(Order.OrderStatus.CANCELLED);
+        when(orderRepository.findByOrderCodeForUpdate("GJH-ABC12345")).thenReturn(Optional.of(order));
+        service.handlePayment(request("in", "GJH-ABC12345", "150000"));
+        assertEquals(Order.PaymentStatus.PENDING, order.getPaymentStatus());
+        verify(orderRepository, never()).save(order);
+        org.mockito.Mockito.verifyNoInteractions(paymentRepository);
     }
 
     private Payment payment(Order order, Payment.PaymentMethod method) {

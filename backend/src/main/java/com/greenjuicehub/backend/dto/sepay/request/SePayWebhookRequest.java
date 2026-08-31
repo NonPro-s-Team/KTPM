@@ -1,6 +1,8 @@
 package com.greenjuicehub.backend.dto.sepay.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
@@ -12,7 +14,11 @@ public class SePayWebhookRequest {
     private String transactionDate;
     private String accountNumber;
     private String subAccount;
+    @NotNull
+    @Pattern(regexp = "in|out")
     private String transferType;
+    @NotNull
+    @DecimalMin(value = "0", inclusive = false)
     private BigDecimal transferAmount;
     private BigDecimal accumulated;
     private String code;

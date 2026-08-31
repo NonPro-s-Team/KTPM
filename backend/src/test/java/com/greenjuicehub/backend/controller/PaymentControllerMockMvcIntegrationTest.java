@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
@@ -58,6 +57,14 @@ class PaymentControllerMockMvcIntegrationTest {
         mockMvc.perform(post("/api/payment/vnpay/create-url")
                         .contentType(MediaType.APPLICATION_JSON).content("{\"orderId\":10}"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void missingOrderIdIsBadRequest() throws Exception {
+        mockMvc.perform(post("/api/payment/vnpay/create-url").with(customer(42L))
+                        .contentType(MediaType.APPLICATION_JSON).content("{}"))
+                .andExpect(status().isBadRequest());
+        org.mockito.Mockito.verifyNoInteractions(vnpayService);
     }
 
     @Test

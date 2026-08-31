@@ -28,6 +28,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements IOrderService {
+    private static final String ORDER_NOT_FOUND = "Không tìm thấy đơn hàng";
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -76,29 +77,10 @@ public class OrderServiceImpl implements IOrderService {
             throw new AppException(HttpStatus.BAD_REQUEST, "Không tìm thấy sản phẩm đã chọn trong giỏ hàng");
         }
 
-        // 3. Kiểm tra tồn kho từng item
-        for (CartItem item : selectedItems) {
-            ProductVariant variant = item.getVariant();
-            if (!variant.getIsActive()) {
-                throw new AppException(HttpStatus.BAD_REQUEST,
-                        "Sản phẩm \"" + item.getProduct().getName() + "\" hiện không còn bán");
-            }
-            if (variant.getStockQty() < item.getQuantity()) {
-                throw new AppException(HttpStatus.BAD_REQUEST,
-                        "Sản phẩm \"" + item.getProduct().getName() + "\" chỉ còn " + variant.getStockQty() + " trong kho");
-            }
-        }
-
-        // 4. Tính subtotal
+        validateSelectedStock(selectedItems);
         BigDecimal subtotal = selectedItems.stream()
-                .map(i -> {
-                    BigDecimal price = i.getVariant().getSalePrice() != null
-                            ? i.getVariant().getSalePrice()
-                            : i.getVariant().getOriginalPrice();
-                    return price.multiply(BigDecimal.valueOf(i.getQuantity()));
-                })
+                .map(item -> unitPrice(item.getVariant()).multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
         // 5. Áp mã khuyến mãi (nếu có)
         Promotion promotion = null;
         BigDecimal discountAmount = BigDecimal.ZERO;
@@ -150,9 +132,7 @@ public class OrderServiceImpl implements IOrderService {
         final Order savedOrder = order;
         List<OrderItem> orderItems = selectedItems.stream().map(cartItem -> {
             ProductVariant variant = cartItem.getVariant();
-            BigDecimal price = variant.getSalePrice() != null
-                    ? variant.getSalePrice()
-                    : variant.getOriginalPrice();
+            BigDecimal price = unitPrice(variant);
 
             String variantLabel = buildVariantLabel(
                     variant.getFlavor() != null ? variant.getFlavor().getName() : null,
@@ -234,7 +214,7 @@ public class OrderServiceImpl implements IOrderService {
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Sản phẩm không tồn tại"));
 
         // 3. Kiểm tra tồn kho
-        if (!variant.getIsActive()) {
+        if (!Boolean.TRUE.equals(variant.getIsActive())) {
             throw new AppException(HttpStatus.BAD_REQUEST,
                     "Sản phẩm \"" + variant.getProduct().getName() + "\" hiện không còn bán");
         }
@@ -367,7 +347,7 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional(readOnly = true)
     public OrderResponse getOrderDetail(Long userId, Long orderId) {
         Order order = orderRepository.findByIdAndUserId(orderId, userId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy đơn hàng"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, ORDER_NOT_FOUND));
 
         List<OrderItem> items = orderItemRepository.findAllByOrderIdWithDetails(orderId);
         Payment payment = paymentRepository.findTopByOrderIdOrderByCreatedAtDesc(orderId).orElse(null);
@@ -386,7 +366,7 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional
     public OrderResponse cancelOrder(Long userId, Long orderId, String reason) {
         Order order = orderRepository.findByIdAndUserId(orderId, userId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy đơn hàng"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, ORDER_NOT_FOUND));
 
         if (order.getStatus() != Order.OrderStatus.PENDING) {
             throw new AppException(HttpStatus.BAD_REQUEST,
@@ -491,7 +471,7 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional
     public OrderResponse confirmDelivered(Long userId, Long orderId) {
         Order order = orderRepository.findByIdAndUserId(orderId, userId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Không tìm thấy đơn hàng"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, ORDER_NOT_FOUND));
 
         if (order.getStatus() != Order.OrderStatus.SHIPPING) {
             throw new AppException(HttpStatus.BAD_REQUEST,
@@ -542,7 +522,7 @@ public class OrderServiceImpl implements IOrderService {
         Promotion promo = promotionRepository.findByCodeIgnoreCase(code)
                 .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Mã khuyến mãi không tồn tại"));
 
-        if (!promo.getIsActive()) {
+        if (!Boolean.TRUE.equals(promo.getIsActive())) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Mã khuyến mãi đã bị vô hiệu hoá");
         }
 
@@ -605,6 +585,22 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     /** Parse paymentMethod string → enum */
+    private void validateSelectedStock(List<CartItem> selectedItems) {
+        for (CartItem item : selectedItems) {
+            ProductVariant variant = item.getVariant();
+            if (!Boolean.TRUE.equals(variant.getIsActive())) {
+                throw new AppException(HttpStatus.BAD_REQUEST, "Sản phẩm hiện không còn bán");
+            }
+            if (variant.getStockQty() < item.getQuantity()) {
+                throw new AppException(HttpStatus.BAD_REQUEST,
+                        "Sản phẩm " + item.getProduct().getName() + " chỉ còn " + variant.getStockQty() + " trong kho");
+            }
+        }
+    }
+
+    private BigDecimal unitPrice(ProductVariant variant) {
+        return variant.getSalePrice() != null ? variant.getSalePrice() : variant.getOriginalPrice();
+    }
     private Payment.PaymentMethod parsePaymentMethod(String method) {
         try {
             return Payment.PaymentMethod.valueOf(method.toUpperCase());

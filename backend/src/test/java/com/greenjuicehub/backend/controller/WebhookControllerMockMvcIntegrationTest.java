@@ -63,6 +63,35 @@ class WebhookControllerMockMvcIntegrationTest {
         verify(webhookService).handlePayment(any());
     }
 
+    @Test
+    void apiKeyIsCaseSensitive() throws Exception {
+        when(sePayProperties.getApiKey()).thenReturn("secret");
+        mockMvc.perform(post("/api/webhooks/sepay").with(customer())
+                        .header("Authorization", "apikey SECRET")
+                        .contentType(MediaType.APPLICATION_JSON).content(validBody()))
+                .andExpect(status().isUnauthorized());
+        verify(webhookService, never()).handlePayment(any());
+    }
+
+    @Test
+    void missingServerKeyFailsClosed() throws Exception {
+        mockMvc.perform(post("/api/webhooks/sepay").with(customer())
+                        .header("Authorization", "apikey null")
+                        .contentType(MediaType.APPLICATION_JSON).content(validBody()))
+                .andExpect(status().isUnauthorized());
+        verify(webhookService, never()).handlePayment(any());
+    }
+
+    @Test
+    void missingAmountIsBadRequest() throws Exception {
+        mockMvc.perform(post("/api/webhooks/sepay").with(customer())
+                        .header("Authorization", "apikey secret")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"transferType\":\"in\",\"content\":\"GJH-ABC12345\"}"))
+                .andExpect(status().isBadRequest());
+        verify(webhookService, never()).handlePayment(any());
+    }
+
     private String validBody() {
         return "{\"transferType\":\"in\",\"transferAmount\":150000,\"content\":\"GJH-ABC12345\"}";
     }
