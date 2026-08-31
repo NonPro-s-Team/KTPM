@@ -66,7 +66,71 @@ Remove-Item Env:E2E_API_URL
 
 Helper nạp token vào browser context, reload để Zustand đọc lại session, rồi truyền selectedIds đúng cách React Router dùng. Token được đọc trong custom helper, không đưa vào tham số step/console. Không commit token, cookie hay trace có phiên đăng nhập.
 
-Hai scenario checkout chỉ kiểm tra chọn COD và các phương thức thanh toán hiển thị. **Không bấm đặt hàng**, không xác nhận giao dịch. Token hết hạn/thiếu cart item không được coi là test đạt. Kiểm thử nghiệp vụ thanh toán cần suite riêng và sandbox phù hợp.
+Hai scenario checkout cũ chỉ kiểm tra chọn COD và các phương thức thanh toán hiển thị. **Không bấm đặt hàng**, không xác nhận giao dịch. Token hết hạn/thiếu cart item không được coi là test đạt. Suite checkout journey hoàn chỉnh bên dưới chạy riêng, không yêu cầu token do người dùng cung cấp.
+
+### Checkout journey: đặt hàng → thanh toán → theo dõi trạng thái
+
+Yêu cầu thêm **JDK 21** và Node trên PATH. Từ gốc repository:
+
+```powershell
+./backend/mvnw.cmd -f backend/pom.xml -Dtest=CheckoutBrowserIT test
+```
+
+Linux/macOS:
+
+```bash
+cd backend
+bash mvnw -Dtest=CheckoutBrowserIT test
+```
+
+Nếu Node chưa có trên PATH, thêm `-De2e.node=<đường dẫn tuyệt đối tới node>`.
+Không cần database, Redis, Docker, tài khoản thật hoặc payment secret.
+JUnit tự mở backend loopback cổng ngẫu nhiên với H2 riêng, seed 6 khách hàng,
+địa chỉ/sản phẩm/giỏ hàng giả và JWT test. Sau đó chạy CodeceptJS với frontend
+Vite tại 127.0.0.1:4173. Cổng 4173 phải trống. Database mất khi tiến trình kết
+thúc; không dùng database local/production. Token chỉ truyền qua môi trường
+tiến trình, không xuất ra tệp minh chứng.
+
+Suite `checkout_journey_test.js` có 6 scenario:
+
+| Scenario | Các kiểm tra chính |
+| --- | --- |
+| COD ngoài TP.HCM | Quote và đơn lưu cùng phí 30.000đ; PENDING → CONFIRMED → SHIPPING → DELIVERED; chỉ PAID sau xác nhận nhận hàng |
+| VNPay ngoài TP.HCM | URL có đúng mã đơn/số tiền; return trước IPN không báo đã thanh toán; IPN sai chữ ký bị từ chối; IPN hợp lệ và replay; theo dõi đến DELIVERED |
+| MoMo ngoài TP.HCM | Mở modal MoMo, xử lý SePay webhook sai key/thiếu tiền/hợp lệ/lặp; polling tự tới đơn; theo dõi đến DELIVERED |
+| Chuyển khoản/SePay ngoài TP.HCM | Modal ngân hàng, cùng các kiểm tra webhook và polling; theo dõi đến DELIVERED |
+| VNPay khách hủy thanh toán | Callback ký đúng với code 24, hiển thị đã hủy; đơn vẫn chưa thanh toán |
+| TP.HCM đối chứng | Dùng phí GHN mô phỏng 19.000đ thay vì phí ngoài vùng 30.000đ; kiểm tra cả quote và đơn lưu |
+
+Mỗi khách hàng ngoài TP.HCM có địa chỉ Hà Nội **đầy đủ districtId/wardCode**,
+để không nhầm “ngoài vùng” với nhánh địa chỉ thiếu mã GHN. GHN stub luôn trả
+19.000đ; JUnit còn xác nhận không có lời gọi GHN cho districtId Hà Nội.
+
+Frontend, controller, service, repository, JWT filter, transaction và H2
+chạy thật. Cột snapshot địa chỉ trong H2 test dùng VARCHAR để tránh H2 bọc
+chuỗi JDBC thành JSON string khác MySQL; schema production không bị đổi.
+Suite không kiểm chứng semantics của cột JSON trên MySQL.
+**Chỉ biên nhà cung cấp được mô phỏng**: GHN, VNPay gateway/callback,
+SePay callback, Redis blacklist và CORS local trong test. Không mock response
+của API checkout/order/payment của ứng dụng. Trạng thái xác nhận/giao hàng
+được cập nhật qua API admin bằng JWT STAFF test, sau đó kiểm tra trên UI
+khách hàng. Nhận hàng được bấm trên UI thật.
+
+MoMo hiện được ứng dụng triển khai bằng chuyển khoản và xác nhận qua SePay,
+không phải tích hợp MoMo merchant API độc lập. Kết quả không chứng minh giao
+dịch thật/sandbox của nhà cung cấp, OTP/login, QR ngân hàng hoặc MySQL production.
+Request browser ra ngoài loopback bị chặn; QR và ảnh CDN có thể không tải
+trong minh chứng. Không dùng suite để chuyển tiền thật.
+
+Output của suite nằm riêng tại `output/checkout-journey/`: JUnit XML,
+`runner.log`, ảnh từng bước, event JSON không có token. Kết quả PNG/JSON/XML
+cũ trong đúng thư mục output của suite được xóa khi bắt đầu để tránh nhầm
+minh chứng cũ. Hãy copy ảnh muốn giữ ra `test-evidence` trước khi chạy lại.
+Không chạy hai suite dùng cổng 4173 cùng lúc.
+
+CI: `.github/workflows/e2e-checkout.yml`, chạy khi PR đổi frontend/backend/e2e
+hoặc workflow_dispatch; không cần GitHub secrets. `mvn test` thông thường
+không chạy class hậu tố IT; phải dùng lệnh opt-in trên.
 
 ## 5. Viết scenario mới
 

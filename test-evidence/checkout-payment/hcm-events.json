@@ -1,0 +1,15 @@
+[
+  {
+    "event": "placed",
+    "method": "COD",
+    "orderId": 6,
+    "shippingFee": 19000,
+    "total": 119000,
+    "paymentStatus": "PENDING"
+  },
+  {
+    "event": "order-visible",
+    "status": "PENDING",
+    "paymentStatus": "PENDING"
+  }
+]

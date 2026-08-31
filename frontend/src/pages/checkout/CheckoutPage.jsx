@@ -1138,7 +1138,7 @@ function OrderSummary({ items, subtotal, discount, shipping, shippingLoading, to
           ) : shipping === null ? (
             <span style={{ color: 'var(--color-text-muted)' }}>Đang tính...</span>
           ) : (
-            <span style={{ color: shipping === 0 ? '#16a34a' : 'var(--color-text-primary)' }}>
+            <span data-testid="checkout-shipping-fee" style={{ color: shipping === 0 ? '#16a34a' : 'var(--color-text-primary)' }}>
               {shipping === 0 ? 'Miễn phí' : fmt(shipping)}
             </span>
           )}

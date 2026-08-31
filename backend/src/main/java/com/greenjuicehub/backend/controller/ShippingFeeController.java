@@ -7,6 +7,7 @@ import com.greenjuicehub.backend.entity.ProductVariant;
 import com.greenjuicehub.backend.exception.AppException;
 import com.greenjuicehub.backend.repository.*;
 import com.greenjuicehub.backend.service.shipping.GhnService;
+import com.greenjuicehub.backend.service.shipping.ShippingFeePolicy;
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -46,10 +47,10 @@ public class ShippingFeeController {
         if (userId == null || address.getUser() == null || !Objects.equals(address.getUser().getId(), userId)) {
             throw new AppException(HttpStatus.NOT_FOUND, "Địa chỉ không tồn tại");
         }
-        if (address.getDistrictId() == null || address.getWardCode() == null) {
-            // Địa chỉ cũ chưa có GHN data → fallback
+        if (!ShippingFeePolicy.canUseCarrierQuote(address)) {
+            // Outside current GHN coverage, or legacy address without carrier identifiers.
             return ResponseEntity.ok(ShippingFeeResponse.builder()
-                    .shippingFee(BigDecimal.valueOf(30_000))
+                    .shippingFee(ShippingFeePolicy.FIXED_FEE)
                     .build());
         }
 

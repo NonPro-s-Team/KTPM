@@ -6,6 +6,7 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const frontend = path.resolve(root, '../frontend');
 const checkout = process.argv[2] === 'checkout';
+const journey = process.argv[2] === 'journey';
 const baseUrl = process.env.E2E_BASE_URL || 'http://127.0.0.1:4173';
 const output = path.join(root, 'output');
 fs.mkdirSync(output, { recursive: true });
@@ -35,6 +36,17 @@ for (const signal of ['SIGINT', 'SIGTERM']) {
 }
 
 async function main() {
+  if (journey && !process.env.E2E_CHECKOUT_FIXTURES) {
+    throw new Error('Run CheckoutBrowserIT to create isolated checkout fixtures; see README.md.');
+  }
+  if (journey) {
+    const results = path.join(output, 'checkout-journey');
+    fs.mkdirSync(results, { recursive: true });
+    // Delete only generated result files in this suite's own disposable output directory.
+    for (const entry of fs.readdirSync(results, { withFileTypes: true })) {
+      if (entry.isFile() && /\.(png|json|xml)$/.test(entry.name)) fs.unlinkSync(path.join(results, entry.name));
+    }
+  }
   if (checkout && !process.env.E2E_ACCESS_TOKEN) {
     throw new Error('Checkout needs E2E_ACCESS_TOKEN and prepared local test account/address/cart. See README.md.');
   }
@@ -73,10 +85,11 @@ async function main() {
     await new Promise(resolve => setTimeout(resolve, 500));
   }
   if (!ready) throw new Error('Frontend not ready after 30 seconds: ' + baseUrl);
-  console.log(`Running ${checkout ? 'checkout' : 'smoke'} on ${baseUrl} using CodeceptJS + Playwright`);
+  console.log(`Running ${journey ? 'checkout journey' : checkout ? 'checkout' : 'smoke'} on ${baseUrl} using CodeceptJS + Playwright`);
   const executable = path.join(root, 'node_modules/codeceptjs/bin/codecept.js');
   const args = [executable, 'run', '--reporter', './reporters/JUnitConsole.js'];
   if (checkout) args.push('--config', 'codecept.checkout.conf.js');
+  if (journey) args.push('--config', 'codecept.journey.conf.js');
   runner = spawn(process.execPath, args, {
     cwd: root, windowsHide: true, stdio: 'inherit', env: { ...process.env, E2E_BASE_URL: baseUrl },
   });

@@ -11,6 +11,7 @@ import com.greenjuicehub.backend.mapper.OrderMapper;
 import com.greenjuicehub.backend.repository.*;
 import com.greenjuicehub.backend.service.order.IOrderService;
 import com.greenjuicehub.backend.service.shipping.GhnService;
+import com.greenjuicehub.backend.service.shipping.ShippingFeePolicy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -574,8 +575,8 @@ public class OrderServiceImpl implements IOrderService {
         if (promotion != null && Boolean.TRUE.equals(promotion.getFreeShipping())) {
             return BigDecimal.ZERO;
         }
-        if (address.getDistrictId() == null || address.getWardCode() == null) {
-            return BigDecimal.valueOf(30_000);
+        if (!ShippingFeePolicy.canUseCarrierQuote(address)) {
+            return ShippingFeePolicy.FIXED_FEE;
         }
         return ghnService.calculateShippingFee(
                 address.getDistrictId(),

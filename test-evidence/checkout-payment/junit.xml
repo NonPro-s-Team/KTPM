@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Checkout journeys - real backend, simulated providers" time="36.372" tests="6" failures="0">
+  <testsuite name="Root Suite" timestamp="2026-08-31T05:21:45" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Checkout to payment to order tracking - real backend, simulated providers" timestamp="2026-08-31T05:21:45" tests="6" file="E:\KCPM\KTPM\e2e\tests\checkout_journey_test.js" time="36.371" failures="0">
+    <testcase name="Checkout to payment to order tracking - real backend, simulated providers: COD: outside HCM costs 30,000 VND and order can be tracked" time="5.109" classname="COD: outside HCM costs 30,000 VND and order can be tracked">
+    </testcase>
+    <testcase name="Checkout to payment to order tracking - real backend, simulated providers: VNPAY: outside HCM costs 30,000 VND and order can be tracked" time="5.351" classname="VNPAY: outside HCM costs 30,000 VND and order can be tracked">
+    </testcase>
+    <testcase name="Checkout to payment to order tracking - real backend, simulated providers: MOMO: outside HCM costs 30,000 VND and order can be tracked" time="9.506" classname="MOMO: outside HCM costs 30,000 VND and order can be tracked">
+    </testcase>
+    <testcase name="Checkout to payment to order tracking - real backend, simulated providers: BANK_TRANSFER: outside HCM costs 30,000 VND and order can be tracked" time="9.536" classname="BANK_TRANSFER: outside HCM costs 30,000 VND and order can be tracked">
+    </testcase>
+    <testcase name="Checkout to payment to order tracking - real backend, simulated providers: VNPay declined callback keeps order unpaid and displays failure" time="2.669" classname="VNPay declined callback keeps order unpaid and displays failure">
+    </testcase>
+    <testcase name="Checkout to payment to order tracking - real backend, simulated providers: HCM control uses carrier quote instead of outside-region fixed fee" time="2.048" classname="HCM control uses carrier quote instead of outside-region fixed fee">
+    </testcase>
+  </testsuite>
+</testsuites>

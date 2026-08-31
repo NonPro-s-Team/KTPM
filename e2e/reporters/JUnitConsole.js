@@ -10,7 +10,7 @@ class JUnitConsole extends JUnitReporter {
     runner.once('end', () => {
       const { tests, passes, failures, pending, duration } = runner.stats;
       console.log(`Tests: ${tests} | Passed: ${passes} | Failed: ${failures} | Skipped: ${pending} | Duration: ${duration}ms`);
-      console.log('JUnit: output/junit.xml | Screenshots: output/*.png');
+      console.log(`JUnit: ${options.reporterOptions?.mochaFile || './output/junit.xml'} | Screenshots: configured output directory`);
     });
   }
 }
