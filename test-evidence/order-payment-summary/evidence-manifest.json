@@ -1,0 +1,98 @@
+[
+  {
+    "path": "test-evidence\\order-payment-summary\\bug-report-vnpay-zero-total.md",
+    "sha256": "584FE4617EC76BD48CB1E81EB688407067358ECB505B950C1A83C30CD12CB4D0"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\build-summary.ps1",
+    "sha256": "F0AB9019C23834B6EE73D2E879F088CFA7049EFADC446DBF1D4C63B033FD77EE"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\execution-summary.json",
+    "sha256": "A19EC0DA9481AA5EE51C73A445EBD57FBB315707E7DFAEED965C5337067F3BA8"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\failure-reproduction.json",
+    "sha256": "66ACE31E6AD0C5F101B006D3426AB82BDA7C7476A2227D663978B198AD6D2FEF"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\formal-test-cases.json",
+    "sha256": "AF25DE4DF442C43228BBAE15C253DF41E8C59531308F5967D6529ED8764D759E"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\order-payment-reconciliation.json",
+    "sha256": "D60F04351CAB5C67B56377FA9A7F334EB9365521E7674E05C78854720AA6FEEC"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\README.md",
+    "sha256": "630A92989DB8D58B85AAB9F9C98BD7E03062252DC834FBA3936A236CC82E1AE1"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\result-table.md",
+    "sha256": "3C70A2FA3349D1FF8D484108467D3132B69B0AEDB4AFBE31FA76CC42EE12459F"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\test-execution-results.md",
+    "sha256": "1C51C66153AEB788D88B623F84533A06F8095BC863D183A51ABEDCAACEC33CF6"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\retest\\api-evidence.json",
+    "sha256": "95D3A9B3720964EE4467A8DFD413E3367D28A16CD8120F604DEF370F8CE5570F"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\retest\\assertion-results.json",
+    "sha256": "2159333C8E7359E0BB24B93CAEE7DEE67AE79427D2E0787C1C7E46C60D1CFA36"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\retest\\runner-result.txt",
+    "sha256": "C3AECE2180BB7E6F89D73045CCA3F5ECB55028BBAECE1149E7BD41DFE0913F9A"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\retest\\test-environment.json",
+    "sha256": "E6A9180DAB696D6633D6E168733E6C208FDFD7CC6E7140C1676365402651E376"
+  },
+  {
+    "path": "test-evidence\\order-payment-summary\\retest\\test-results.json",
+    "sha256": "BB9FFEC9AF5B739766B19AD98B6B7E0779CA6F86FC4D44406F4BABFCB2F8F52A"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\AutoCancelScheduler.java",
+    "sha256": "26800F1E40617B64BC4FEFD024599700027B01FA251645E2F1283F6611651DAF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\AutoDeliverScheduler.java",
+    "sha256": "C470CB1DCB6C3A23C2C597643AFBAC2D86768314EAA9D4DD2A4F7AC8A13E6D25"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\IAdminOrderService.java",
+    "sha256": "60B1C447596E8D5AE63D1DDEF2B3C34C3723EE1FA5707AF85917206513A29874"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\IOrderService.java",
+    "sha256": "D9ADB9FCA2652933788E594FD7854572B9EE04898340104A98BE369BF716D8F0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\impl\\AdminOrderServiceImpl.java",
+    "sha256": "FE36B773E69C9DCC37F8E5DD3FB7B7F6A9BD1C9D62C543569DBE5DDB851E6415"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\impl\\OrderServiceImpl.java",
+    "sha256": "67689199C2B9FB026364B140A77B40C1954D913554177091D86370D19AF3753F"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\payment\\IVnpayService.java",
+    "sha256": "60FA6E8BFBC7CF6452B611CF3C2E801469275B9DCCE9BDF00FF4FA45F7674605"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\payment\\impl\\VnpayServiceImpl.java",
+    "sha256": "03F79F382278328F372C454DC050190A6B89C6C5180E0E95E9F3709F6C112FD7"
+  },
+  {
+    "path": "database\\schema.sql",
+    "sha256": "AAF6B705670C1E24AE839C9E75AFBC48711B8CB177856C824C72C3B574F31E37"
+  },
+  {
+    "path": "backend\\src\\test\\java\\com\\greenjuicehub\\backend\\e2e\\OrderAmountBvaIT.java",
+    "sha256": "128E765B94DC595BBA7E4CC855A7441B391A1937625AD777EAD109CD866E979E"
+  }
+]

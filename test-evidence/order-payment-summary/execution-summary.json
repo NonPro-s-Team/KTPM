@@ -1,0 +1,40 @@
+{
+  "task": "QLPT-294",
+  "environment": {
+    "isolation": "ephemeral in-memory DB; existing MySQL untouched",
+    "schema": "qlpt293_bva_e07ebda11aff",
+    "database": "H2 MySQL mode; JPA generated schema, NOT MySQL",
+    "externalServices": "GHN and token blacklist mocked; local signed VNPay/SePay callbacks",
+    "startedAt": "2026-08-31T15:55:32.686521900Z",
+    "limitation": "MySQL login rejected project-config credentials; H2 cannot prove production MySQL behavior"
+  },
+  "total": 59,
+  "counts": {
+    "PASS": 39,
+    "FAIL": 6,
+    "BLOCKED": 14,
+    "NOT RUN": 0
+  },
+  "passRateExecuted": 86.66666666666667,
+  "passRateAllPlanned": 66.10169491525424,
+  "executionCoverage": 76.27118644067797,
+  "httpRequests": 327,
+  "assertions": 1035,
+  "failedAssertions": 12,
+  "reproducedFailCases": 6,
+  "bugs": {
+    "crossImpactOrder": 1,
+    "primaryOrder": 0,
+    "priority": "Medium",
+    "severity": "Medium (proposed)",
+    "id": "QLPT-341",
+    "primaryShipping": 0,
+    "primaryPayment": 1,
+    "total": 1
+  },
+  "paymentSnapshots": 64,
+  "uniqueReconciledOrders": 38,
+  "allMoneyMatched": true,
+  "baselineCommit": "bdb1c13e19fdd68ba5476ac43b9ae9e9eb1d6ce3",
+  "definitionOfDone": "59 complete formal records; 6 failures reproduced, linked to confirmed bug; 14 explicit blocked reasons; all observed payment records reconciled; summary and evidence retained"
+}

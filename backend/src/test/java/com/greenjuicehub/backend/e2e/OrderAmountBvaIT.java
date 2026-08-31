@@ -41,7 +41,7 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 class OrderAmountBvaIT {
     private static final ObjectMapper JSON = new ObjectMapper().enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
-    private static final Path OUT = Path.of("../test-evidence/order-total-amount-bva").toAbsolutePath().normalize();
+    private static final Path OUT = Path.of(System.getProperty("bva.output", "../test-evidence/order-total-amount-bva")).toAbsolutePath().normalize();
     private static final String SCHEMA = "qlpt293_bva_" + UUID.randomUUID().toString().replace("-", "").substring(0, 12);
     private static String dbUrl, dbUser, dbPassword;
     private static final boolean MYSQL = !"h2".equals(System.getProperty("bva.database"));
@@ -138,7 +138,7 @@ class OrderAmountBvaIT {
             supplemental();
             storageProbes();
             for (String flow : List.of("BUY", "CART")) for (String boundary : List.of("9999999999.98", "9999999999.99", "10000000000.00")) {
-                results.add(Map.of("id", flow+"-upper-"+boundary, "status","Blocked", "layer","System/API", "expected", "Assess storage boundary without unrealistic sales data", "actual", "No realistic catalog/stock fixture produces this total. No huge order fabricated. Separate MySQL DECIMAL probes executed."));
+                results.add(Map.of("id", flow+"-upper-"+boundary, "status","Blocked", "layer","System/API", "expected", "Assess storage boundary without unrealistic sales data", "actual", "No realistic catalog/stock fixture produces this total. No huge order fabricated. See separate storage probe statuses; H2 does not establish MySQL behavior."));
             }
             results.add(Map.of("id","LIVE-GHN", "status","Blocked", "layer","External integration", "expected","Real GHN quote and carrier geography", "actual","Not contacted; deterministic GHN stub is not evidence of live carrier behavior."));
             results.add(Map.of("id","LIVE-VNPAY", "status","Blocked", "layer","External integration", "expected","Gateway accepts amount and delivers callbacks", "actual","Only local create-url and correctly signed simulated IPN/Return executed; no real payment."));
