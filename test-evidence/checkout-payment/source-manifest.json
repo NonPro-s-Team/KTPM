@@ -1,0 +1,66 @@
+[
+  {
+    "path": ".github/workflows/e2e-checkout.yml",
+    "sha256": "8F7BBF62B4A31365DEE90A1489A4140DFBF3B1DB1F506A66EF376806B3338DF0"
+  },
+  {
+    "path": "backend/src/main/java/com/greenjuicehub/backend/service/shipping/ShippingFeePolicy.java",
+    "sha256": "9947744649B807B42FA7731E38E88BF11B2149AF155C77B5EBC4C2F790D3541A"
+  },
+  {
+    "path": "backend/src/test/java/com/greenjuicehub/backend/e2e/CheckoutBrowserIT.java",
+    "sha256": "8FDD7F5686F7A2F73B004C4B9CB11A8C075E366835A4A5EB341CD60B7B29F582"
+  },
+  {
+    "path": "backend/src/test/java/com/greenjuicehub/backend/service/shipping/ShippingFeePolicyTest.java",
+    "sha256": "08772DABDE8B53D3F9345EEEB0202E2AEA51C66AE8B2B08B795C6E730C38AF48"
+  },
+  {
+    "path": "e2e/codecept.journey.conf.js",
+    "sha256": "DC8D50CB0E7F3E98EECEA33892F4195D077E3D2111CEBE55B86EB588666B550B"
+  },
+  {
+    "path": "e2e/helpers/CheckoutJourney.js",
+    "sha256": "C55C233C9839ACD29DF20137FC8BC9E54667D2A93BBE8FFDC899AC2091A594A6"
+  },
+  {
+    "path": "e2e/scripts/capture-checkout-summary.ps1",
+    "sha256": "49FB190F52714A91059247CB36FA5A6DFB35EC026F70A4C069943D8F67F48129"
+  },
+  {
+    "path": "e2e/tests/checkout_journey_test.js",
+    "sha256": "A723925090187FF27D02322FEE22014DE144965F5125602C75539136F2994A1A"
+  },
+  {
+    "path": "backend/src/main/java/com/greenjuicehub/backend/controller/ShippingFeeController.java",
+    "sha256": "B5F2D60197184277F02E7B5011BB8E98E7B28515CEC4AF6362AF3E9966F1057B"
+  },
+  {
+    "path": "backend/src/main/java/com/greenjuicehub/backend/service/order/impl/OrderServiceImpl.java",
+    "sha256": "67689199C2B9FB026364B140A77B40C1954D913554177091D86370D19AF3753F"
+  },
+  {
+    "path": "e2e/README.md",
+    "sha256": "4ED59BF8184407484495D9B250BBFC193D0C1B05E67F8B0A2A7AF49C51BA4B20"
+  },
+  {
+    "path": "e2e/reporters/JUnitConsole.js",
+    "sha256": "F3CDEAEEBD00CE57C49B56D1542465B5DBC0B9B76505A2162DF60CE4CF893421"
+  },
+  {
+    "path": "e2e/scripts/run-tests.js",
+    "sha256": "B54566F9FB445834B8DA86C4D16A2F40D69D045DC9C4192ECF6AF20A6B86CAB1"
+  },
+  {
+    "path": "frontend/src/pages/checkout/CheckoutPage.jsx",
+    "sha256": "2D3455DFE142E6E701F2F99A885AA1D9CAD8322D7D625639B50C561912658E35"
+  },
+  {
+    "path": "frontend/src/pages/orders/OrderDetailPage.jsx",
+    "sha256": "B2C019F5C56D9ED6C722AEEC04180D3AAB764BA8EF873FFC4BE053753555AA57"
+  },
+  {
+    "path": "frontend/src/pages/payment/VnpayResultPage.jsx",
+    "sha256": "6CED538A01238CF9AD64EA754962D318AB47C309460AECDB074C85302A154E0A"
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "event": "placed",
+    "method": "MOMO",
+    "orderId": 3,
+    "shippingFee": 30000,
+    "total": 130000,
+    "paymentStatus": "PENDING"
+  },
+  {
+    "event": "provider-simulated",
+    "provider": "SePay",
+    "outcome": "success"
+  },
+  {
+    "event": "order-visible",
+    "status": "PENDING",
+    "paymentStatus": "PAID"
+  },
+  {
+    "event": "order-visible",
+    "status": "CONFIRMED",
+    "paymentStatus": "PAID"
+  },
+  {
+    "event": "order-visible",
+    "status": "SHIPPING",
+    "paymentStatus": "PAID"
+  },
+  {
+    "event": "order-visible",
+    "status": "DELIVERED",
+    "paymentStatus": "PAID"
+  }
+]

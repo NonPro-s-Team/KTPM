@@ -42,11 +42,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorBody(400, message));
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<Map<String, Object>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        String message = String.format("Tham số '%s' nhận giá trị không hợp lệ", ex.getName());
-        return ResponseEntity.badRequest().body(errorBody(400, message));
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<Map<String, Object>> handleMissingRequestParameter(
+            MissingServletRequestParameterException ex) {
+        return ResponseEntity.badRequest().body(errorBody(
+                HttpStatus.BAD_REQUEST.value(),
+                "Thiếu tham số bắt buộc: " + ex.getParameterName()));
     }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneral(Exception ex) {
         log.error("Unhandled exception: {}", ex.getMessage(), ex);  // ← thêm dòng này

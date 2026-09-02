@@ -36,3 +36,14 @@ logging:
   level:
     root: WARN
     com.greenjuicehub: WARN
+
+google:
+  client-id: test-google-client
+  recaptcha-secret: test-recaptcha-secret
+
+vnpay:
+  tmn-code: test-tmn-code
+  hash-secret: test-hash-secret
+
+gemini:
+  api-key: test-gemini-key

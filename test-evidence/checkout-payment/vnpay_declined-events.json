@@ -1,0 +1,20 @@
+[
+  {
+    "event": "placed",
+    "method": "VNPAY",
+    "orderId": 5,
+    "shippingFee": 30000,
+    "total": 130000,
+    "paymentStatus": "PENDING"
+  },
+  {
+    "event": "provider-simulated",
+    "provider": "VNPay",
+    "outcome": "declined"
+  },
+  {
+    "event": "order-visible",
+    "status": "PENDING",
+    "paymentStatus": "PENDING"
+  }
+]
