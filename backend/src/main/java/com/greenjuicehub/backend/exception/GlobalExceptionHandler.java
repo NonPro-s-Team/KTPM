@@ -1,13 +1,13 @@
 package com.greenjuicehub.backend.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -16,6 +16,11 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, Object>> handleAccessDenied(AccessDeniedException ex) {
+        return ResponseEntity.status(403).body(errorBody(403, "Bạn không có quyền thực hiện thao tác này"));
+    }
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<Map<String, Object>> handleAppException(AppException ex) {
@@ -31,10 +36,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorBody(400, message));
     }
 
-    @ExceptionHandler(AuthorizationDeniedException.class)
-    public ResponseEntity<Map<String, Object>> handleAccessDenied(AuthorizationDeniedException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(errorBody(HttpStatus.FORBIDDEN.value(), "Bạn không có quyền thực hiện thao tác này"));
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<Map<String, Object>> handleMissingParams(MissingServletRequestParameterException ex) {
+        String message = String.format("Thiếu tham số bắt buộc: '%s'", ex.getParameterName());
+        return ResponseEntity.badRequest().body(errorBody(400, message));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
