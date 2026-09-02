@@ -1,0 +1,5 @@
+.\mvnw.cmd clean test "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"
+
+.\mvnw.cmd test "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"
+
+start target/site/jacoco/index.html
