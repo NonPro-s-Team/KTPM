@@ -1,0 +1,9 @@
+Running checkout journey on http://127.0.0.1:4173 using CodeceptJS + Playwright
+  PASS Checkout to payment to order tracking - real backend, simulated providers: COD: outside HCM costs 30,000 VND and order can be tracked (5109ms)
+  PASS Checkout to payment to order tracking - real backend, simulated providers: VNPAY: outside HCM costs 30,000 VND and order can be tracked (5351ms)
+  PASS Checkout to payment to order tracking - real backend, simulated providers: MOMO: outside HCM costs 30,000 VND and order can be tracked (9506ms)
+  PASS Checkout to payment to order tracking - real backend, simulated providers: BANK_TRANSFER: outside HCM costs 30,000 VND and order can be tracked (9536ms)
+  PASS Checkout to payment to order tracking - real backend, simulated providers: VNPay declined callback keeps order unpaid and displays failure (2669ms)
+  PASS Checkout to payment to order tracking - real backend, simulated providers: HCM control uses carrier quote instead of outside-region fixed fee (2048ms)
+Tests: 6 | Passed: 6 | Failed: 0 | Skipped: 0 | Duration: 36372ms
+JUnit: ./output/checkout-journey/junit.xml | Screenshots: configured output directory

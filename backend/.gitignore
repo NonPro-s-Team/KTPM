@@ -92,20 +92,4 @@ local.properties
 ### VS Code ###
 .vscode/
 
-### macOS ###
-.DS_Store
-
-### Windows ###
-Thumbs.db
-desktop.ini
-
-### Docker (nếu chạy local qua docker-compose có mount volume/data) ###
-docker-data/
-*.pid
-
-### Test / Coverage ###
-/coverage/
-*.exec
-
-/target
-runtest
+.env

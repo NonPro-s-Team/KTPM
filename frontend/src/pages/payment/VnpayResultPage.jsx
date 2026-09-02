@@ -25,7 +25,7 @@ export default function VnpayResultPage() {
   const navigate = useNavigate()
   const [orderId, setOrderId] = useState('')
 
-  const [status, setStatus] = useState('loading') // 'loading' | 'success' | 'failed'
+  const [status, setStatus] = useState('loading') // 'loading' | 'pending' | 'success' | 'failed'
   const [orderCode, setOrderCode] = useState('')
   const [message, setMessage] = useState('')
   const [responseCode, setResponseCode] = useState('')
@@ -44,8 +44,9 @@ export default function VnpayResultPage() {
         setOrderId(data.orderId ? String(data.orderId) : '')
 
         if (data.success) {
-          setStatus('success')
-          setMessage('Đơn hàng của bạn đang được xử lý.')
+          setStatus(data.confirmed === true ? 'success' : 'pending')
+          setMessage(data.confirmed === true ? 'Đơn hàng của bạn đang được xử lý.' :
+            'Đã nhận kết quả từ VNPay. Đơn hàng đang chờ xác nhận thanh toán từ hệ thống.')
         } else {
           setStatus('failed')
           setMessage(
@@ -98,6 +99,20 @@ export default function VnpayResultPage() {
               Kiểm tra kết quả thanh toán...
             </h2>
             <p className="osm-sub">Vui lòng không đóng trang này.</p>
+          </>
+        )}
+
+        {status === 'pending' && (
+          <>
+            <h2 className="osm-title" style={{ fontSize: 20 }}>Đang chờ xác nhận thanh toán</h2>
+            <p className="osm-sub">{message}</p>
+            <p className="osm-code">Mã đơn: <span>{orderCode}</span></p>
+            <div className="osm-actions">
+              <button className="osm-btn osm-btn--primary"
+                onClick={() => navigate(orderId ? `/orders/${orderId}` : '/orders', { replace: true })}>
+                Theo dõi đơn hàng
+              </button>
+            </div>
           </>
         )}
 

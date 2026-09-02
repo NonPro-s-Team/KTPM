@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>QLPT-266 | JUnit test evidence</title>
+<style>
+body{font:16px Segoe UI,Arial,sans-serif;background:#eff3f8;color:#17263c;margin:0;padding:32px}
+main{max-width:1200px;margin:auto}h1{font-size:30px;margin:6px 0 12px}h2{font-size:20px}
+.tag{color:#4c6382;font-weight:600}.success{color:#08784e}section,.card{background:white;border:1px solid #dbe3ed;border-radius:12px;padding:22px;margin:16px 0}
+.stats{display:flex;gap:18px}.stats div{flex:1;background:white;padding:16px;border-radius:10px;border:1px solid #dbe3ed}.stats strong{display:block;font-size:30px}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:10px 8px;border-bottom:1px solid #e1e7ef}th{color:#51647c}
+pre{background:#17263c;color:#e3efff;padding:18px;border-radius:8px;font-size:14px;white-space:pre-wrap}p{line-height:1.5;margin:8px 0}.note{font-size:14px;color:#51647c}li{padding:6px}li b{color:#08784e;margin-right:12px}
+</style><main><div class="tag">GREEN JUICE HUB · QLPT-266 · HUY</div>
+<h1>Order / Payment / Shipping / Webhook</h1><p>Spring Boot Test · JUnit 5 · Mockito · MockMvc</p>
+<div class="stats"><div><strong>45</strong>Task test cases</div><div><strong>0</strong>Failures</div><div><strong>0</strong>Errors</div><div><strong>0</strong>Skipped</div></div>
+<section><h2 class="success">BUILD SUCCESS</h2><p>Full backend suite: <b>103 tests</b>; failures: 0; errors: 0; skipped: 3.</p>
+<p class="note">Generated from actual Maven Surefire XML. Controller tests are MVC slice integrations with mocked services and a test security configuration; this is not a database or live payment end-to-end run.</p>
+<table><thead><tr><th>QLPT-266 suite</th><th>Tests</th><th>Fail</th><th>Error</th><th>Skip</th><th>Time</th></tr></thead><tbody><tr><td>GhnServiceTest</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0.217s</td></tr>
+<tr><td>OrderControllerMockMvcIntegrationTest</td><td>6</td><td>0</td><td>0</td><td>0</td><td>0.789s</td></tr>
+<tr><td>OrderServiceImplTest</td><td>14</td><td>0</td><td>0</td><td>0</td><td>0.715s</td></tr>
+<tr><td>PaymentControllerMockMvcIntegrationTest</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0.763s</td></tr>
+<tr><td>SePayWebhookServiceImplTest</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0.013s</td></tr>
+<tr><td>ShippingControllerMockMvcIntegrationTest</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0.568s</td></tr>
+<tr><td>VnpayServiceImplTest</td><td>8</td><td>0</td><td>0</td><td>0</td><td>0.038s</td></tr>
+<tr><td>WebhookControllerMockMvcIntegrationTest</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0.475s</td></tr></tbody></table></section>
+<section><h2>Maven execution output</h2><pre>[WARNING] Tests run: 5, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.026 s -- in com.greenjuicehub.backend.service.promotion.PromotionServiceImplTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 s -- in com.greenjuicehub.backend.service.sepay.SePayWebhookServiceImplTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.217 s -- in com.greenjuicehub.backend.service.shipping.GhnServiceTest
+[INFO] Tests run: 103, Failures: 0, Errors: 0, Skipped: 3
+[INFO] BUILD SUCCESS
+[INFO] Total time:  03:08 min
+[INFO] Finished at: 2026-08-30T23:25:22+07:00</pre><p class="note">Java 21 · Command: mvnw.cmd -B -Dmaven.repo.local=E:/KCPM/KTPM/.m2/repository clean verify</p></section>
+<h1>Executed test cases</h1><section><h2>GhnServiceTest</h2><ul><li><b>PASS</b> returnsFeeFromSuccessfulGhnResponse</li>
+<li><b>PASS</b> fallsBackWhenResponseIsMalformed</li>
+<li><b>PASS</b> fallsBackToThirtyThousandWhenGhnFails</li></ul></section>
+<section><h2>OrderControllerMockMvcIntegrationTest</h2><ul><li><b>PASS</b> placeOrderForwardsAuthenticatedCustomer</li>
+<li><b>PASS</b> anonymousCannotReadOrders</li>
+<li><b>PASS</b> foreignOrderMapsToNotFound</li>
+<li><b>PASS</b> emptyCartIsRejectedBeforeServiceCall</li>
+<li><b>PASS</b> staffCannotUseCustomerOrders</li>
+<li><b>PASS</b> customerGetsOwnOrder</li></ul></section>
+<section><h2>OrderServiceImplTest</h2><ul><li><b>PASS</b> missingOrForeignOrderCannotBeRead</li>
+<li><b>PASS</b> confirmingCodDeliveryMarksPaymentSuccessful</li>
+<li><b>PASS</b> rejectsUnselectedCartItemsWithoutWrites</li>
+<li><b>PASS</b> rejectsInvalidPaymentMethodWithoutWrites</li>
+<li><b>PASS</b> cannotCancelShippingOrder</li>
+<li><b>PASS</b> rejectsAnotherCustomersAddressWithoutWrites</li>
+<li><b>PASS</b> rejectsInsufficientStockWithoutWrites</li>
+<li><b>PASS</b> checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[1]</li>
+<li><b>PASS</b> checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[2]</li>
+<li><b>PASS</b> checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[3]</li>
+<li><b>PASS</b> checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[4]</li>
+<li><b>PASS</b> cannotConfirmPendingOrder</li>
+<li><b>PASS</b> rejectsInactiveVariantWithoutWrites</li>
+<li><b>PASS</b> cancellingPaidOrderRestocksAndRequestsRefund</li></ul></section>
+<section><h2>PaymentControllerMockMvcIntegrationTest</h2><ul><li><b>PASS</b> ipnMapsServiceResult</li>
+<li><b>PASS</b> createsUrlForAuthenticatedOrderOwner</li>
+<li><b>PASS</b> anonymousCannotCreateUrl</li>
+<li><b>PASS</b> returnEndpointMapsVerificationResult</li></ul></section>
+<section><h2>SePayWebhookServiceImplTest</h2><ul><li><b>PASS</b> ignoresContentWithoutOrderCode</li>
+<li><b>PASS</b> ignoresOutgoingTransfer</li>
+<li><b>PASS</b> ignoresUnsupportedPaymentMethod</li>
+<li><b>PASS</b> rejectsUnderpayment</li>
+<li><b>PASS</b> marksBankTransferPaidAndIsIdempotent</li></ul></section>
+<section><h2>ShippingControllerMockMvcIntegrationTest</h2><ul><li><b>PASS</b> missingProvinceIdIsBadRequest</li>
+<li><b>PASS</b> returnsDistrictsForProvince</li></ul></section>
+<section><h2>VnpayServiceImplTest</h2><ul><li><b>PASS</b> createsSignedUrlForOwnedVnpayOrder</li>
+<li><b>PASS</b> rejectsNonVnpayPayment</li>
+<li><b>PASS</b> signedIpnRejectsWrongAmount</li>
+<li><b>PASS</b> rejectsPaidOrder</li>
+<li><b>PASS</b> forgedIpnCannotTouchRepositories</li>
+<li><b>PASS</b> signedSuccessIpnIsIdempotent</li>
+<li><b>PASS</b> declinedIpnDoesNotMarkOrderPaid</li>
+<li><b>PASS</b> rejectsOrderOwnedByAnotherCustomer</li></ul></section>
+<section><h2>WebhookControllerMockMvcIntegrationTest</h2><ul><li><b>PASS</b> acceptsValidApiKey</li>
+<li><b>PASS</b> rejectsMissingApiKey</li>
+<li><b>PASS</b> rejectsWrongApiKeyBeforeProcessingPayment</li></ul></section></main></html>

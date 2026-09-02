@@ -1,0 +1,2 @@
+Actual frontend build output, selected result line:
+✓ built in 1.08s

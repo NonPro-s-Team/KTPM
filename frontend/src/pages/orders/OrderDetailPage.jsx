@@ -764,7 +764,7 @@ function OrderSummary({ o, onCancel, cancelling, onConfirmDelivered, confirming 
               {PAYMENT_METHOD[o.paymentMethod] || o.paymentMethod}
             </p>
             <div className="flex items-center justify-between gap-2">
-              <p className="text-xs font-medium" style={{ color: PAYMENT_STATUS[o.paymentStatus]?.color || '#6b7280' }}>
+              <p data-testid="order-payment-status" className="text-xs font-medium" style={{ color: PAYMENT_STATUS[o.paymentStatus]?.color || '#6b7280' }}>
                 {PAYMENT_STATUS[o.paymentStatus]?.label || o.paymentStatus}
               </p>
               {canPay && (
@@ -980,12 +980,12 @@ export default function OrderDetailPage() {
               Đặt lúc {formatDate(o.createdAt)}
             </p>
           </div>
-          <div className="flex-shrink-0 mt-0.5">
+          <div data-testid="order-status" className="flex-shrink-0 mt-0.5">
             <StatusBadge status={o.status} />
           </div>
         </div>
 
-        {fromCheckout && o.status !== 'CANCELLED' && (
+        {fromCheckout && o.status === 'PENDING' && (
           <div
             className="mb-4 sm:mb-5 px-4 py-3 rounded-[var(--radius-md)] text-sm"
             style={{ background: '#16a34a15', border: '1px solid #16a34a30', color: '#16a34a' }}

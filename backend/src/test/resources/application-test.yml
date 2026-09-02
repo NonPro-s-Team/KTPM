@@ -1,0 +1,49 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:green_juice_hub_test;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;NON_KEYWORDS=VALUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  data:
+    redis:
+      repositories:
+        enabled: false
+  task:
+    scheduling:
+      enabled: false
+
+# Giá trị giả cho các biến môi trường bắt buộc (không có default trong application.yml)
+# để Spring context load được khi chạy test trên CI / máy dev.
+google:
+  client-id: test-google-client-id
+  recaptcha-secret: test-recaptcha-secret
+
+vnpay:
+  tmn-code: TEST
+  hash-secret: test-vnpay-hash-secret
+
+gemini:
+  api-key: test-gemini-api-key
+
+jwt:
+  secret: dGVzdC1qd3Qtc2VjcmV0LWtleS1mb3ItdW5pdC10ZXN0cy1vbmx5LTEyMzQ1Njc4OTA=
+
+logging:
+  level:
+    root: WARN
+    com.greenjuicehub: WARN
+
+google:
+  client-id: test-google-client
+  recaptcha-secret: test-recaptcha-secret
+
+vnpay:
+  tmn-code: test-tmn-code
+  hash-secret: test-hash-secret
+
+gemini:
+  api-key: test-gemini-key
