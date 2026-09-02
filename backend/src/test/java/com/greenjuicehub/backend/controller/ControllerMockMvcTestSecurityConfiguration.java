@@ -16,7 +16,19 @@ class ControllerMockMvcTestSecurityConfiguration {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/products/**").permitAll()
+                        .requestMatchers(
+                                "/api/auth/check-account",
+                                "/api/auth/send-otp",
+                                "/api/auth/verify-otp",
+                                "/api/auth/login-with-otp",
+                                "/api/auth/login",
+                                "/api/auth/set-password",
+                                "/api/auth/reset-password",
+                                "/api/auth/google",
+                                "/api/auth/refresh",
+                                "/api/auth/logout",
+                                "/api/products/**")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .build();
