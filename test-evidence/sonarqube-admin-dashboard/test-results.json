@@ -1,0 +1,36 @@
+{
+  "task": "QLPT-278",
+  "generatedAt": "2026-09-05T22:53:40.8692209+07:00",
+  "command": "mvn -Dtest=BackendApplicationTests,AdminControllersUnitTest,AdminDashboardMockMvcIntegrationTest test",
+  "tests": 25.0,
+  "failures": 0.0,
+  "errors": 0.0,
+  "skipped": 0.0,
+  "status": "PASSED",
+  "suites": [
+    {
+      "suite": "BackendApplicationTests",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timeSeconds": 34.599
+    },
+    {
+      "suite": "AdminControllersUnitTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timeSeconds": 4.086
+    },
+    {
+      "suite": "AdminDashboardMockMvcIntegrationTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timeSeconds": 10.35
+    }
+  ]
+}

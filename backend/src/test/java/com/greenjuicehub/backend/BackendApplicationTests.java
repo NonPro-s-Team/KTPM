@@ -10,6 +10,7 @@ class BackendApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Passing this test confirms that the Spring application context starts successfully.
 	}
 
 }

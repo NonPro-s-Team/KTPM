@@ -1,0 +1,4540 @@
+{
+  "exportedAt": "2026-09-05T23:52:22.9344220+07:00",
+  "serverVersion": "26.8.0.126808",
+  "projectKey": "green-juice-hub-admin-dashboard",
+  "scope": [
+    "backend/src/main/java/**/controller/Admin*Controller.java",
+    "backend/src/main/java/**/controller/DashboardController.java",
+    "backend/src/main/java/**/service/**/*Admin*.java",
+    "backend/src/main/java/**/service/dashboard/**/*.java",
+    "backend/src/main/java/**/dto/admin*/**/*.java",
+    "backend/src/main/java/**/dto/dashboard/**/*.java",
+    "frontend/src/pages/admin/**/*.jsx",
+    "frontend/src/api/admin*.js",
+    "frontend/src/api/dashboardApi.js",
+    "frontend/src/components/layout/Admin*.jsx"
+  ],
+  "analysis": [
+    {
+      "key": "68a4c79b-d8e9-496c-9cb9-1a18d202a534",
+      "date": "2026-09-05T23:50:38+07:00",
+      "revision": "712ced77a93e012dd9d7441951180f04624a831c"
+    }
+  ],
+  "measures": [
+    {
+      "metric": "blocker_violations",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "coverage",
+      "value": "1.8",
+      "bestValue": false
+    },
+    {
+      "metric": "bugs",
+      "value": "13",
+      "bestValue": false
+    },
+    {
+      "metric": "ncloc",
+      "value": "9206"
+    },
+    {
+      "metric": "vulnerabilities",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "security_hotspots",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "critical_violations",
+      "value": "5",
+      "bestValue": false
+    }
+  ],
+  "qualityGate": {
+    "status": "OK",
+    "conditions": [
+      {
+        "status": "OK",
+        "metricKey": "new_duplicated_lines_density",
+        "comparator": "GT",
+        "errorThreshold": "3",
+        "actualValue": "0.0"
+      },
+      {
+        "status": "OK",
+        "metricKey": "new_violations",
+        "comparator": "GT",
+        "errorThreshold": "0",
+        "actualValue": "0"
+      }
+    ],
+    "ignoredConditions": false,
+    "period": {
+      "mode": "PREVIOUS_VERSION",
+      "date": "2026-09-05T23:27:05+07:00"
+    },
+    "caycStatus": "compliant"
+  },
+  "issueCount": 280,
+  "issues": [
+    {
+      "key": "5a822cdf-3a21-4f21-8d74-76d506e42288",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminOrder/request/AdminRefundRequest.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "e51d80c1-45ba-430d-ba76-8a4018b0de6e",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminOrder/request/AdminUpdateOrderStatusRequest.java",
+      "line": 2,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "06b75bf0-d3bc-4d2b-b756-f0194189d321",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminOrder/response/TopProductResponse.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "5391d03f-8305-4ce7-bd2a-1d84348a5631",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminProduct/request/SaveCategoryRequest.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "1f585de2-0365-47e0-b3fc-0332f652feda",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminProduct/request/SaveFlavorRequest.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "76643a57-85f5-4e31-b260-45837462f2f5",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminProduct/request/SaveProductRequest.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "a1f063c3-bc73-43e8-8fd7-47bfb2029445",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminProduct/request/SaveSizeRequest.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "897ea73c-90d8-4553-a45b-25a2e91cf84e",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminProduct/request/SaveVariantRequest.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "6dcd293e-19e6-456b-923b-4e61df1b1c6c",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminProduct/response/AdminProductDetailResponse.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "808df8fe-fd60-44c1-af22-be0ffc484ac2",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminProduct/response/AdminProductImageResponse.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "5de2ca66-5180-4095-b59d-3a81d7016f06",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminProduct/response/AdminProductRowResponse.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "9f9edde0-b824-477f-a948-3112cef23772",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminProduct/response/AdminVariantResponse.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "672c2cca-279c-4b04-8ff9-70d02de79fc6",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminPromotion/request/SavePromotionRequest.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "46281e6b-4765-40b0-9b72-f0a1bbe98d57",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminPromotion/response/AdminPromotionResponse.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "7ee8d1c8-e94f-4d22-a7ae-f610d92bd1fc",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminPromotion/response/PromotionUsageResponse.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "4e974d4e-6a7b-45af-bd18-e17b14839c62",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminUser/request/CreatePersonalPromoRequest.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "f06d9973-e573-4f5a-884d-baf3dc15b1b6",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminUser/request/UpdateUserRoleRequest.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "9310f36b-b582-4f68-886e-190e3ac3fc5d",
+      "rule": "java:S120",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/dto/adminUser/response/AdminUserResponse.java",
+      "line": 1,
+      "message": "Rename this package name to match the regular expression '^[a-z_]+(\\.[a-z_][a-z0-9_]*)*$'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "c3282bc9-3638-49ab-b855-7a8941b66160",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/contact/impl/AdminContactServiceImpl.java",
+      "line": 62,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "65400bcb-063b-4fb0-a9a6-cdb4f0afe649",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/dashboard/impl/DashboardServiceImpl.java",
+      "line": 41,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "4198cfbf-8b84-4a94-987b-ed88f00cf7c5",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/dashboard/impl/DashboardServiceImpl.java",
+      "line": 87,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "2efcbc69-70eb-44fa-9e29-c3f047fd909c",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/dashboard/impl/DashboardServiceImpl.java",
+      "line": 122,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "e771de6c-3674-47c3-8242-582b53bbbca7",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/order/impl/AdminOrderServiceImpl.java",
+      "line": 95,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "bebac831-6eec-44b2-a8c3-58929d598453",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/order/impl/AdminOrderServiceImpl.java",
+      "line": 96,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "b7c34e52-97b5-4e38-b22c-eed40ba2d640",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/order/impl/AdminOrderServiceImpl.java",
+      "line": 109,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "63335491-2f61-4ad1-a2a3-fa1a77b593b9",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/order/impl/AdminOrderServiceImpl.java",
+      "line": 122,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "45e945e6-8371-4b2b-9b2d-3c6a7ac394ed",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/order/impl/AdminOrderServiceImpl.java",
+      "line": 123,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "db21fe03-6fe5-4c38-a92d-1d81fcec291f",
+      "rule": "java:S1125",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/policy/impl/AdminPolicyServiceImpl.java",
+      "line": 63,
+      "message": "Remove the unnecessary boolean literal.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "b50605fe-c320-4e16-a5e8-d42a767f60a3",
+      "rule": "java:S107",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/product/IAdminProductService.java",
+      "line": 16,
+      "message": "Method has 8 parameters, which is greater than 7 authorized.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "2e6c9106-2a50-4110-8711-649a501463c8",
+      "rule": "java:S1192",
+      "severity": "CRITICAL",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/product/impl/AdminProductServiceImpl.java",
+      "line": 185,
+      "message": "Define a constant instead of duplicating this literal \"Flavor không tồn tại\" 5 times.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    {
+      "key": "88d56bb5-1836-43e3-bc9d-4b3cdd19cb3d",
+      "rule": "java:S1192",
+      "severity": "CRITICAL",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/product/impl/AdminProductServiceImpl.java",
+      "line": 189,
+      "message": "Define a constant instead of duplicating this literal \"Size không tồn tại\" 5 times.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    {
+      "key": "bb869250-2bef-49c9-8332-73e8b1b28c46",
+      "rule": "java:S1125",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/product/impl/AdminProductServiceImpl.java",
+      "line": 197,
+      "message": "Remove the unnecessary boolean literal.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "333295a2-621c-479e-8125-dca24c523cfe",
+      "rule": "java:S1125",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/product/impl/AdminProductServiceImpl.java",
+      "line": 233,
+      "message": "Remove the unnecessary boolean literal.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "e3a518fa-d177-408e-a2b1-3816a1ae7f0e",
+      "rule": "java:S1192",
+      "severity": "CRITICAL",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/product/impl/AdminProductServiceImpl.java",
+      "line": 242,
+      "message": "Define a constant instead of duplicating this literal \"Danh mục không tồn tại\" 4 times.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    {
+      "key": "8b733a6b-d97d-4aa4-888f-3151a5ce7680",
+      "rule": "java:S1125",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/product/impl/AdminProductServiceImpl.java",
+      "line": 276,
+      "message": "Remove the unnecessary boolean literal.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "a6289433-eb5e-4377-a243-ab572709aab9",
+      "rule": "java:S1125",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/product/impl/AdminProductServiceImpl.java",
+      "line": 315,
+      "message": "Remove the unnecessary boolean literal.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "05b56586-9efe-4194-8d6b-d6930725f78a",
+      "rule": "java:S1125",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/product/impl/AdminProductServiceImpl.java",
+      "line": 425,
+      "message": "Remove the unnecessary boolean literal.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "5c1725b5-a9cf-432f-9516-674ff0012ded",
+      "rule": "java:S1125",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/product/impl/AdminProductServiceImpl.java",
+      "line": 456,
+      "message": "Remove the unnecessary boolean literal.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "27ef0982-9dc5-4a17-ba94-03f3ccb0a9fe",
+      "rule": "java:S1125",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/promotion/impl/AdminPromotionServiceImpl.java",
+      "line": 67,
+      "message": "Remove the unnecessary boolean literal.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "50a95492-6774-4903-85df-6cbf406b1d9d",
+      "rule": "java:S1125",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/promotion/impl/AdminPromotionServiceImpl.java",
+      "line": 75,
+      "message": "Remove the unnecessary boolean literal.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "68e840a6-c26f-4b5b-88be-da1a4817c1ba",
+      "rule": "java:S1125",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/promotion/impl/AdminPromotionServiceImpl.java",
+      "line": 98,
+      "message": "Remove the unnecessary boolean literal.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "a5806dad-f902-4229-9d45-71774b9e4555",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/promotion/impl/AdminPromotionServiceImpl.java",
+      "line": 161,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "13848938-5273-40b0-b708-3fe91b86dd38",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/user/impl/AdminUserServiceImpl.java",
+      "line": 171,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "9392db3c-8b3c-424b-ba59-aceae8e30046",
+      "rule": "java:S5411",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:backend/src/main/java/com/greenjuicehub/backend/service/user/impl/AdminUserServiceImpl.java",
+      "line": 172,
+      "message": "Use a primitive boolean expression here.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "c32077bb-e551-4253-977f-3a9a9d47b7c4",
+      "rule": "javascript:S7737",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/api/adminOrderApi.js",
+      "line": 44,
+      "message": "Do not use an object literal as default for parameter `params`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "1c13342f-8251-45b1-9257-69f19ca150b6",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/components/layout/AdminLayout.jsx",
+      "line": 25,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "cee75a02-3f31-4c5e-9af2-14c14fffe357",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/components/layout/AdminLayout.jsx",
+      "line": 25,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "6bb06785-bf4c-4341-a906-6eca5b0fa218",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/components/layout/AdminSidebar.jsx",
+      "line": 138,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "70c89144-e510-454f-a22a-0f7398336db4",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/components/layout/AdminTopbar.jsx",
+      "line": 130,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "e3afba70-5c8b-430d-84fe-81914d505ea4",
+      "rule": "javascript:S6479",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/components/layout/AdminTopbar.jsx",
+      "line": 144,
+      "message": "Do not use Array index in keys",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "f59a5704-91df-465e-9fbd-8b43fbbf3e00",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/components/layout/AdminTopbar.jsx",
+      "line": 190,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "2125d214-2da5-4e59-a1fa-2c2b96215d66",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/components/layout/AdminTopbar.jsx",
+      "line": 205,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "c870d5b4-6c45-4ff1-87ce-33edee80e0a2",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/components/layout/AdminTopbar.jsx",
+      "line": 205,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "67f6f194-5536-4f83-97f8-ad4992e1097c",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/components/layout/AdminTopbar.jsx",
+      "line": 253,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "8d4bce55-760e-45ea-ab1d-bdf83ad2d167",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/AdminDashboardPage.jsx",
+      "line": 194,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "75dc2641-e516-41bc-8c4c-bb493c82e23d",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 171,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "5775b2c3-6e7e-4b4a-ae3b-56e6bb68d76f",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 180,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "60ba679b-ebe9-4e84-8705-44b43bc8dd28",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 181,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "9b7e1d38-5c66-4e0f-816d-6e89eed1bedc",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 181,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "acfe39c3-e6d5-4333-876e-d9f54b748709",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 229,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "7294cc43-ece8-498a-84a9-297c308ccaf6",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 240,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "5ec73e3e-083d-4355-8027-c6dc5df20a0e",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 252,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "331ce4e8-1313-4538-9268-f473e4cb53fd",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 254,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "a514223a-239c-495d-b429-20a5188c9f67",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 269,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "339ea297-fb76-4b06-8bab-3e2cbbff3bab",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 279,
+      "message": "A form label must have accessible text.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "33f365c1-747c-419d-81d5-d731d0c3aa29",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 300,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "0e3800c5-230e-46c0-a34e-baf0f784a211",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 306,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "5ba98872-68ed-45ed-9068-4c217a5938e5",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 311,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "1423d7dc-6c78-4a6f-8412-8227d9247486",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 341,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "0db2eb18-a3eb-4386-afdb-0a84a9561016",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 347,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "08e0881b-ccd4-4889-b588-fe326aeb2419",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 390,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "53a37e7e-a01e-469f-9df2-b2157ecac9d0",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 395,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "df770934-fb38-4451-9e3f-8d3a6efa05ed",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 420,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "d77d2d28-287a-43bc-8f5d-a121c787260b",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 433,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "1ebcc394-cdc6-4fa8-954c-f5b98a02d1c1",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 437,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "a7a2456b-0077-4364-8925-74c1a28b77e0",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 441,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "0f199242-3e0c-4f93-b0b1-91a26feb180c",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 446,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "417613f6-5ef0-4b3c-9dac-41db01f4d006",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 450,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "66b1d0c4-84df-4ed9-a851-f04d29398768",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 552,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "84ad4c95-f6d5-4d52-929a-736da3d76104",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 556,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "fd0c19e1-e06c-4c13-a16a-1d9171c2f05f",
+      "rule": "javascript:S7723",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 572,
+      "message": "Use `new Array()` instead of `Array()`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "4008554c-7f62-4e23-90d6-7dc54a708484",
+      "rule": "javascript:S6479",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/banners/AdminBannersPage.jsx",
+      "line": 573,
+      "message": "Do not use Array index in keys",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "037a617e-48f1-44f2-9f4d-8e6be6808b23",
+      "rule": "javascript:S1128",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 1,
+      "message": "Remove this unused import of 'useRef'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "b06adabf-2072-4c50-9314-31e48b7b32c4",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 146,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "58396dff-7cfc-4837-ad72-afc4d1decb7c",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 168,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "4e415aea-9d86-464d-9ecb-06b7cac1c1ee",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 177,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "bb94148b-2c36-4925-b541-669d709c798a",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 259,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "8aa98334-3f1e-461f-927a-0b4268407a62",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 270,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "3251dc40-d3ee-4981-b4b8-467784ab9e6a",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 285,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "7d6d4c45-7817-4894-ae41-a18b2cd7076f",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 403,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "bcbd930c-dcab-437f-a251-293ffdc0a61d",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 408,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "1eba80d9-020d-4164-90ec-9c3fd91cbb99",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 420,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "5f2792b2-ba86-452b-8f31-122e2e2a94a1",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 433,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "3688e96a-24e4-4d9a-bc41-dff0c02679b3",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 500,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "8a5655c9-8e1f-4308-b823-4c53d5c55c9f",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/contact/AdminContactsPage.jsx",
+      "line": 508,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "b3f8e920-6712-42e7-8b3d-1121e655a1b6",
+      "rule": "javascript:S1128",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 2,
+      "message": "Remove this unused import of 'Link'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "47630777-2dfe-41fc-96d5-d59164885937",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 117,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "afe578ad-cdac-4785-ae0d-a8acd3afa9d2",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 123,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "361bfb43-5092-4e10-91fe-beeacb9955cb",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 137,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "d4b29d40-5af5-4d86-8e9b-973eb9047b67",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 144,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "0a442a3b-d920-45b9-809c-f6d2571e0a1c",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 181,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "3a48b4ff-4339-4137-a367-1da307ccd8a7",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 181,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "3a0e5925-d634-4cac-b153-429492d9e561",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 186,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "ee383829-b0db-4333-896c-1ba61d29b014",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 186,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "1be05c26-e4ef-4a85-bd69-a767024caa21",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 194,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "1f74b542-4594-490a-a859-89303f357a63",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 205,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "3a889ce1-5b4b-4c97-8063-dead603fe867",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 242,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "a2abaded-98b4-49bf-b8fb-cd746d3c9c7a",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 248,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "1736d145-bc5e-4f2a-81e4-cc4aed7d22aa",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 274,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "333f71f5-4bdb-4db7-9b5d-f1695c8d234f",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 274,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "8b2b815f-df38-4fd9-8e71-18a0de2f969c",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 279,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "a80f67c1-ce48-4b4a-9e0a-43d44596ce5c",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 279,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "6ad3cd52-5f55-4a8e-abaa-0f4451db0a25",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 286,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "48368f8a-166b-465e-8738-62cd7f9579d0",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 299,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "b0c48556-c9ef-41c5-9ab6-439d5d4f361e",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 311,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "4481a9b8-0172-4d6f-8314-4864317a098d",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 314,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "23c1765e-25cf-4bfc-b409-d46db336c349",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 431,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "642b076b-e172-46bb-a366-53ecd38fc5d7",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 575,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "83020ad7-ce02-4b44-8cb6-14d7acbee5b2",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrderDetailPage.jsx",
+      "line": 600,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "7426e72e-d931-41c3-862c-da4f684ae71a",
+      "rule": "javascript:S4144",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 82,
+      "message": "Update this function so that its implementation is not identical to the one on line 67.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "d76e91e9-2ae8-43a6-ac2c-6eccb23edf34",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 158,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "94c4b65e-6292-46fd-8b4c-94bacb0d3143",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 168,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "8dbe2834-15ee-4948-a83c-9865b2b46364",
+      "rule": "javascript:S6479",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 184,
+      "message": "Do not use Array index in keys",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "3bb13276-3859-4142-b67a-d1ba4cebeeb8",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 192,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "ebffad14-4311-47f2-bbf0-3a7e3a1786b0",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 196,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "09518d88-804b-46a9-8913-5d65b1376f7f",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 201,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "cf6ea2b0-e0b7-4ff9-88e7-9447b8981c6a",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 201,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "527d5152-ee14-48c3-b755-93a1c6b6c234",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 221,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "6d3bc073-96f2-45f9-9d3f-b5a8e65f727c",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 327,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "fd6e8464-3be0-4d9a-9a9c-3bbef9ebef22",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 327,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "df82e182-5d66-4dd4-8d5b-8de1ad63a5e9",
+      "rule": "javascript:S2486",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 490,
+      "message": "Handle this exception or don't catch it at all.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "b112943e-eaaf-4879-801e-106c6714b156",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 616,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "80f38b41-2f0e-4792-b8d4-e71992e35d9c",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 662,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "4b9a028c-b7d3-48dd-8f1c-8abae7b0d0e6",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 668,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "46033e9b-6ad5-4efd-b37e-85fa54f9645d",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 685,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "125219be-acae-42ea-9714-3d216cae6af5",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 696,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c6dd3156-e5d5-40ef-a8e6-85ce457326d9",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 711,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "e02b9693-6bbe-44f7-9e9a-59a266b7d1c7",
+      "rule": "javascript:S3776",
+      "severity": "CRITICAL",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 748,
+      "message": "Refactor this function to reduce its Cognitive Complexity from 22 to the 15 allowed.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    {
+      "key": "1f64b27a-e929-4275-9d9b-3e0a35d67205",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 754,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "bb51a40b-5c17-4d75-890d-f431d6487fa9",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 758,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "bd30403f-1a27-4b31-bbef-7c1d66d9446f",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 758,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "67dc5cce-6114-40e1-9810-a38e3eac7db3",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 759,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c49fe537-594c-4c0f-ae38-fb410bf4f0fc",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 759,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "4671de75-825a-40fe-ba51-9355f8b7857e",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 760,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "aacfa39d-376a-4ecd-9cb9-d1bf994d2046",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 760,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "8cf83e50-8c49-44ae-85a8-d1522c9179e0",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 798,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c6d62a6c-031b-4c53-afd6-1728ac281e0c",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 802,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "ef811f63-758a-41ab-b1b3-d9f040f0c2b0",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 807,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "a2a4acd2-077e-4d02-82de-cd9fc004f573",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/order/AdminOrdersPage.jsx",
+      "line": 878,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "9d396b5c-d6c3-46d5-ac8f-5fa8fcceb488",
+      "rule": "javascript:S8786",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 121,
+      "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "81a07997-e36a-4df9-a717-2a226fe3866a",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 181,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "8d16b26b-e860-49e4-b951-5c0c254cbab9",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 191,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "e816b2e6-6913-4ce6-b0ea-a301fc4f8397",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 202,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "156481e9-f592-473d-810a-085af903d29e",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 212,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "61b557a4-8440-4929-9c51-7bed9e63d4b4",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 222,
+      "message": "A form label must have accessible text.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "6d37b0fa-8e4c-434d-a6a5-9e2199021741",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 244,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c92a337a-46d5-481e-86ed-7a5b9b732962",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 248,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "b54a56be-4dcd-40e0-b8eb-743afc20bb70",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 260,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "e76d28ff-75b6-4f4d-8999-01747199e06b",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 296,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "70e9d3dc-a5df-4493-b6d0-abbe71a4085a",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 301,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "57f6bce6-cc6f-4ab1-8027-0b9a5ae73881",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 326,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "2b4fcea4-5e2a-4895-859f-1e07dd15392d",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 339,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "bf3f641c-637d-49d0-b4e5-fd0f5e5f3b98",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 343,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "6fb3c1a0-ad07-49dd-b2cb-661245efa4ce",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 347,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "3dbc8df9-80fc-42b0-a720-e891bcd077c5",
+      "rule": "javascript:S6479",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 476,
+      "message": "Do not use Array index in keys",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "8cb562c9-b3c1-4e46-9dce-0649e1e3104d",
+      "rule": "javascript:S7723",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 476,
+      "message": "Use `new Array()` instead of `Array()`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "b7b4d32c-d087-4185-87fc-660c24ee6847",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/policy/Adminpoliciespage.jsx",
+      "line": 477,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "1ab9cb62-274d-404f-af91-beed3d6a211c",
+      "rule": "javascript:S2681",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductFormPage.jsx",
+      "line": 99,
+      "message": "This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "74a1a6e3-a865-433a-b34d-ec736a0043b5",
+      "rule": "javascript:S6479",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductFormPage.jsx",
+      "line": 183,
+      "message": "Do not use Array index in keys",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "219b6cc6-6b6e-4d0f-b293-fb279fea655f",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductFormPage.jsx",
+      "line": 222,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "80843760-0d29-4869-ae98-11c69cb881a9",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductFormPage.jsx",
+      "line": 222,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "8d56a840-2677-40fe-a0c8-ff0d449ccea7",
+      "rule": "javascript:S6479",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductFormPage.jsx",
+      "line": 581,
+      "message": "Do not use Array index in keys",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "dec90d11-3101-4029-a48a-f96549876146",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductFormPage.jsx",
+      "line": 586,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "44a901b9-cf67-42f7-ad0d-11b434a9779b",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductFormPage.jsx",
+      "line": 722,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "2dde2965-3d05-498f-9309-0326d0468e5d",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 65,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "f077fd57-6f45-4b77-a824-cf8ff5b46f30",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 66,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "647ffebb-e8ed-4790-8e0d-6397a9be8117",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 179,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "442605c0-29df-4ad7-971a-0730a26e170a",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 183,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "9edbfe27-a5a6-48f2-be9f-2b47d2fe02b5",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 191,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c16bda08-a6f7-4542-883c-1d76a0fc6364",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 198,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "85963a3f-b489-4adc-8aa9-b7285d9faf93",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 203,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "28aa6083-1489-4d10-b692-b64b617b0529",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 279,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "885ae05b-c035-4da6-af57-a5b2f26f0271",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 297,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "a105243c-470a-4f8d-b2eb-10b1776b46f2",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 299,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "9961a6a4-4931-4cb9-bc5a-a0da825ef824",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 346,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "0d8c5610-ad91-44ad-b564-4171805b7816",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 359,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "b42a3ea9-999f-467c-ae51-f1f05d81a5e7",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 364,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "a7fbfe9b-2aec-4954-ab11-ecd56016c0e7",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 369,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "2c511865-c138-42b2-91f8-3936cd030e4b",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 376,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "a75dc79f-8d30-42f8-85bb-1860a8ef77b9",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 399,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c9959079-d3ff-4ffe-9a87-a656db85f3eb",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 404,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "eebca269-9014-4628-87e0-0619ffa58e48",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/product/AdminProductsPage.jsx",
+      "line": 409,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "cd6f3d20-5cc1-4016-87b8-74c141e9d2a8",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 66,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "6b72028c-123d-4882-8736-8946068d520e",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 137,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "78aa90c2-57ea-4a2d-b9d4-a34fc2a79317",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 137,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "66e5e80a-260f-49c0-81e1-9b8514668fde",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 158,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "46e023b9-f4dc-4fba-b323-44fea78a4886",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 181,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "ab03fd9c-e3f7-428c-a7fb-d371e959359d",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 220,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "83f54a95-7951-4340-8ce4-d1892126eab0",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 227,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "cf854e01-fc14-4c96-ba1c-5c3514bf461f",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 335,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "57031ba8-1e94-45e5-b616-31b26342d859",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 339,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "8d098564-0bee-47dd-9e25-2492ce8fd30f",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 356,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "cbbbd302-689e-4681-9054-bac9a7c3250e",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 367,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "89c0139e-2b82-46fa-b678-ad47faf33787",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 380,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "25d0956a-7f8f-44f3-b4d4-52c10d9934c9",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 391,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "06284281-2813-45c9-8c82-921ee7661d1b",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 393,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "9078b41c-6dea-4342-951e-3825ec1595c8",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 473,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "a68204e6-e85a-494c-8acb-d89285b18cac",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 478,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "42588b40-15cc-418f-9b30-140408c27ade",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 495,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "e84f0caf-4f3b-43c6-a209-abfca9f4949b",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Adminpromotionspage.jsx",
+      "line": 502,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "876e0a39-b74a-4286-bb54-2e8c4966e599",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 18,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "e3178a7c-d194-4485-b8de-c887d085a22c",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 117,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "eacabf0c-33c7-45ca-868a-29c59b64450b",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 132,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "d36c9de8-63c5-40b8-80f5-cee5f9679db8",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 159,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c7c3cf52-422c-4938-9378-a63eec696b40",
+      "rule": "javascript:S3776",
+      "severity": "CRITICAL",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 249,
+      "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    {
+      "key": "ae1e5839-f375-4bc2-9643-2afc16dc90cb",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 254,
+      "message": "Prefer `Number.parseFloat` over `parseFloat`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c985b059-c2f8-4967-84ff-285a7e783cd8",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 255,
+      "message": "Prefer `Number.isNaN` over `isNaN`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "3a0263b5-9ebb-4d2e-86d9-2229a347b2dc",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 262,
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "cd19d3c3-1d3f-448a-b896-91f5f5e608d2",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 262,
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "60269bfe-bfcd-4f89-a9d4-511ca8cc8757",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 275,
+      "message": "Prefer `Number.parseFloat` over `parseFloat`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "8a5b78b9-a713-49a3-8726-d86c6593ffa9",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 276,
+      "message": "Prefer `Number.parseFloat` over `parseFloat`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "ea996161-79d1-42fa-990c-8630182f6321",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 280,
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "9c8ab406-0daa-4136-88c4-c3b414e0d866",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 281,
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "8b6f6d3d-5475-420d-8ce2-38b1b6903d0c",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 304,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "d45b47ca-fdcc-4471-bd18-45551a2ecc7f",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 304,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "b7bea6f9-e217-4efc-af86-660ab943b9d4",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 311,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "dcc2cfdc-5718-42b6-b5a3-cdae3340b2be",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 379,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "798d107d-2e38-4b6e-bd30-1f5902f2c7aa",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 394,
+      "message": "A form label must have accessible text.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c39254fb-d452-45ee-be0a-5ac8f41bde67",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 470,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "fbf72a50-a433-4a44-b987-9dde5dfc398c",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/promotion/Promotionformmodal.jsx",
+      "line": 474,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "69c44bc9-ea8f-4631-9a90-dd06b648e0c2",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 107,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "df314aea-0843-4db4-88ff-cfd9ff4b2b28",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 107,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "63137b2b-8991-410d-97c8-183f5719beb5",
+      "rule": "javascript:S6847",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 109,
+      "message": "Non-interactive elements should not be assigned mouse or keyboard event listeners.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "8223e7c5-a14c-439e-ba0d-9fe43330467e",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 109,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "c22a8d33-5830-433b-a422-880885eac051",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 167,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "9fa9c173-ffe5-4fb6-a5d9-a9e4bdbf0212",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 187,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "2addb39d-43bd-46a6-9c72-a8b581d150b6",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 196,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "5077384e-2e01-4853-a88b-551d6437129c",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 203,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "7c6bf167-d052-4a91-b120-bc6372cc7218",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 273,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "e51db214-39eb-4282-8d9a-84d0ff83b0ed",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 287,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "58effd62-4aef-440e-b5a0-4ca653a74c2d",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 293,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "e2ace218-4da5-48ee-b25d-c60028ec06fa",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 338,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "d7cf6424-c70f-4de7-92bf-7b9a60305ea5",
+      "rule": "javascript:S6754",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 398,
+      "message": "useState call is not destructured into value + setter pair",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "b8ab6e0c-515d-48ee-bda3-6dec8b994ad5",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 416,
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "ec286f73-46bb-4cde-9d5e-6db3400959a8",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 456,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "31294b2a-689b-4a42-b817-90e2d6769fe3",
+      "rule": "javascript:S6479",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 488,
+      "message": "Do not use Array index in keys",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "eb7450e7-7bb9-4c8b-9fb1-56331e7f5029",
+      "rule": "javascript:S7723",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 488,
+      "message": "Use `new Array()` instead of `Array()`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "dc14ed77-a50a-4241-a548-d09d63863541",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 490,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c5ad0eee-1b59-4fd8-8e82-0f6afbe68c77",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 514,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "bff8742b-5dea-4f15-ad07-c05d21e6574e",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/reviews/AdminReviewsPage.jsx",
+      "line": 522,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "6d49201d-f0ee-40e9-bd36-67069edac7f7",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 49,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "f67f6888-5057-4b0f-9e0e-9c8eb865a201",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 54,
+      "message": "Ambiguous spacing after previous element span",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "8f32d35c-06da-4d06-a393-ff134e07bd92",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 123,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "fc8b96c2-eea1-44cf-a9ba-60b8d91efa47",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 126,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "6f63b5bf-5fc7-4e43-a1a6-bd9affb4b5d2",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 172,
+      "message": "Prefer `Number.parseFloat` over `parseFloat`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "fb1ef45e-8828-45f2-bed5-d6b7442b4e9a",
+      "rule": "javascript:S7773",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 173,
+      "message": "Prefer `Number.parseFloat` over `parseFloat`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "869c2bc5-8ff0-49a7-831b-5ec2fcaf207f",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 201,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "74b303bb-f0b3-4003-9809-d8568ad6000c",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 206,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "10049527-d75e-44c9-a8cd-16dd1a77ea49",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 215,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "7b8ad036-bf4e-4eac-a401-2a322265709a",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 228,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "39106534-6aa3-43c6-9a8f-f8818bacc2b0",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 236,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "207bf452-bbf2-47e7-bcb0-3a9815e232a4",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 241,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "0daa90af-9e96-46d8-aa1e-1771cc102087",
+      "rule": "javascript:S6772",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 250,
+      "message": "Ambiguous spacing after previous element input",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "5cc5c154-3546-4b3b-a3a2-d3c98cde6bc7",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 258,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "2edb411f-194e-4c04-adb8-14aa679061a4",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 259,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "07eff7eb-e41d-44da-ac26-5b54a0f79af8",
+      "rule": "javascript:S1854",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 293,
+      "message": "Remove this useless assignment to variable \"isProtected\".",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "ebf9e22e-b188-4acb-8c73-5507ace55547",
+      "rule": "javascript:S1481",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 293,
+      "message": "Remove the declaration of the unused 'isProtected' variable.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "7f3993e5-5981-45c7-b222-7d18fe7afcbd",
+      "rule": "javascript:S7723",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 416,
+      "message": "Use `new Array()` instead of `Array()`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "12791c81-2597-44e0-8581-7f1cd5634d23",
+      "rule": "javascript:S6479",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 417,
+      "message": "Do not use Array index in keys",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "7e20b576-5b5a-4b65-bce7-676a9da3c086",
+      "rule": "javascript:S7723",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 418,
+      "message": "Use `new Array()` instead of `Array()`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "0fbf6b07-3e1c-4e68-95c2-4cc829b37d09",
+      "rule": "javascript:S6479",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 419,
+      "message": "Do not use Array index in keys",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "b5aa9232-6377-449d-9176-b2b7580310e3",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 425,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "826f00ad-ee91-47f7-8e9e-0f74126e9769",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 473,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "2fe32b57-17ea-4bb0-b0d0-f5f70c931f2d",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 483,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "7edc12b1-0125-4ce2-bfc5-c7dccfbccc93",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 487,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "13a011a2-ac41-4b6d-b04e-08766ceb6c2a",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 498,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "3895870a-0670-4330-aa4b-19d34bfb995e",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 522,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "f7ad0582-ffc4-4217-9cbd-9847df4a277b",
+      "rule": "javascript:S7723",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 529,
+      "message": "Use `new Array()` instead of `Array()`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "51fe83f3-8cab-4d42-9a4f-c243b431e60a",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 533,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "74456596-edb1-481b-b056-ff1601d4c705",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-admin-dashboard:frontend/src/pages/admin/user/AdminUsersPage.jsx",
+      "line": 544,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    }
+  ],
+  "hotspotCount": 0,
+  "hotspots": [],
+  "adminTagControllerFindingCount": 0,
+  "adminTagControllerFindings": []
+}
