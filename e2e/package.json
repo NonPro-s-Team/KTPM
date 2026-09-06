@@ -1,0 +1,20 @@
+{
+  "name": "green-juice-hub-e2e",
+  "private": true,
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "test": "node scripts/run-admin-tests.js",
+    "test:admin": "node scripts/run-admin-tests.js",
+    "test:admin:headed": "cross-env E2E_SHOW_BROWSER=true node scripts/run-admin-tests.js",
+    "test:headed": "cross-env E2E_SHOW_BROWSER=true node scripts/run-admin-tests.js",
+    "test:list": "codeceptjs dry-run --config codecept.admin.conf.js --steps",
+    "test:list:admin": "codeceptjs dry-run --config codecept.admin.conf.js --steps",
+    "browsers:install": "playwright install chromium"
+  },
+  "devDependencies": {
+    "codeceptjs": "3.7.5",
+    "cross-env": "10.0.0",
+    "playwright": "1.55.0",
+    "mocha-junit-reporter": "2.2.1"
+  }
+}
