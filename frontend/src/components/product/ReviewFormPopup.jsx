@@ -155,6 +155,7 @@ function ReviewItemCard({ item, state, onChange }) {
   return (
     <div
       className="rounded-[var(--radius-md)] transition-all"
+      data-testid={`review-item-card-${itemKey(item)}`}
       style={{
         border: "1px solid var(--color-border-subtle)",
         background: isDone ? "var(--color-bg-muted)" : "var(--color-bg-elevated)",
@@ -178,7 +179,7 @@ function ReviewItemCard({ item, state, onChange }) {
           )}
         </div>
         {isDone && (
-          <span className="flex items-center gap-1 text-xs font-medium flex-shrink-0" style={{ color: "#16a34a" }}>
+          <span className="flex items-center gap-1 text-xs font-medium flex-shrink-0" data-testid="review-item-done-badge" style={{ color: "#16a34a" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
@@ -197,6 +198,7 @@ function ReviewItemCard({ item, state, onChange }) {
           </div>
 
           <textarea
+            data-testid="review-comment"
             value={comment}
             onChange={(e) => onChange({ comment: e.target.value })}
             placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."
@@ -221,7 +223,7 @@ function ReviewItemCard({ item, state, onChange }) {
           />
 
           {status === "submitting" && (
-            <p className="text-xs flex items-center gap-1.5" style={{ color: "var(--color-text-muted)" }}>
+            <p className="text-xs flex items-center gap-1.5" data-testid="review-item-submitting" style={{ color: "var(--color-text-muted)" }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
                 strokeLinecap="round" style={{ animation: "rv-spin 0.8s linear infinite", flexShrink: 0 }}>
                 <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
@@ -233,6 +235,7 @@ function ReviewItemCard({ item, state, onChange }) {
           {errorMsg && (
             <p
               className="text-xs px-3 py-2 rounded-[var(--radius-md)]"
+              data-testid="review-item-error-message"
               style={{ background: "#fef2f2", color: "#dc2626", border: "1px solid #fecaca" }}
             >
               {errorMsg}
@@ -270,7 +273,7 @@ function SuccessScreen({ items, onClose }) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-5 px-6 py-8" style={{ animation: "rv-fadeIn 0.35s ease" }}>
+    <div className="flex flex-col items-center gap-5 px-6 py-8" data-testid="review-success-screen" style={{ animation: "rv-fadeIn 0.35s ease" }}>
       <div style={{ position: "relative", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{
           position: "absolute", width: 72, height: 72, borderRadius: "50%",
@@ -291,7 +294,7 @@ function SuccessScreen({ items, onClose }) {
       </div>
 
       <div className="text-center flex flex-col gap-1.5">
-        <p className="text-base font-bold" style={{ color: "#16a34a" }}>
+        <p className="text-base font-bold" data-testid="review-success-title" style={{ color: "#16a34a" }}>
           Cảm ơn bạn đã đánh giá{items.length > 1 ? ` ${items.length} sản phẩm` : ""}!
         </p>
         <p className="text-sm leading-relaxed" style={{ color: "var(--color-text-secondary)" }}>
@@ -340,6 +343,7 @@ function SuccessScreen({ items, onClose }) {
 
       <button
         onClick={onClose}
+        data-testid="review-success-close-btn"
         className="w-full py-2.5 rounded-[var(--radius-pill)] text-sm font-medium transition-colors"
         style={{
           background: "var(--color-bg-muted)",
@@ -478,6 +482,7 @@ export default function ReviewFormPopup({ items: itemsProp, onClose, onSuccess }
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
         <div
           className="relative w-full max-w-md rounded-[var(--radius-lg)] overflow-hidden shadow-2xl pointer-events-auto flex flex-col"
+          data-testid="review-form-popup"
           style={{
             background: "var(--color-bg-elevated)",
             maxHeight: "85vh",
@@ -503,6 +508,7 @@ export default function ReviewFormPopup({ items: itemsProp, onClose, onSuccess }
             {!allDone && (
               <button
                 onClick={onClose}
+                data-testid="review-popup-close-btn"
                 className="w-7 h-7 flex items-center justify-center rounded-full flex-shrink-0 transition-colors cursor-pointer"
                 style={{ background: "var(--color-bg-muted)", color: "var(--color-text-secondary)" }}
                 onMouseEnter={e => e.currentTarget.style.background = "var(--color-border-subtle)"}
@@ -538,6 +544,7 @@ export default function ReviewFormPopup({ items: itemsProp, onClose, onSuccess }
                 {topError && (
                   <p
                     className="text-xs px-3 py-2 rounded-[var(--radius-md)]"
+                    data-testid="review-top-error-message"
                     style={{ background: "#fef2f2", color: "#dc2626", border: "1px solid #fecaca" }}
                   >
                     {topError}
@@ -566,6 +573,7 @@ export default function ReviewFormPopup({ items: itemsProp, onClose, onSuccess }
                 <button
                   onClick={handleSubmit}
                   disabled={submitting || pendingRatedCount === 0}
+                  data-testid="review-submit-btn"
                   className="flex-1 py-2.5 rounded-[var(--radius-pill)] text-sm font-semibold text-white
                     disabled:opacity-40 transition-all duration-200 active:scale-[0.98] cursor-pointer"
                   style={{ background: "var(--color-primary)" }}

@@ -28,9 +28,12 @@
     e2e-tests/.vite/
     e2e-tests/.cypress/
     e2e-tests/runcode.txt
-    
+    # Test
+e2e-tests/.env
+e2e-tests/.env.*
+node_modules/
     node_modules/
-    
+
     # IDE
     .idea/
     .vscode/

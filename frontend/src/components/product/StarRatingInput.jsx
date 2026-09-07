@@ -5,12 +5,13 @@ export default function StarRatingInput({ value = 0, onChange }) {
   const labels = ["", "Tệ", "Không ổn", "Bình thường", "Tốt", "Tuyệt vời"];
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3" data-testid="star-rating-input">
       <div className="flex items-center gap-1">
         {[1, 2, 3, 4, 5].map((star) => (
           <button
             key={star}
             type="button"
+            data-testid={`star-${star}`}
             onClick={() => onChange(star)}
             onMouseEnter={() => setHovered(star)}
             onMouseLeave={() => setHovered(0)}
@@ -27,7 +28,7 @@ export default function StarRatingInput({ value = 0, onChange }) {
         ))}
       </div>
       {(hovered || value) > 0 && (
-        <span className="text-sm font-medium text-amber-600">
+        <span className="text-sm font-medium text-amber-600" data-testid="star-rating-label">
           {labels[hovered || value]}
         </span>
       )}
