@@ -6,8 +6,11 @@
     "test": "node scripts/run-tests.js",
     "test:smoke": "node scripts/run-tests.js",
     "test:checkout": "node scripts/run-tests.js checkout",
+    "test:admin": "node scripts/run-admin-tests.js",
     "test:headed": "cross-env E2E_SHOW_BROWSER=true node scripts/run-tests.js",
+    "test:admin:headed": "cross-env E2E_SHOW_BROWSER=true node scripts/run-admin-tests.js",
     "test:list": "codeceptjs dry-run --steps",
+    "test:list:admin": "codeceptjs dry-run --config codecept.admin.conf.js --steps",
     "browsers:install": "playwright install chromium"
   },
   "devDependencies": {
