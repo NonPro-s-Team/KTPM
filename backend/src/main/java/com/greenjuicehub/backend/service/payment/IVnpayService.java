@@ -13,7 +13,7 @@ public interface IVnpayService {
      * @param clientIp IP của user (lấy từ HttpServletRequest)
      * @return URL redirect sang cổng VNPay
      */
-    String createPaymentUrl(Long orderId, String clientIp);
+    String createPaymentUrl(Long userId, Long orderId, String clientIp);
 
     /**
      * Xử lý IPN (server-to-server) từ VNPay — cập nhật DB.

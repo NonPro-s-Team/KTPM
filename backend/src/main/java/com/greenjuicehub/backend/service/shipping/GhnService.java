@@ -18,6 +18,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class GhnService {
+    private static final String WEIGHT = "weight";
 
     private final GhnProperties ghn;
     private final RestTemplate restTemplate;
@@ -97,7 +98,7 @@ public class GhnService {
         body.put("from_ward_code",   ghn.getFromWardCode());
         body.put("to_district_id",   toDistrictId);
         body.put("to_ward_code",     toWardCode);
-        body.put("weight",           Math.max(weightGram, 1));
+        body.put(WEIGHT,           Math.max(weightGram, 1));
         body.put("service_type_id",  ghn.getServiceTypeId());
 
         // ── Thêm log request ──
@@ -164,7 +165,7 @@ public class GhnService {
         body.put("to_ward_code", toWardCode);
         body.put("to_district_id", toDistrictId);
 
-        body.put("weight", Math.max(weightGram, 1));
+        body.put(WEIGHT, Math.max(weightGram, 1));
         body.put("length", length);
         body.put("width",  width);
         body.put("height", height);
@@ -186,12 +187,12 @@ public class GhnService {
             Map<String, Object> item = new HashMap<>();
             item.put("name",     i.getProductName());
             item.put("quantity", i.getQuantity());
-            item.put("weight",   itemWeight);
+            item.put(WEIGHT,   itemWeight);
             return item;
         }).toList();
         body.put("items", ghnItems);
 
-        log.info("GHN createShippingOrder request: {}", body);
+        log.info("GHN createShippingOrder: sending order {}", order.getOrderCode());
 
         try {
             ResponseEntity<String> res = restTemplate.exchange(
@@ -199,13 +200,13 @@ public class GhnService {
                     new HttpEntity<>(body, shopHeaders()),
                     String.class
             );
-            log.info("GHN createShippingOrder response: {}", res.getBody());
+            log.info("GHN createShippingOrder: response received for {}", order.getOrderCode());
 
             JsonNode root = objectMapper.readTree(res.getBody());
             if (root.path("code").asInt() == 200) {
                 return root.path("data").path("order_code").asText(null);
             }
-            log.error("GHN createShippingOrder error response: {}", res.getBody());
+            log.error("GHN createShippingOrder: carrier rejected order {}", order.getOrderCode());
         } catch (Exception e) {
             log.error("GHN createShippingOrder error: {}", e.getMessage());
         }

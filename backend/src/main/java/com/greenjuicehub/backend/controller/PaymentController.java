@@ -1,10 +1,13 @@
 package com.greenjuicehub.backend.controller;
 
 import com.greenjuicehub.backend.service.payment.IVnpayService;
+import com.greenjuicehub.backend.dto.payment.request.CreatePaymentRequest;
+import jakarta.validation.Valid;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -20,16 +23,16 @@ public class PaymentController {
     // ─────────────────────────────────────────────────────────────────────────
     // VNPAY — TẠO URL THANH TOÁN
     // POST /api/payment/vnpay/create-url
-    // Body: { "orderId": 123 }
     // ─────────────────────────────────────────────────────────────────────────
     @PostMapping("/vnpay/create-url")
-    public ResponseEntity<?> createVnpayUrl(
-            @RequestBody Map<String, Long> body,
+    public ResponseEntity<Map<String, String>> createVnpayUrl(
+            @AuthenticationPrincipal Long userId,
+            @Valid @RequestBody CreatePaymentRequest body,
             HttpServletRequest request
     ) {
-        Long orderId  = body.get("orderId");
+        Long orderId = body.getOrderId();
         String clientIp = vnpayService.getClientIp(request);
-        String paymentUrl = vnpayService.createPaymentUrl(orderId, clientIp);
+        String paymentUrl = vnpayService.createPaymentUrl(userId, orderId, clientIp);
 
         return ResponseEntity.ok(Map.of("paymentUrl", paymentUrl));
     }
@@ -39,9 +42,8 @@ public class PaymentController {
     // GET /api/payment/vnpay/ipn?vnp_TxnRef=...&vnp_SecureHash=...&...
     // ─────────────────────────────────────────────────────────────────────────
     @GetMapping("/vnpay/ipn")
-    public ResponseEntity<?> vnpayIpn(@RequestParam Map<String, String> params) {
+    public ResponseEntity<Map<String, String>> vnpayIpn(@RequestParam Map<String, String> params) {
         String resultCode = vnpayService.processIpn(params);
-        // VNPay yêu cầu trả về JSON { "RspCode": "00", "Message": "Confirm Success" }
         return ResponseEntity.ok(Map.of(
                 "RspCode", resultCode,
                 "Message", "00".equals(resultCode) ? "Confirm Success" : "Confirm Fail"
@@ -56,7 +58,7 @@ public class PaymentController {
     // FE sẽ tự gọi endpoint này từ trang /payment/vnpay/result để verify kết quả.
     // ─────────────────────────────────────────────────────────────────────────
     @GetMapping("/vnpay/return")
-    public ResponseEntity<?> vnpayReturn(@RequestParam Map<String, String> params) {
+    public ResponseEntity<Map<String, Object>> vnpayReturn(@RequestParam Map<String, String> params) {
         Map<String, Object> result = vnpayService.processReturn(params);
         return ResponseEntity.ok(result);
     }

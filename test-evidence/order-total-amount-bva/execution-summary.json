@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-08-31T22:44:22.8846641+07:00",
+  "database": "H2 MySQL mode; JPA generated schema, NOT MySQL",
+  "cases": 59,
+  "outcomes": {
+    "Pass": 39,
+    "Fail": 6,
+    "Blocked": 14
+  },
+  "httpRequests": 327,
+  "checks": 1035,
+  "failedChecks": 12,
+  "sourceCommit": "6fbc4c8005c4a2e0d6e17fbfc41e8815d4da57b4"
+}

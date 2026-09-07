@@ -1,0 +1,11 @@
+
+> test
+> node scripts/run-tests.js
+
+Running smoke on http://127.0.0.1:4173 using CodeceptJS + Playwright
+  PASS Application smoke: Login page renders its form @smoke (1132ms)
+  PASS Application smoke: Empty login input displays validation @smoke (1805ms)
+  PASS Application smoke: Anonymous customer cannot open checkout @smoke (1002ms)
+  PASS Application smoke: Unknown route displays the application 404 @smoke (990ms)
+Tests: 4 | Passed: 4 | Failed: 0 | Skipped: 0 | Duration: 6398ms
+JUnit: output/junit.xml | Screenshots: output/*.png

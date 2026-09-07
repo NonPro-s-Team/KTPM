@@ -3,18 +3,17 @@ package com.greenjuicehub.backend.service.sepay.impl;
 import com.greenjuicehub.backend.dto.sepay.request.SePayWebhookRequest;
 import com.greenjuicehub.backend.entity.Order;
 import com.greenjuicehub.backend.entity.Payment;
-import com.greenjuicehub.backend.exception.AppException;
 import com.greenjuicehub.backend.repository.OrderRepository;
 import com.greenjuicehub.backend.repository.PaymentRepository;
 import com.greenjuicehub.backend.service.sepay.ISePayWebhookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +21,7 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class SePayWebhookServiceImpl implements ISePayWebhookService {
+    private static final Pattern ORDER_CODE = Pattern.compile("GJH-[A-Z0-9]{8}");
 
     private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
@@ -31,27 +31,28 @@ public class SePayWebhookServiceImpl implements ISePayWebhookService {
     public void handlePayment(SePayWebhookRequest request) {
 
         // 1. Chỉ xử lý tiền vào
-        if (!"in".equals(request.getTransferType())) {
-            log.info("SePay: bỏ qua giao dịch tiền ra - referenceCode={}", request.getReferenceCode());
+        if (!"in".equals(request.getTransferType()) || request.getTransferAmount() == null
+                || request.getTransferAmount().signum() <= 0) {
+            log.info("SePay: bỏ qua giao dịch không phải tiền vào hợp lệ");
             return;
         }
 
         // 2. Extract orderCode từ content
         String orderCode = extractOrderCode(request.getContent());
         if (orderCode == null) {
-            log.info("SePay: không tìm thấy mã đơn hàng trong content='{}'", request.getContent());
+            log.info("SePay: không tìm thấy mã đơn hàng trong nội dung chuyển khoản");
             return;
         }
 
         // 3. Tìm đơn hàng
-        Order order = orderRepository.findByOrderCode(orderCode).orElse(null);
+        Order order = orderRepository.findByOrderCodeForUpdate(orderCode).orElse(null);
         if (order == null) {
             log.warn("SePay: không tìm thấy đơn hàng orderCode={}", orderCode);
             return;
         }
 
         // 4. Đã thanh toán rồi thì bỏ qua
-        if (order.getPaymentStatus() == Order.PaymentStatus.PAID) {
+        if (order.getPaymentStatus() != Order.PaymentStatus.PENDING || order.getStatus() == Order.OrderStatus.CANCELLED) {
             log.info("SePay: đơn {} đã thanh toán trước đó, bỏ qua", orderCode);
             return;
         }
@@ -80,13 +81,12 @@ public class SePayWebhookServiceImpl implements ISePayWebhookService {
         }
 
         payment.setStatus(Payment.PaymentStatus.SUCCESS);
-        payment.setPaidAt(LocalDateTime.now());
+        payment.setPaidAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         payment.setTransactionId(request.getReferenceCode());
         paymentRepository.save(payment);
 
         // 7. Cập nhật Order
         order.setPaymentStatus(Order.PaymentStatus.PAID);
-        // order.setStatus(Order.OrderStatus.CONFIRMED);
         orderRepository.save(order);
 
         log.info("SePay: xác nhận thanh toán thành công - orderCode={}, amount={}",
@@ -97,8 +97,7 @@ public class SePayWebhookServiceImpl implements ISePayWebhookService {
     private String extractOrderCode(String content) {
         if (content == null)
             return null;
-        Pattern pattern = Pattern.compile("GJH-[A-Z0-9]{8}");
-        Matcher matcher = pattern.matcher(content.toUpperCase());
+        Matcher matcher = ORDER_CODE.matcher(content.toUpperCase(Locale.ROOT));
         return matcher.find() ? matcher.group() : null;
     }
 }

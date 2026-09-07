@@ -1,0 +1,10 @@
+{
+  "images": 5,
+  "type": "selected report images, not application screenshots",
+  "covers": "summary; two order flows; Order-Payment; confirmed bug; blockers",
+  "rawEvidence": {
+    "cases": 59,
+    "httpRequests": 327
+  },
+  "applicationScreenshots": false
+}

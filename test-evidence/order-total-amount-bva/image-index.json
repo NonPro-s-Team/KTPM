@@ -1,0 +1,32 @@
+[
+  {
+    "file": "images/01-tong-hop-ket-qua.png",
+    "title": "01 — Tổng hợp kết quả và phạm vi",
+    "source": "execution-summary.json + source review",
+    "sha256": "A2D026B6C594994F95A65206402ABBDF1645C60170DD5C77432CCCA90ABBE6CD"
+  },
+  {
+    "file": "images/02-bva-hai-luong-tao-don.png",
+    "title": "02 — BVA tổng tiền trên cả BUY và CART",
+    "source": "test-results.json",
+    "sha256": "9E9AC71AB813A0C73E3B2503907C5A9A2349231AC4804785FEE8219F24630014"
+  },
+  {
+    "file": "images/03-doi-chieu-order-payment.png",
+    "title": "03 — Order ↔ Payment ↔ số tiền VNPay",
+    "source": "test-results.json + API evidence",
+    "sha256": "7A185FC847DD3E412EDE2D76E105DA8BD304821E08B86395EB63F557C1D6F4D2"
+  },
+  {
+    "file": "images/04-bug-vnpay-don-khong-dong.png",
+    "title": "04 — Evidence lỗi đơn VNPay 0đ (hai flow)",
+    "source": "API request/response + DB snapshots; QLPT-341",
+    "sha256": "63786B4EE26F4C43C900133219923BB4EECA205CEB73524A16D4B5B8CD4F77E3"
+  },
+  {
+    "file": "images/05-blocked-va-gioi-han.png",
+    "title": "05 — Blocked, biên kỹ thuật và giới hạn kết luận",
+    "source": "test-results.json + mysql-access-blocked.log",
+    "sha256": "816C10336D449143B5B1B1F14E834C5F6E88F17776DBC4188384DF8E06E2ED0E"
+  }
+]

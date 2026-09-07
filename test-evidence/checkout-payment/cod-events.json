@@ -1,0 +1,30 @@
+[
+  {
+    "event": "placed",
+    "method": "COD",
+    "orderId": 1,
+    "shippingFee": 30000,
+    "total": 130000,
+    "paymentStatus": "PENDING"
+  },
+  {
+    "event": "order-visible",
+    "status": "PENDING",
+    "paymentStatus": "PENDING"
+  },
+  {
+    "event": "order-visible",
+    "status": "CONFIRMED",
+    "paymentStatus": "PENDING"
+  },
+  {
+    "event": "order-visible",
+    "status": "SHIPPING",
+    "paymentStatus": "PENDING"
+  },
+  {
+    "event": "order-visible",
+    "status": "DELIVERED",
+    "paymentStatus": "PAID"
+  }
+]

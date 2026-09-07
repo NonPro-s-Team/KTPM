@@ -1,0 +1,300 @@
+[
+  {
+    "case": "BUY-lower-plus-cent",
+    "request": {
+      "variantId": 5,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-lower-plus-cent",
+      "promoCode": "BVA_bb7eb7ea"
+    },
+    "response": {
+      "id": 4,
+      "orderCode": "GJH-8C682955",
+      "status": "PENDING",
+      "paymentStatus": "PENDING",
+      "paymentMethod": "VNPAY",
+      "subtotal": 50000.0,
+      "discountAmount": 49999.99,
+      "shippingFee": 0,
+      "totalAmount": 0.01,
+      "promoCode": "BVA_BB7EB7EA",
+      "note": "QLPT-293 BUY-lower-plus-cent",
+      "shippingAddress": {
+        "fullName": "Khach kiem thu",
+        "phone": "0900000000",
+        "province": "Hồ Chí Minh",
+        "district": "Quận 1",
+        "ward": "Phường kiểm thử",
+        "detail": "Test only - do not ship"
+      },
+      "items": [
+        {
+          "id": 4,
+          "productId": 1,
+          "productSlug": "bva-juice",
+          "variantId": 5,
+          "productName": "BVA juice",
+          "variantName": "",
+          "imageUrl": null,
+          "unitPrice": 50000.0,
+          "quantity": 1,
+          "subtotal": 50000.0,
+          "hasReviewed": false
+        }
+      ],
+      "cancelReason": null,
+      "cancelledBy": null,
+      "expiresAt": "2026-09-01T22:06:15.9217588",
+      "createdAt": "2026-08-31T22:06:15.9227606",
+      "updatedAt": "2026-08-31T22:06:15.9227606"
+    },
+    "db": {
+      "subtotal": "50000.00",
+      "discount_amount": "49999.99",
+      "shipping_fee": "0.00",
+      "total_amount": "0.01",
+      "amount": "0.01",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 4
+    },
+    "afterCallback": {
+      "subtotal": "50000.00",
+      "discount_amount": "49999.99",
+      "shipping_fee": "0.00",
+      "total_amount": "0.01",
+      "amount": "0.01",
+      "payment_status": "PAID",
+      "payment_record_status": "SUCCESS",
+      "items_subtotal": "50000.00",
+      "orderId": 4
+    }
+  },
+  {
+    "case": "BUY-lower-zero",
+    "request": {
+      "variantId": 6,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-lower-zero",
+      "promoCode": "BVA_3b64f248"
+    },
+    "response": {
+      "id": 5,
+      "orderCode": "GJH-4A71C839",
+      "status": "PENDING",
+      "paymentStatus": "PENDING",
+      "paymentMethod": "VNPAY",
+      "subtotal": 50000.0,
+      "discountAmount": 50000.0,
+      "shippingFee": 0,
+      "totalAmount": 0,
+      "promoCode": "BVA_3B64F248",
+      "note": "QLPT-293 BUY-lower-zero",
+      "shippingAddress": {
+        "fullName": "Khach kiem thu",
+        "phone": "0900000000",
+        "province": "Hồ Chí Minh",
+        "district": "Quận 1",
+        "ward": "Phường kiểm thử",
+        "detail": "Test only - do not ship"
+      },
+      "items": [
+        {
+          "id": 5,
+          "productId": 1,
+          "productSlug": "bva-juice",
+          "variantId": 6,
+          "productName": "BVA juice",
+          "variantName": "",
+          "imageUrl": null,
+          "unitPrice": 50000.0,
+          "quantity": 1,
+          "subtotal": 50000.0,
+          "hasReviewed": false
+        }
+      ],
+      "cancelReason": null,
+      "cancelledBy": null,
+      "expiresAt": "2026-09-01T22:06:16.079505",
+      "createdAt": "2026-08-31T22:06:16.0805012",
+      "updatedAt": "2026-08-31T22:06:16.0805012"
+    },
+    "db": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 5
+    },
+    "afterCallback": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 5
+    }
+  },
+  {
+    "case": "CART-lower-plus-cent",
+    "request": {
+      "cartItemIds": [
+        4
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-lower-plus-cent",
+      "promoCode": "BVA_ec3a7f8e"
+    },
+    "response": {
+      "id": 17,
+      "orderCode": "GJH-1A65EF55",
+      "status": "PENDING",
+      "paymentStatus": "PENDING",
+      "paymentMethod": "VNPAY",
+      "subtotal": 50000.0,
+      "discountAmount": 49999.99,
+      "shippingFee": 0,
+      "totalAmount": 0.01,
+      "promoCode": "BVA_EC3A7F8E",
+      "note": "QLPT-293 CART-lower-plus-cent",
+      "shippingAddress": {
+        "fullName": "Khach kiem thu",
+        "phone": "0900000000",
+        "province": "Hồ Chí Minh",
+        "district": "Quận 1",
+        "ward": "Phường kiểm thử",
+        "detail": "Test only - do not ship"
+      },
+      "items": [
+        {
+          "id": 17,
+          "productId": 1,
+          "productSlug": "bva-juice",
+          "variantId": 18,
+          "productName": "BVA juice",
+          "variantName": "",
+          "imageUrl": null,
+          "unitPrice": 50000.0,
+          "quantity": 1,
+          "subtotal": 50000.0,
+          "hasReviewed": false
+        }
+      ],
+      "cancelReason": null,
+      "cancelledBy": null,
+      "expiresAt": "2026-09-01T22:06:17.3556209",
+      "createdAt": "2026-08-31T22:06:17.3576181",
+      "updatedAt": "2026-08-31T22:06:17.3576181"
+    },
+    "db": {
+      "subtotal": "50000.00",
+      "discount_amount": "49999.99",
+      "shipping_fee": "0.00",
+      "total_amount": "0.01",
+      "amount": "0.01",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 17
+    },
+    "afterCallback": {
+      "subtotal": "50000.00",
+      "discount_amount": "49999.99",
+      "shipping_fee": "0.00",
+      "total_amount": "0.01",
+      "amount": "0.01",
+      "payment_status": "PAID",
+      "payment_record_status": "SUCCESS",
+      "items_subtotal": "50000.00",
+      "orderId": 17
+    }
+  },
+  {
+    "case": "CART-lower-zero",
+    "request": {
+      "cartItemIds": [
+        5
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-lower-zero",
+      "promoCode": "BVA_0a0c13d4"
+    },
+    "response": {
+      "id": 18,
+      "orderCode": "GJH-6CA1401E",
+      "status": "PENDING",
+      "paymentStatus": "PENDING",
+      "paymentMethod": "VNPAY",
+      "subtotal": 50000.0,
+      "discountAmount": 50000.0,
+      "shippingFee": 0,
+      "totalAmount": 0,
+      "promoCode": "BVA_0A0C13D4",
+      "note": "QLPT-293 CART-lower-zero",
+      "shippingAddress": {
+        "fullName": "Khach kiem thu",
+        "phone": "0900000000",
+        "province": "Hồ Chí Minh",
+        "district": "Quận 1",
+        "ward": "Phường kiểm thử",
+        "detail": "Test only - do not ship"
+      },
+      "items": [
+        {
+          "id": 18,
+          "productId": 1,
+          "productSlug": "bva-juice",
+          "variantId": 19,
+          "productName": "BVA juice",
+          "variantName": "",
+          "imageUrl": null,
+          "unitPrice": 50000.0,
+          "quantity": 1,
+          "subtotal": 50000.0,
+          "hasReviewed": false
+        }
+      ],
+      "cancelReason": null,
+      "cancelledBy": null,
+      "expiresAt": "2026-09-01T22:06:17.4607655",
+      "createdAt": "2026-08-31T22:06:17.4617652",
+      "updatedAt": "2026-08-31T22:06:17.4617652"
+    },
+    "db": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 18
+    },
+    "afterCallback": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 18
+    }
+  }
+]

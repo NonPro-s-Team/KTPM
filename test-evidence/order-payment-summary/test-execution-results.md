@@ -1,0 +1,1420 @@
+# Bộ test case và kết quả Order/Payment
+
+Nguồn: lần chạy độc lập trong retest/. Mỗi số HTTP bên dưới là vị trí 1-based trong api-evidence.json. Expected tiền được đặt trước trong Scenario của test runner; các assertion bổ sung ghi trong assertion-results.json. Không suy ra business min/max từ DECIMAL. Các case characterization chỉ xác nhận hành vi hiện tại, không chứng nhận hành vi đó an toàn.
+
+## BUY-baseline-fallback — PASS
+
+**Description:** BUY baseline fallback
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+2. POST /api/orders/buy-now — body và query ở HTTP evidence
+3. GET /api/orders/1 — body và query ở HTTP evidence
+4. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+5. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+6. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":2,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-baseline-fallback"},"price":"50000","quantity":1,"promotion":[],"before":{"payments":0,"orders":0,"stock":1000},"layerNote":null,"httpRecords":[1,2,3,4,5,6,7,8,9,10,11]}`
+
+**Expected:** `{"shipping":"30000","total":"80000","subtotal":"50000","discount":"0"}`
+
+**Actual:** `{"response":{"id":1,"orderCode":"GJH-99BCE11C","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":0,"shippingFee":30000,"totalAmount":80000.0,"promoCode":null,"note":"QLPT-293 BUY-baseline-fallback","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":1,"productId":1,"productSlug":"bva-juice","variantId":2,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:53.3268754","createdAt":"2026-08-31T22:55:53.3409383","updatedAt":"2026-08-31T22:55:53.3409383"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":1},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":1},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-baseline-fallback; retest/assertion-results.json: case=BUY-baseline-fallback; retest/api-evidence.json: records 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+
+**Bug:** None
+
+## BUY-baseline-ghn-stub — PASS
+
+**Description:** BUY baseline ghn stub
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+2. POST /api/orders/buy-now — body và query ở HTTP evidence
+3. GET /api/orders/2 — body và query ở HTTP evidence
+4. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+5. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+6. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":3,"quantity":1,"addressId":2,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-baseline-ghn-stub"},"price":"50000","quantity":1,"promotion":[],"before":{"payments":1,"orders":1,"stock":1000},"layerNote":null,"httpRecords":[12,13,14,15,16,17,18,19,20,21,22]}`
+
+**Expected:** `{"shipping":"19000","total":"69000","subtotal":"50000","discount":"0"}`
+
+**Actual:** `{"response":{"id":2,"orderCode":"GJH-D9E1BEE9","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":0,"shippingFee":19000,"totalAmount":69000.0,"promoCode":null,"note":"QLPT-293 BUY-baseline-ghn-stub","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":2,"productId":1,"productSlug":"bva-juice","variantId":3,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:53.812056","createdAt":"2026-08-31T22:55:53.815104","updatedAt":"2026-08-31T22:55:53.815104"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"19000.00","total_amount":"69000.00","amount":"69000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":2},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"19000.00","total_amount":"69000.00","amount":"69000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":2},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-baseline-ghn-stub; retest/assertion-results.json: case=BUY-baseline-ghn-stub; retest/api-evidence.json: records 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22
+
+**Bug:** None
+
+## BUY-free-shipping — PASS
+
+**Description:** BUY free shipping
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/3 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":4,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-free-shipping","promoCode":"BVA_2502b869"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:53.9624437","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:53.9624437","name":"QLPT293 BVA_2502b869","freeShipping":true,"target":"PUBLIC","value":0.01,"code":"BVA_2502b869"}],"before":{"payments":2,"orders":2,"stock":1000},"layerNote":null,"httpRecords":[23,24,25,26,27,28,29,30,31,32,33,34,35]}`
+
+**Expected:** `{"shipping":"0","total":"49999.99","subtotal":"50000","discount":"0.01"}`
+
+**Actual:** `{"response":{"id":3,"orderCode":"GJH-34958C41","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":0.01,"shippingFee":0,"totalAmount":49999.99,"promoCode":"BVA_2502B869","note":"QLPT-293 BUY-free-shipping","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":3,"productId":1,"productSlug":"bva-juice","variantId":4,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:54.1563573","createdAt":"2026-08-31T22:55:54.1586595","updatedAt":"2026-08-31T22:55:54.1586595"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"0.01","shipping_fee":"0.00","total_amount":"49999.99","amount":"49999.99","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":3},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"0.01","shipping_fee":"0.00","total_amount":"49999.99","amount":"49999.99","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":3},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-free-shipping; retest/assertion-results.json: case=BUY-free-shipping; retest/api-evidence.json: records 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35
+
+**Bug:** None
+
+## BUY-lower-plus-cent — PASS
+
+**Description:** BUY lower plus cent
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/4 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":5,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-lower-plus-cent","promoCode":"BVA_88c7cdd9"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:54.3032468","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:54.3032468","name":"QLPT293 BVA_88c7cdd9","freeShipping":true,"target":"PUBLIC","value":49999.99,"code":"BVA_88c7cdd9"}],"before":{"payments":3,"orders":3,"stock":1000},"layerNote":null,"httpRecords":[36,37,38,39,40,41,42,43,44,45,46,47,48]}`
+
+**Expected:** `{"shipping":"0","total":"0.01","subtotal":"50000","discount":"49999.99"}`
+
+**Actual:** `{"response":{"id":4,"orderCode":"GJH-0CECBD5F","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":49999.99,"shippingFee":0,"totalAmount":0.01,"promoCode":"BVA_88C7CDD9","note":"QLPT-293 BUY-lower-plus-cent","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":4,"productId":1,"productSlug":"bva-juice","variantId":5,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:54.3681527","createdAt":"2026-08-31T22:55:54.3700019","updatedAt":"2026-08-31T22:55:54.3700019"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"49999.99","shipping_fee":"0.00","total_amount":"0.01","amount":"0.01","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":4},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"49999.99","shipping_fee":"0.00","total_amount":"0.01","amount":"0.01","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":4},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-lower-plus-cent; retest/assertion-results.json: case=BUY-lower-plus-cent; retest/api-evidence.json: records 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48
+
+**Bug:** None
+
+## BUY-lower-zero — FAIL
+
+**Description:** BUY lower zero
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/5 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":6,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-lower-zero","promoCode":"BVA_03c9bd7e"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:54.5165697","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:54.5165697","name":"QLPT293 BVA_03c9bd7e","freeShipping":true,"target":"PUBLIC","value":50000,"code":"BVA_03c9bd7e"}],"before":{"payments":4,"orders":4,"stock":1000},"layerNote":null,"httpRecords":[49,50,51,52,53,54,55,56]}`
+
+**Expected:** `{"money":{"shipping":"0","total":"0","subtotal":"50000","discount":"50000"},"contract":"Không cấp phiên thanh toán 0đ mà backend không thể hoàn tất. Cần từ chối sớm hoặc luồng đơn miễn phí được nghiệp vụ thống nhất; không yêu cầu bỏ validation IPN số tiền dương."}`
+
+**Actual:** `{"response":{"id":5,"orderCode":"GJH-7A160BA5","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":50000.0,"shippingFee":0,"totalAmount":0,"promoCode":"BVA_03C9BD7E","note":"QLPT-293 BUY-lower-zero","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":5,"productId":1,"productSlug":"bva-juice","variantId":6,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:54.5886533","createdAt":"2026-08-31T22:55:54.5907592","updatedAt":"2026-08-31T22:55:54.5907592"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":5},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":5},"db":null,"failedChecks":[{"actual":"{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}","expected":"00","case":"BUY-lower-zero","status":"Fail","check":"exact amount accepted after URL issued"},{"actual":"{\"orderId\":5,\"success\":false,\"orderCode\":\"GJH-7A160BA5\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}","expected":"confirmed=true, DB=PAID","case":"BUY-lower-zero","status":"Fail","check":"exact callback completes online order"}]}`
+
+**Evidence:** retest/test-results.json: id=BUY-lower-zero; retest/assertion-results.json: case=BUY-lower-zero; retest/api-evidence.json: records 49, 50, 51, 52, 53, 54, 55, 56
+
+**Bug:** QLPT-341
+
+## BUY-lower-minus-candidate-clamped — FAIL
+
+**Description:** BUY lower minus candidate clamped
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/6 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":7,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-lower-minus-candidate-clamped","promoCode":"BVA_91995f7a"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:54.6677856","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:54.6677856","name":"QLPT293 BVA_91995f7a","freeShipping":true,"target":"PUBLIC","value":50000.01,"code":"BVA_91995f7a"}],"before":{"payments":5,"orders":5,"stock":1000},"layerNote":null,"httpRecords":[57,58,59,60,61,62,63,64]}`
+
+**Expected:** `{"money":{"shipping":"0","total":"0","subtotal":"50000","discount":"50000"},"contract":"Không cấp phiên thanh toán 0đ mà backend không thể hoàn tất. Cần từ chối sớm hoặc luồng đơn miễn phí được nghiệp vụ thống nhất; không yêu cầu bỏ validation IPN số tiền dương."}`
+
+**Actual:** `{"response":{"id":6,"orderCode":"GJH-A6617BEA","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":50000.0,"shippingFee":0,"totalAmount":0,"promoCode":"BVA_91995F7A","note":"QLPT-293 BUY-lower-minus-candidate-clamped","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":6,"productId":1,"productSlug":"bva-juice","variantId":7,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:54.7298622","createdAt":"2026-08-31T22:55:54.7318609","updatedAt":"2026-08-31T22:55:54.7318609"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":6},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":6},"db":null,"failedChecks":[{"actual":"{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}","expected":"00","case":"BUY-lower-minus-candidate-clamped","status":"Fail","check":"exact amount accepted after URL issued"},{"actual":"{\"orderId\":6,\"success\":false,\"orderCode\":\"GJH-A6617BEA\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}","expected":"confirmed=true, DB=PAID","case":"BUY-lower-minus-candidate-clamped","status":"Fail","check":"exact callback completes online order"}]}`
+
+**Evidence:** retest/test-results.json: id=BUY-lower-minus-candidate-clamped; retest/assertion-results.json: case=BUY-lower-minus-candidate-clamped; retest/api-evidence.json: records 57, 58, 59, 60, 61, 62, 63, 64
+
+**Bug:** QLPT-341
+
+## BUY-discount-below-subtotal-with-fee — PASS
+
+**Description:** BUY discount below subtotal with fee
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/7 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":8,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-discount-below-subtotal-with-fee","promoCode":"BVA_a94037bc"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:54.8043022","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:54.8043022","name":"QLPT293 BVA_a94037bc","freeShipping":false,"target":"PUBLIC","value":49999.99,"code":"BVA_a94037bc"}],"before":{"payments":6,"orders":6,"stock":1000},"layerNote":null,"httpRecords":[65,66,67,68,69,70,71,72,73,74,75,76,77]}`
+
+**Expected:** `{"shipping":"30000","total":"30000.01","subtotal":"50000","discount":"49999.99"}`
+
+**Actual:** `{"response":{"id":7,"orderCode":"GJH-126DA4BD","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":49999.99,"shippingFee":30000,"totalAmount":30000.01,"promoCode":"BVA_A94037BC","note":"QLPT-293 BUY-discount-below-subtotal-with-fee","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":7,"productId":1,"productSlug":"bva-juice","variantId":8,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:54.8570936","createdAt":"2026-08-31T22:55:54.859361","updatedAt":"2026-08-31T22:55:54.859361"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"49999.99","shipping_fee":"30000.00","total_amount":"30000.01","amount":"30000.01","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":7},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"49999.99","shipping_fee":"30000.00","total_amount":"30000.01","amount":"30000.01","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":7},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-discount-below-subtotal-with-fee; retest/assertion-results.json: case=BUY-discount-below-subtotal-with-fee; retest/api-evidence.json: records 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77
+
+**Bug:** None
+
+## BUY-discount-equal-subtotal-with-fee — PASS
+
+**Description:** BUY discount equal subtotal with fee
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/8 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":9,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-discount-equal-subtotal-with-fee","promoCode":"BVA_96b5af1f"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:54.9915063","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:54.9915063","name":"QLPT293 BVA_96b5af1f","freeShipping":false,"target":"PUBLIC","value":50000,"code":"BVA_96b5af1f"}],"before":{"payments":7,"orders":7,"stock":1000},"layerNote":null,"httpRecords":[78,79,80,81,82,83,84,85,86,87,88,89,90]}`
+
+**Expected:** `{"shipping":"30000","total":"30000","subtotal":"50000","discount":"50000"}`
+
+**Actual:** `{"response":{"id":8,"orderCode":"GJH-C2586692","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":50000.0,"shippingFee":30000,"totalAmount":30000.0,"promoCode":"BVA_96B5AF1F","note":"QLPT-293 BUY-discount-equal-subtotal-with-fee","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":8,"productId":1,"productSlug":"bva-juice","variantId":9,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:55.0401986","createdAt":"2026-08-31T22:55:55.0423283","updatedAt":"2026-08-31T22:55:55.0423283"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"30000.00","total_amount":"30000.00","amount":"30000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":8},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"30000.00","total_amount":"30000.00","amount":"30000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":8},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-discount-equal-subtotal-with-fee; retest/assertion-results.json: case=BUY-discount-equal-subtotal-with-fee; retest/api-evidence.json: records 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90
+
+**Bug:** None
+
+## BUY-discount-above-subtotal-with-fee — PASS
+
+**Description:** BUY discount above subtotal with fee
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/9 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":10,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-discount-above-subtotal-with-fee","promoCode":"BVA_fd6b05c0"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:55.1543442","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:55.1543442","name":"QLPT293 BVA_fd6b05c0","freeShipping":false,"target":"PUBLIC","value":50000.01,"code":"BVA_fd6b05c0"}],"before":{"payments":8,"orders":8,"stock":1000},"layerNote":null,"httpRecords":[91,92,93,94,95,96,97,98,99,100,101,102,103]}`
+
+**Expected:** `{"shipping":"30000","total":"30000","subtotal":"50000","discount":"50000"}`
+
+**Actual:** `{"response":{"id":9,"orderCode":"GJH-7EF15708","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":50000.0,"shippingFee":30000,"totalAmount":30000.0,"promoCode":"BVA_FD6B05C0","note":"QLPT-293 BUY-discount-above-subtotal-with-fee","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":9,"productId":1,"productSlug":"bva-juice","variantId":10,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:55.2072232","createdAt":"2026-08-31T22:55:55.2095236","updatedAt":"2026-08-31T22:55:55.2095236"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"30000.00","total_amount":"30000.00","amount":"30000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":9},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"30000.00","total_amount":"30000.00","amount":"30000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":9},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-discount-above-subtotal-with-fee; retest/assertion-results.json: case=BUY-discount-above-subtotal-with-fee; retest/api-evidence.json: records 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103
+
+**Bug:** None
+
+## BUY-percent-floor-below — PASS
+
+**Description:** BUY percent floor below
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/10 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":11,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-percent-floor-below","promoCode":"BVA_0f49475e"},"price":"50009.99","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:55.3220556","type":"PERCENT","minOrderValue":0,"startsAt":"2026-08-30T22:55:55.3220556","name":"QLPT293 BVA_0f49475e","freeShipping":true,"target":"PUBLIC","value":10,"code":"BVA_0f49475e"}],"before":{"payments":9,"orders":9,"stock":1000},"layerNote":null,"httpRecords":[104,105,106,107,108,109,110,111,112,113,114,115,116]}`
+
+**Expected:** `{"shipping":"0","total":"45009.99","subtotal":"50009.99","discount":"5000"}`
+
+**Actual:** `{"response":{"id":10,"orderCode":"GJH-07E21DBF","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50009.99,"discountAmount":5000,"shippingFee":0,"totalAmount":45009.99,"promoCode":"BVA_0F49475E","note":"QLPT-293 BUY-percent-floor-below","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":10,"productId":1,"productSlug":"bva-juice","variantId":11,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50009.99,"quantity":1,"subtotal":50009.99,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:55.3666562","createdAt":"2026-08-31T22:55:55.3676575","updatedAt":"2026-08-31T22:55:55.3676575"},"dbAfterCreate":{"subtotal":"50009.99","discount_amount":"5000.00","shipping_fee":"0.00","total_amount":"45009.99","amount":"45009.99","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50009.99","orderId":10},"dbAfterCallback":{"subtotal":"50009.99","discount_amount":"5000.00","shipping_fee":"0.00","total_amount":"45009.99","amount":"45009.99","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50009.99","orderId":10},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-percent-floor-below; retest/assertion-results.json: case=BUY-percent-floor-below; retest/api-evidence.json: records 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116
+
+**Bug:** None
+
+## BUY-percent-floor-at — PASS
+
+**Description:** BUY percent floor at
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/11 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":12,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-percent-floor-at","promoCode":"BVA_3fb43a0a"},"price":"50010.00","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:55.4806552","type":"PERCENT","minOrderValue":0,"startsAt":"2026-08-30T22:55:55.4806552","name":"QLPT293 BVA_3fb43a0a","freeShipping":true,"target":"PUBLIC","value":10,"code":"BVA_3fb43a0a"}],"before":{"payments":10,"orders":10,"stock":1000},"layerNote":null,"httpRecords":[117,118,119,120,121,122,123,124,125,126,127,128,129]}`
+
+**Expected:** `{"shipping":"0","total":"45009","subtotal":"50010.00","discount":"5001"}`
+
+**Actual:** `{"response":{"id":11,"orderCode":"GJH-F28596B4","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50010.0,"discountAmount":5001,"shippingFee":0,"totalAmount":45009,"promoCode":"BVA_3FB43A0A","note":"QLPT-293 BUY-percent-floor-at","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":11,"productId":1,"productSlug":"bva-juice","variantId":12,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50010.0,"quantity":1,"subtotal":50010.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:55.5284492","createdAt":"2026-08-31T22:55:55.5314928","updatedAt":"2026-08-31T22:55:55.5314928"},"dbAfterCreate":{"subtotal":"50010.00","discount_amount":"5001.00","shipping_fee":"0.00","total_amount":"45009.00","amount":"45009.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50010.00","orderId":11},"dbAfterCallback":{"subtotal":"50010.00","discount_amount":"5001.00","shipping_fee":"0.00","total_amount":"45009.00","amount":"45009.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50010.00","orderId":11},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-percent-floor-at; retest/assertion-results.json: case=BUY-percent-floor-at; retest/api-evidence.json: records 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129
+
+**Bug:** None
+
+## BUY-percent-floor-above — PASS
+
+**Description:** BUY percent floor above
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/12 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":13,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-percent-floor-above","promoCode":"BVA_da07b5ea"},"price":"50010.01","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:55.6481086","type":"PERCENT","minOrderValue":0,"startsAt":"2026-08-30T22:55:55.6481086","name":"QLPT293 BVA_da07b5ea","freeShipping":true,"target":"PUBLIC","value":10,"code":"BVA_da07b5ea"}],"before":{"payments":11,"orders":11,"stock":1000},"layerNote":null,"httpRecords":[130,131,132,133,134,135,136,137,138,139,140,141,142]}`
+
+**Expected:** `{"shipping":"0","total":"45009.01","subtotal":"50010.01","discount":"5001"}`
+
+**Actual:** `{"response":{"id":12,"orderCode":"GJH-8F3AEA62","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50010.01,"discountAmount":5001,"shippingFee":0,"totalAmount":45009.01,"promoCode":"BVA_DA07B5EA","note":"QLPT-293 BUY-percent-floor-above","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":12,"productId":1,"productSlug":"bva-juice","variantId":13,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50010.01,"quantity":1,"subtotal":50010.01,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:55.6963189","createdAt":"2026-08-31T22:55:55.6973536","updatedAt":"2026-08-31T22:55:55.6973536"},"dbAfterCreate":{"subtotal":"50010.01","discount_amount":"5001.00","shipping_fee":"0.00","total_amount":"45009.01","amount":"45009.01","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50010.01","orderId":12},"dbAfterCallback":{"subtotal":"50010.01","discount_amount":"5001.00","shipping_fee":"0.00","total_amount":"45009.01","amount":"45009.01","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50010.01","orderId":12},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-percent-floor-above; retest/assertion-results.json: case=BUY-percent-floor-above; retest/api-evidence.json: records 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142
+
+**Bug:** None
+
+## BUY-percent-100 — FAIL
+
+**Description:** BUY percent 100
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders/buy-now — body và query ở HTTP evidence
+5. GET /api/orders/13 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":14,"quantity":1,"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 BUY-percent-100","promoCode":"BVA_d70fcf8d"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:55.8033581","type":"PERCENT","minOrderValue":0,"startsAt":"2026-08-30T22:55:55.8033581","name":"QLPT293 BVA_d70fcf8d","freeShipping":true,"target":"PUBLIC","value":100,"code":"BVA_d70fcf8d"}],"before":{"payments":12,"orders":12,"stock":1000},"layerNote":null,"httpRecords":[143,144,145,146,147,148,149,150]}`
+
+**Expected:** `{"money":{"shipping":"0","total":"0","subtotal":"50000","discount":"50000"},"contract":"Không cấp phiên thanh toán 0đ mà backend không thể hoàn tất. Cần từ chối sớm hoặc luồng đơn miễn phí được nghiệp vụ thống nhất; không yêu cầu bỏ validation IPN số tiền dương."}`
+
+**Actual:** `{"response":{"id":13,"orderCode":"GJH-FFC16166","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":50000,"shippingFee":0,"totalAmount":0,"promoCode":"BVA_D70FCF8D","note":"QLPT-293 BUY-percent-100","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":13,"productId":1,"productSlug":"bva-juice","variantId":14,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:55.8506516","createdAt":"2026-08-31T22:55:55.851673","updatedAt":"2026-08-31T22:55:55.851673"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":13},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":13},"db":null,"failedChecks":[{"actual":"{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}","expected":"00","case":"BUY-percent-100","status":"Fail","check":"exact amount accepted after URL issued"},{"actual":"{\"orderId\":13,\"success\":false,\"orderCode\":\"GJH-FFC16166\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}","expected":"confirmed=true, DB=PAID","case":"BUY-percent-100","status":"Fail","check":"exact callback completes online order"}]}`
+
+**Evidence:** retest/test-results.json: id=BUY-percent-100; retest/assertion-results.json: case=BUY-percent-100; retest/api-evidence.json: records 143, 144, 145, 146, 147, 148, 149, 150
+
+**Bug:** QLPT-341
+
+## CART-baseline-fallback — PASS
+
+**Description:** CART baseline fallback
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+2. POST /api/orders — body và query ở HTTP evidence
+3. GET /api/orders/14 — body và query ở HTTP evidence
+4. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+5. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+6. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[1],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-baseline-fallback"},"price":"50000","quantity":1,"promotion":[],"before":{"payments":13,"orders":13,"stock":1000},"layerNote":null,"httpRecords":[151,152,153,154,155,156,157,158,159,160,161]}`
+
+**Expected:** `{"shipping":"30000","total":"80000","subtotal":"50000","discount":"0"}`
+
+**Actual:** `{"response":{"id":14,"orderCode":"GJH-7796C8CD","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":0,"shippingFee":30000,"totalAmount":80000.0,"promoCode":null,"note":"QLPT-293 CART-baseline-fallback","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":14,"productId":1,"productSlug":"bva-juice","variantId":15,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:55.9666992","createdAt":"2026-08-31T22:55:55.969315","updatedAt":"2026-08-31T22:55:55.969315"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":14},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":14},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-baseline-fallback; retest/assertion-results.json: case=CART-baseline-fallback; retest/api-evidence.json: records 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161
+
+**Bug:** None
+
+## CART-baseline-ghn-stub — PASS
+
+**Description:** CART baseline ghn stub
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+2. POST /api/orders — body và query ở HTTP evidence
+3. GET /api/orders/15 — body và query ở HTTP evidence
+4. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+5. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+6. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[2],"addressId":2,"paymentMethod":"VNPAY","note":"QLPT-293 CART-baseline-ghn-stub"},"price":"50000","quantity":1,"promotion":[],"before":{"payments":14,"orders":14,"stock":1000},"layerNote":null,"httpRecords":[162,163,164,165,166,167,168,169,170,171,172]}`
+
+**Expected:** `{"shipping":"19000","total":"69000","subtotal":"50000","discount":"0"}`
+
+**Actual:** `{"response":{"id":15,"orderCode":"GJH-2B9127FA","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":0,"shippingFee":19000,"totalAmount":69000.0,"promoCode":null,"note":"QLPT-293 CART-baseline-ghn-stub","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":15,"productId":1,"productSlug":"bva-juice","variantId":16,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:56.1086548","createdAt":"2026-08-31T22:55:56.1106561","updatedAt":"2026-08-31T22:55:56.1106561"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"19000.00","total_amount":"69000.00","amount":"69000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":15},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"19000.00","total_amount":"69000.00","amount":"69000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":15},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-baseline-ghn-stub; retest/assertion-results.json: case=CART-baseline-ghn-stub; retest/api-evidence.json: records 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172
+
+**Bug:** None
+
+## CART-free-shipping — PASS
+
+**Description:** CART free shipping
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/16 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[3],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-free-shipping","promoCode":"BVA_a3b64d49"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:56.2137901","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:56.2137901","name":"QLPT293 BVA_a3b64d49","freeShipping":true,"target":"PUBLIC","value":0.01,"code":"BVA_a3b64d49"}],"before":{"payments":15,"orders":15,"stock":1000},"layerNote":null,"httpRecords":[173,174,175,176,177,178,179,180,181,182,183,184,185]}`
+
+**Expected:** `{"shipping":"0","total":"49999.99","subtotal":"50000","discount":"0.01"}`
+
+**Actual:** `{"response":{"id":16,"orderCode":"GJH-4CBFB0C8","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":0.01,"shippingFee":0,"totalAmount":49999.99,"promoCode":"BVA_A3B64D49","note":"QLPT-293 CART-free-shipping","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":16,"productId":1,"productSlug":"bva-juice","variantId":17,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:56.2636068","createdAt":"2026-08-31T22:55:56.2650501","updatedAt":"2026-08-31T22:55:56.2650501"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"0.01","shipping_fee":"0.00","total_amount":"49999.99","amount":"49999.99","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":16},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"0.01","shipping_fee":"0.00","total_amount":"49999.99","amount":"49999.99","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":16},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-free-shipping; retest/assertion-results.json: case=CART-free-shipping; retest/api-evidence.json: records 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185
+
+**Bug:** None
+
+## CART-lower-plus-cent — PASS
+
+**Description:** CART lower plus cent
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/17 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[4],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-lower-plus-cent","promoCode":"BVA_9f712f12"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:56.3661989","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:56.3661989","name":"QLPT293 BVA_9f712f12","freeShipping":true,"target":"PUBLIC","value":49999.99,"code":"BVA_9f712f12"}],"before":{"payments":16,"orders":16,"stock":1000},"layerNote":null,"httpRecords":[186,187,188,189,190,191,192,193,194,195,196,197,198]}`
+
+**Expected:** `{"shipping":"0","total":"0.01","subtotal":"50000","discount":"49999.99"}`
+
+**Actual:** `{"response":{"id":17,"orderCode":"GJH-E9C81DDC","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":49999.99,"shippingFee":0,"totalAmount":0.01,"promoCode":"BVA_9F712F12","note":"QLPT-293 CART-lower-plus-cent","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":17,"productId":1,"productSlug":"bva-juice","variantId":18,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:56.4112696","createdAt":"2026-08-31T22:55:56.4132253","updatedAt":"2026-08-31T22:55:56.4132253"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"49999.99","shipping_fee":"0.00","total_amount":"0.01","amount":"0.01","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":17},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"49999.99","shipping_fee":"0.00","total_amount":"0.01","amount":"0.01","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":17},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-lower-plus-cent; retest/assertion-results.json: case=CART-lower-plus-cent; retest/api-evidence.json: records 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198
+
+**Bug:** None
+
+## CART-lower-zero — FAIL
+
+**Description:** CART lower zero
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/18 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[5],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-lower-zero","promoCode":"BVA_c3b660f0"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:56.5184003","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:56.5184003","name":"QLPT293 BVA_c3b660f0","freeShipping":true,"target":"PUBLIC","value":50000,"code":"BVA_c3b660f0"}],"before":{"payments":17,"orders":17,"stock":1000},"layerNote":null,"httpRecords":[199,200,201,202,203,204,205,206]}`
+
+**Expected:** `{"money":{"shipping":"0","total":"0","subtotal":"50000","discount":"50000"},"contract":"Không cấp phiên thanh toán 0đ mà backend không thể hoàn tất. Cần từ chối sớm hoặc luồng đơn miễn phí được nghiệp vụ thống nhất; không yêu cầu bỏ validation IPN số tiền dương."}`
+
+**Actual:** `{"response":{"id":18,"orderCode":"GJH-2CAA11F8","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":50000.0,"shippingFee":0,"totalAmount":0,"promoCode":"BVA_C3B660F0","note":"QLPT-293 CART-lower-zero","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":18,"productId":1,"productSlug":"bva-juice","variantId":19,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:56.5690838","createdAt":"2026-08-31T22:55:56.5711041","updatedAt":"2026-08-31T22:55:56.5711041"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":18},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":18},"db":null,"failedChecks":[{"actual":"{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}","expected":"00","case":"CART-lower-zero","status":"Fail","check":"exact amount accepted after URL issued"},{"actual":"{\"orderId\":18,\"success\":false,\"orderCode\":\"GJH-2CAA11F8\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}","expected":"confirmed=true, DB=PAID","case":"CART-lower-zero","status":"Fail","check":"exact callback completes online order"}]}`
+
+**Evidence:** retest/test-results.json: id=CART-lower-zero; retest/assertion-results.json: case=CART-lower-zero; retest/api-evidence.json: records 199, 200, 201, 202, 203, 204, 205, 206
+
+**Bug:** QLPT-341
+
+## CART-lower-minus-candidate-clamped — FAIL
+
+**Description:** CART lower minus candidate clamped
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/19 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[6],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-lower-minus-candidate-clamped","promoCode":"BVA_fbf55fa8"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:56.6256607","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:56.6256607","name":"QLPT293 BVA_fbf55fa8","freeShipping":true,"target":"PUBLIC","value":50000.01,"code":"BVA_fbf55fa8"}],"before":{"payments":18,"orders":18,"stock":1000},"layerNote":null,"httpRecords":[207,208,209,210,211,212,213,214]}`
+
+**Expected:** `{"money":{"shipping":"0","total":"0","subtotal":"50000","discount":"50000"},"contract":"Không cấp phiên thanh toán 0đ mà backend không thể hoàn tất. Cần từ chối sớm hoặc luồng đơn miễn phí được nghiệp vụ thống nhất; không yêu cầu bỏ validation IPN số tiền dương."}`
+
+**Actual:** `{"response":{"id":19,"orderCode":"GJH-ED09BEEA","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":50000.0,"shippingFee":0,"totalAmount":0,"promoCode":"BVA_FBF55FA8","note":"QLPT-293 CART-lower-minus-candidate-clamped","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":19,"productId":1,"productSlug":"bva-juice","variantId":20,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:56.6767664","createdAt":"2026-08-31T22:55:56.6777629","updatedAt":"2026-08-31T22:55:56.6777629"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":19},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":19},"db":null,"failedChecks":[{"actual":"{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}","expected":"00","case":"CART-lower-minus-candidate-clamped","status":"Fail","check":"exact amount accepted after URL issued"},{"actual":"{\"orderId\":19,\"success\":false,\"orderCode\":\"GJH-ED09BEEA\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}","expected":"confirmed=true, DB=PAID","case":"CART-lower-minus-candidate-clamped","status":"Fail","check":"exact callback completes online order"}]}`
+
+**Evidence:** retest/test-results.json: id=CART-lower-minus-candidate-clamped; retest/assertion-results.json: case=CART-lower-minus-candidate-clamped; retest/api-evidence.json: records 207, 208, 209, 210, 211, 212, 213, 214
+
+**Bug:** QLPT-341
+
+## CART-discount-below-subtotal-with-fee — PASS
+
+**Description:** CART discount below subtotal with fee
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/20 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[7],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-discount-below-subtotal-with-fee","promoCode":"BVA_9be5fab4"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:56.7316231","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:56.7316231","name":"QLPT293 BVA_9be5fab4","freeShipping":false,"target":"PUBLIC","value":49999.99,"code":"BVA_9be5fab4"}],"before":{"payments":19,"orders":19,"stock":1000},"layerNote":null,"httpRecords":[215,216,217,218,219,220,221,222,223,224,225,226,227]}`
+
+**Expected:** `{"shipping":"30000","total":"30000.01","subtotal":"50000","discount":"49999.99"}`
+
+**Actual:** `{"response":{"id":20,"orderCode":"GJH-09568CC2","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":49999.99,"shippingFee":30000,"totalAmount":30000.01,"promoCode":"BVA_9BE5FAB4","note":"QLPT-293 CART-discount-below-subtotal-with-fee","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":20,"productId":1,"productSlug":"bva-juice","variantId":21,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:56.7812413","createdAt":"2026-08-31T22:55:56.7842752","updatedAt":"2026-08-31T22:55:56.7842752"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"49999.99","shipping_fee":"30000.00","total_amount":"30000.01","amount":"30000.01","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":20},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"49999.99","shipping_fee":"30000.00","total_amount":"30000.01","amount":"30000.01","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":20},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-discount-below-subtotal-with-fee; retest/assertion-results.json: case=CART-discount-below-subtotal-with-fee; retest/api-evidence.json: records 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227
+
+**Bug:** None
+
+## CART-discount-equal-subtotal-with-fee — PASS
+
+**Description:** CART discount equal subtotal with fee
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/21 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[8],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-discount-equal-subtotal-with-fee","promoCode":"BVA_31fe2b07"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:56.894658","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:56.894658","name":"QLPT293 BVA_31fe2b07","freeShipping":false,"target":"PUBLIC","value":50000,"code":"BVA_31fe2b07"}],"before":{"payments":20,"orders":20,"stock":1000},"layerNote":null,"httpRecords":[228,229,230,231,232,233,234,235,236,237,238,239,240]}`
+
+**Expected:** `{"shipping":"30000","total":"30000","subtotal":"50000","discount":"50000"}`
+
+**Actual:** `{"response":{"id":21,"orderCode":"GJH-6535D211","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":50000.0,"shippingFee":30000,"totalAmount":30000.0,"promoCode":"BVA_31FE2B07","note":"QLPT-293 CART-discount-equal-subtotal-with-fee","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":21,"productId":1,"productSlug":"bva-juice","variantId":22,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:56.9325591","createdAt":"2026-08-31T22:55:56.9335576","updatedAt":"2026-08-31T22:55:56.9335576"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"30000.00","total_amount":"30000.00","amount":"30000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":21},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"30000.00","total_amount":"30000.00","amount":"30000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":21},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-discount-equal-subtotal-with-fee; retest/assertion-results.json: case=CART-discount-equal-subtotal-with-fee; retest/api-evidence.json: records 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240
+
+**Bug:** None
+
+## CART-discount-above-subtotal-with-fee — PASS
+
+**Description:** CART discount above subtotal with fee
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/22 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[9],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-discount-above-subtotal-with-fee","promoCode":"BVA_d9999290"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:57.0205902","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:57.0205902","name":"QLPT293 BVA_d9999290","freeShipping":false,"target":"PUBLIC","value":50000.01,"code":"BVA_d9999290"}],"before":{"payments":21,"orders":21,"stock":1000},"layerNote":null,"httpRecords":[241,242,243,244,245,246,247,248,249,250,251,252,253]}`
+
+**Expected:** `{"shipping":"30000","total":"30000","subtotal":"50000","discount":"50000"}`
+
+**Actual:** `{"response":{"id":22,"orderCode":"GJH-8EAF22E9","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":50000.0,"shippingFee":30000,"totalAmount":30000.0,"promoCode":"BVA_D9999290","note":"QLPT-293 CART-discount-above-subtotal-with-fee","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":22,"productId":1,"productSlug":"bva-juice","variantId":23,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:57.0642238","createdAt":"2026-08-31T22:55:57.0652457","updatedAt":"2026-08-31T22:55:57.0652457"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"30000.00","total_amount":"30000.00","amount":"30000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":22},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"30000.00","total_amount":"30000.00","amount":"30000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":22},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-discount-above-subtotal-with-fee; retest/assertion-results.json: case=CART-discount-above-subtotal-with-fee; retest/api-evidence.json: records 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253
+
+**Bug:** None
+
+## CART-percent-floor-below — PASS
+
+**Description:** CART percent floor below
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/23 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[10],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-percent-floor-below","promoCode":"BVA_b7d7bf1f"},"price":"50009.99","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:57.1520262","type":"PERCENT","minOrderValue":0,"startsAt":"2026-08-30T22:55:57.1520262","name":"QLPT293 BVA_b7d7bf1f","freeShipping":true,"target":"PUBLIC","value":10,"code":"BVA_b7d7bf1f"}],"before":{"payments":22,"orders":22,"stock":1000},"layerNote":null,"httpRecords":[254,255,256,257,258,259,260,261,262,263,264,265,266]}`
+
+**Expected:** `{"shipping":"0","total":"45009.99","subtotal":"50009.99","discount":"5000"}`
+
+**Actual:** `{"response":{"id":23,"orderCode":"GJH-F1F38CA0","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50009.99,"discountAmount":5000,"shippingFee":0,"totalAmount":45009.99,"promoCode":"BVA_B7D7BF1F","note":"QLPT-293 CART-percent-floor-below","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":23,"productId":1,"productSlug":"bva-juice","variantId":24,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50009.99,"quantity":1,"subtotal":50009.99,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:57.2113466","createdAt":"2026-08-31T22:55:57.2140152","updatedAt":"2026-08-31T22:55:57.2140152"},"dbAfterCreate":{"subtotal":"50009.99","discount_amount":"5000.00","shipping_fee":"0.00","total_amount":"45009.99","amount":"45009.99","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50009.99","orderId":23},"dbAfterCallback":{"subtotal":"50009.99","discount_amount":"5000.00","shipping_fee":"0.00","total_amount":"45009.99","amount":"45009.99","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50009.99","orderId":23},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-percent-floor-below; retest/assertion-results.json: case=CART-percent-floor-below; retest/api-evidence.json: records 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266
+
+**Bug:** None
+
+## CART-percent-floor-at — PASS
+
+**Description:** CART percent floor at
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/24 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[11],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-percent-floor-at","promoCode":"BVA_a4af1a63"},"price":"50010.00","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:57.2943772","type":"PERCENT","minOrderValue":0,"startsAt":"2026-08-30T22:55:57.2943772","name":"QLPT293 BVA_a4af1a63","freeShipping":true,"target":"PUBLIC","value":10,"code":"BVA_a4af1a63"}],"before":{"payments":23,"orders":23,"stock":1000},"layerNote":null,"httpRecords":[267,268,269,270,271,272,273,274,275,276,277,278,279]}`
+
+**Expected:** `{"shipping":"0","total":"45009","subtotal":"50010.00","discount":"5001"}`
+
+**Actual:** `{"response":{"id":24,"orderCode":"GJH-69141C5F","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50010.0,"discountAmount":5001,"shippingFee":0,"totalAmount":45009,"promoCode":"BVA_A4AF1A63","note":"QLPT-293 CART-percent-floor-at","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":24,"productId":1,"productSlug":"bva-juice","variantId":25,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50010.0,"quantity":1,"subtotal":50010.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:57.3368589","createdAt":"2026-08-31T22:55:57.3378804","updatedAt":"2026-08-31T22:55:57.3378804"},"dbAfterCreate":{"subtotal":"50010.00","discount_amount":"5001.00","shipping_fee":"0.00","total_amount":"45009.00","amount":"45009.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50010.00","orderId":24},"dbAfterCallback":{"subtotal":"50010.00","discount_amount":"5001.00","shipping_fee":"0.00","total_amount":"45009.00","amount":"45009.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50010.00","orderId":24},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-percent-floor-at; retest/assertion-results.json: case=CART-percent-floor-at; retest/api-evidence.json: records 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279
+
+**Bug:** None
+
+## CART-percent-floor-above — PASS
+
+**Description:** CART percent floor above
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/25 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+9. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+10. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+11. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+12. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+13. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[12],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-percent-floor-above","promoCode":"BVA_717cfb7e"},"price":"50010.01","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:57.4234781","type":"PERCENT","minOrderValue":0,"startsAt":"2026-08-30T22:55:57.4234781","name":"QLPT293 BVA_717cfb7e","freeShipping":true,"target":"PUBLIC","value":10,"code":"BVA_717cfb7e"}],"before":{"payments":24,"orders":24,"stock":1000},"layerNote":null,"httpRecords":[280,281,282,283,284,285,286,287,288,289,290,291,292]}`
+
+**Expected:** `{"shipping":"0","total":"45009.01","subtotal":"50010.01","discount":"5001"}`
+
+**Actual:** `{"response":{"id":25,"orderCode":"GJH-1C427397","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50010.01,"discountAmount":5001,"shippingFee":0,"totalAmount":45009.01,"promoCode":"BVA_717CFB7E","note":"QLPT-293 CART-percent-floor-above","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":25,"productId":1,"productSlug":"bva-juice","variantId":26,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50010.01,"quantity":1,"subtotal":50010.01,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:57.4613706","createdAt":"2026-08-31T22:55:57.4624977","updatedAt":"2026-08-31T22:55:57.4624977"},"dbAfterCreate":{"subtotal":"50010.01","discount_amount":"5001.00","shipping_fee":"0.00","total_amount":"45009.01","amount":"45009.01","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50010.01","orderId":25},"dbAfterCallback":{"subtotal":"50010.01","discount_amount":"5001.00","shipping_fee":"0.00","total_amount":"45009.01","amount":"45009.01","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50010.01","orderId":25},"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-percent-floor-above; retest/assertion-results.json: case=CART-percent-floor-above; retest/api-evidence.json: records 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292
+
+**Bug:** None
+
+## CART-percent-100 — FAIL
+
+**Description:** CART percent 100
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/apply-promo — body và query ở HTTP evidence
+3. POST /api/orders/shipping-fee — body và query ở HTTP evidence
+4. POST /api/orders — body và query ở HTTP evidence
+5. GET /api/orders/26 — body và query ở HTTP evidence
+6. POST /api/payment/vnpay/create-url — body và query ở HTTP evidence
+7. GET /api/payment/vnpay/ipn — body và query ở HTTP evidence
+8. GET /api/payment/vnpay/return — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[13],"addressId":1,"paymentMethod":"VNPAY","note":"QLPT-293 CART-percent-100","promoCode":"BVA_9ebee000"},"price":"50000","quantity":1,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:57.5568198","type":"PERCENT","minOrderValue":0,"startsAt":"2026-08-30T22:55:57.5568198","name":"QLPT293 BVA_9ebee000","freeShipping":true,"target":"PUBLIC","value":100,"code":"BVA_9ebee000"}],"before":{"payments":25,"orders":25,"stock":1000},"layerNote":null,"httpRecords":[293,294,295,296,297,298,299,300]}`
+
+**Expected:** `{"money":{"shipping":"0","total":"0","subtotal":"50000","discount":"50000"},"contract":"Không cấp phiên thanh toán 0đ mà backend không thể hoàn tất. Cần từ chối sớm hoặc luồng đơn miễn phí được nghiệp vụ thống nhất; không yêu cầu bỏ validation IPN số tiền dương."}`
+
+**Actual:** `{"response":{"id":26,"orderCode":"GJH-7A069CC9","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"VNPAY","subtotal":50000.0,"discountAmount":50000,"shippingFee":0,"totalAmount":0,"promoCode":"BVA_9EBEE000","note":"QLPT-293 CART-percent-100","shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":26,"productId":1,"productSlug":"bva-juice","variantId":27,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":"2026-09-01T22:55:57.624945","createdAt":"2026-08-31T22:55:57.6280522","updatedAt":"2026-08-31T22:55:57.6280522"},"dbAfterCreate":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":26},"dbAfterCallback":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":26},"db":null,"failedChecks":[{"actual":"{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}","expected":"00","case":"CART-percent-100","status":"Fail","check":"exact amount accepted after URL issued"},{"actual":"{\"orderId\":26,\"success\":false,\"orderCode\":\"GJH-7A069CC9\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}","expected":"confirmed=true, DB=PAID","case":"CART-percent-100","status":"Fail","check":"exact callback completes online order"}]}`
+
+**Evidence:** retest/test-results.json: id=CART-percent-100; retest/assertion-results.json: case=CART-percent-100; retest/api-evidence.json: records 293, 294, 295, 296, 297, 298, 299, 300
+
+**Bug:** QLPT-341
+
+## SHIPPING-provinces — PASS
+
+**Description:** SHIPPING provinces
+
+**Pre-condition:** GHN geography mock trả đúng một province/district/ward; không dùng dữ liệu GHN thật.
+
+**Steps:**
+1. GET /api/shipping/provinces — body và query ở HTTP evidence
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[301]}`
+
+**Expected:** `"HTTP 200 with configured GHN geography stub; contract only, NOT live carrier data"`
+
+**Actual:** `{"response":[{"ProvinceID":202,"ProvinceName":"Hồ Chí Minh"}],"dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=SHIPPING-provinces; retest/assertion-results.json: case=SHIPPING-provinces; retest/api-evidence.json: records 301
+
+**Bug:** None
+
+## SHIPPING-districts?provinceId=202 — PASS
+
+**Description:** SHIPPING districts?provinceId=202
+
+**Pre-condition:** GHN geography mock trả đúng một province/district/ward; không dùng dữ liệu GHN thật.
+
+**Steps:**
+1. GET /api/shipping/districts — body và query ở HTTP evidence
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[302]}`
+
+**Expected:** `"HTTP 200 with configured GHN geography stub; contract only, NOT live carrier data"`
+
+**Actual:** `{"response":[{"DistrictName":"Quận 1","DistrictID":1454}],"dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=SHIPPING-districts?provinceId=202; retest/assertion-results.json: case=SHIPPING-districts?provinceId=202; retest/api-evidence.json: records 302
+
+**Bug:** None
+
+## SHIPPING-wards?districtId=1454 — PASS
+
+**Description:** SHIPPING wards?districtId=1454
+
+**Pre-condition:** GHN geography mock trả đúng một province/district/ward; không dùng dữ liệu GHN thật.
+
+**Steps:**
+1. GET /api/shipping/wards — body và query ở HTTP evidence
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[303]}`
+
+**Expected:** `"HTTP 200 with configured GHN geography stub; contract only, NOT live carrier data"`
+
+**Actual:** `{"response":[{"WardName":"Phường kiểm thử","WardCode":"20101"}],"dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=SHIPPING-wards?districtId=1454; retest/assertion-results.json: case=SHIPPING-wards?districtId=1454; retest/api-evidence.json: records 303
+
+**Bug:** None
+
+## BUY-zero-COD — PASS
+
+**Description:** BUY zero COD
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders/buy-now — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":28,"quantity":1,"addressId":1,"paymentMethod":"COD","promoCode":"ZERO_BUY"},"price":null,"quantity":null,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:57.7094145","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:57.7094145","name":"QLPT293 ZERO_BUY","freeShipping":true,"target":"PUBLIC","value":50000,"code":"ZERO_BUY"}],"before":null,"layerNote":null,"httpRecords":[304,305]}`
+
+**Expected:** `"Characterization: zero accepted and stored; not a new business rule"`
+
+**Actual:** `{"response":{"id":27,"orderCode":"GJH-07676243","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"COD","subtotal":50000.0,"discountAmount":50000.0,"shippingFee":0,"totalAmount":0,"promoCode":"ZERO_BUY","note":null,"shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":27,"productId":1,"productSlug":"bva-juice","variantId":28,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":null,"createdAt":"2026-08-31T22:55:57.7306621","updatedAt":"2026-08-31T22:55:57.7306621"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":27},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-zero-COD; retest/assertion-results.json: case=BUY-zero-COD; retest/api-evidence.json: records 304, 305
+
+**Bug:** None
+
+## CART-zero-COD — PASS
+
+**Description:** CART zero COD
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+2. POST /api/orders — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[14],"addressId":1,"paymentMethod":"COD","promoCode":"ZERO_CART"},"price":null,"quantity":null,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:57.7444883","type":"FIXED","minOrderValue":0,"startsAt":"2026-08-30T22:55:57.7444883","name":"QLPT293 ZERO_CART","freeShipping":true,"target":"PUBLIC","value":50000,"code":"ZERO_CART"}],"before":null,"layerNote":null,"httpRecords":[306,307]}`
+
+**Expected:** `"Characterization: zero accepted and stored; not a new business rule"`
+
+**Actual:** `{"response":{"id":28,"orderCode":"GJH-A5733463","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"COD","subtotal":50000.0,"discountAmount":50000.0,"shippingFee":0,"totalAmount":0,"promoCode":"ZERO_CART","note":null,"shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":28,"productId":1,"productSlug":"bva-juice","variantId":29,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":null,"createdAt":"2026-08-31T22:55:57.7658624","updatedAt":"2026-08-31T22:55:57.7658624"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.00","discount_amount":"50000.00","shipping_fee":"0.00","total_amount":"0.00","amount":"0.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":28},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-zero-COD; retest/assertion-results.json: case=CART-zero-COD; retest/api-evidence.json: records 306, 307
+
+**Bug:** None
+
+## INPUT-quantity--1 — PASS
+
+**Description:** INPUT quantity  1
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/buy-now — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":30,"quantity":-1,"addressId":1,"paymentMethod":"COD"},"price":null,"quantity":null,"promotion":[],"before":{"payments":28,"orders":28,"stock":1000},"layerNote":null,"httpRecords":[308]}`
+
+**Expected:** `"400; unchanged orders/payments/stock"`
+
+**Actual:** `{"response":{"message":"quantity: Số lượng tối thiểu là 1","status":400,"timestamp":"2026-08-31T22:55:57.798394"},"dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=INPUT-quantity--1; retest/assertion-results.json: case=INPUT-quantity--1; retest/api-evidence.json: records 308
+
+**Bug:** None
+
+## INPUT-quantity-0 — PASS
+
+**Description:** INPUT quantity 0
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/buy-now — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":31,"quantity":0,"addressId":1,"paymentMethod":"COD"},"price":null,"quantity":null,"promotion":[],"before":{"payments":28,"orders":28,"stock":1000},"layerNote":null,"httpRecords":[309]}`
+
+**Expected:** `"400; unchanged orders/payments/stock"`
+
+**Actual:** `{"response":{"message":"quantity: Số lượng tối thiểu là 1","status":400,"timestamp":"2026-08-31T22:55:57.8162657"},"dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=INPUT-quantity-0; retest/assertion-results.json: case=INPUT-quantity-0; retest/api-evidence.json: records 309
+
+**Bug:** None
+
+## INPUT-empty-cart — PASS
+
+**Description:** INPUT empty cart
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"addressId":1,"cartItemIds":[],"paymentMethod":"COD"},"price":null,"quantity":null,"promotion":[],"before":{"payments":28,"orders":28,"stock":1000},"layerNote":null,"httpRecords":[310]}`
+
+**Expected:** `"400; no zero-item order"`
+
+**Actual:** `{"response":{"message":"cartItemIds: Phải chọn ít nhất 1 sản phẩm","status":400,"timestamp":"2026-08-31T22:55:57.831048"},"dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=INPUT-empty-cart; retest/assertion-results.json: case=INPUT-empty-cart; retest/api-evidence.json: records 310
+
+**Bug:** None
+
+## INPUT-percent-over-100 — PASS
+
+**Description:** INPUT percent over 100
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/admin/promotions — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"isActive":true,"endsAt":"2026-09-02T22:55:57.8367909","type":"PERCENT","minOrderValue":0,"startsAt":"2026-08-30T22:55:57.8367909","name":"QLPT293 OVER100","freeShipping":true,"target":"PUBLIC","value":100.01,"code":"OVER100"},"price":null,"quantity":null,"promotion":[{"isActive":true,"endsAt":"2026-09-02T22:55:57.8367909","type":"PERCENT","minOrderValue":0,"startsAt":"2026-08-30T22:55:57.8367909","name":"QLPT293 OVER100","freeShipping":true,"target":"PUBLIC","value":100.01,"code":"OVER100"}],"before":null,"layerNote":null,"httpRecords":[311]}`
+
+**Expected:** `"400; percent >100 prevented at admin API"`
+
+**Actual:** `{"response":{"message":"Giảm theo % không được vượt quá 100","status":400,"timestamp":"2026-08-31T22:55:57.8477507"},"dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=INPUT-percent-over-100; retest/assertion-results.json: case=INPUT-percent-over-100; retest/api-evidence.json: records 311
+
+**Bug:** None
+
+## BUY-client-money-tampering — PASS
+
+**Description:** BUY client money tampering
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/buy-now — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":32,"quantity":1,"addressId":1,"paymentMethod":"COD","totalAmount":-0.01,"subtotal":0,"discountAmount":999999,"shippingFee":-50000},"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[312]}`
+
+**Expected:** `"Backend computes 80000 independently"`
+
+**Actual:** `{"response":{"id":29,"orderCode":"GJH-C1DF2937","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"COD","subtotal":50000.0,"discountAmount":0,"shippingFee":30000,"totalAmount":80000.0,"promoCode":null,"note":null,"shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":29,"productId":1,"productSlug":"bva-juice","variantId":32,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":null,"createdAt":"2026-08-31T22:55:57.8660706","updatedAt":"2026-08-31T22:55:57.8660706"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":29},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-client-money-tampering; retest/assertion-results.json: case=BUY-client-money-tampering; retest/api-evidence.json: records 312
+
+**Bug:** None
+
+## CART-client-money-tampering — PASS
+
+**Description:** CART client money tampering
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[15],"addressId":1,"paymentMethod":"COD","totalAmount":-0.01,"subtotal":0,"discountAmount":999999,"shippingFee":-50000},"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[313]}`
+
+**Expected:** `"Backend computes 80000 independently"`
+
+**Actual:** `{"response":{"id":30,"orderCode":"GJH-E3F44A20","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"COD","subtotal":50000.0,"discountAmount":0,"shippingFee":30000,"totalAmount":80000.0,"promoCode":null,"note":null,"shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":30,"productId":1,"productSlug":"bva-juice","variantId":33,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.0,"quantity":1,"subtotal":50000.0,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":null,"createdAt":"2026-08-31T22:55:57.8982794","updatedAt":"2026-08-31T22:55:57.8982794"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":30},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-client-money-tampering; retest/assertion-results.json: case=CART-client-money-tampering; retest/api-evidence.json: records 313
+
+**Bug:** None
+
+## SEPAY-BANK_TRANSFER-delta--1 — PASS
+
+**Description:** SEPAY BANK_TRANSFER delta  1
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/buy-now — body và query ở HTTP evidence
+2. POST /api/webhooks/sepay — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"transferType":"in","transferAmount":79999.99,"content":"GJH-360FEFA9","referenceCode":"SEPAY-BANK_TRANSFER-delta--1"},"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[314,315]}`
+
+**Expected:** `"PENDING; amount remains 80000"`
+
+**Actual:** `{"response":{"message":"OK"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":31},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=SEPAY-BANK_TRANSFER-delta--1; retest/assertion-results.json: case=SEPAY-BANK_TRANSFER-delta--1; retest/api-evidence.json: records 314, 315
+
+**Bug:** None
+
+## SEPAY-BANK_TRANSFER-delta-0 — PASS
+
+**Description:** SEPAY BANK_TRANSFER delta 0
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/buy-now — body và query ở HTTP evidence
+2. POST /api/webhooks/sepay — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"transferType":"in","transferAmount":80000.0,"content":"GJH-DA5A67B3","referenceCode":"SEPAY-BANK_TRANSFER-delta-0"},"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[316,317]}`
+
+**Expected:** `"PAID; amount remains 80000"`
+
+**Actual:** `{"response":{"message":"OK"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":32},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=SEPAY-BANK_TRANSFER-delta-0; retest/assertion-results.json: case=SEPAY-BANK_TRANSFER-delta-0; retest/api-evidence.json: records 316, 317
+
+**Bug:** None
+
+## SEPAY-BANK_TRANSFER-delta-1 — PASS
+
+**Description:** SEPAY BANK_TRANSFER delta 1
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/buy-now — body và query ở HTTP evidence
+2. POST /api/webhooks/sepay — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"transferType":"in","transferAmount":80000.01,"content":"GJH-56EADC22","referenceCode":"SEPAY-BANK_TRANSFER-delta-1"},"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[318,319]}`
+
+**Expected:** `"PAID; amount remains 80000"`
+
+**Actual:** `{"response":{"message":"OK"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":33},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=SEPAY-BANK_TRANSFER-delta-1; retest/assertion-results.json: case=SEPAY-BANK_TRANSFER-delta-1; retest/api-evidence.json: records 318, 319
+
+**Bug:** None
+
+## SEPAY-MOMO-delta--1 — PASS
+
+**Description:** SEPAY MOMO delta  1
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/buy-now — body và query ở HTTP evidence
+2. POST /api/webhooks/sepay — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"transferType":"in","transferAmount":79999.99,"content":"GJH-7983FA28","referenceCode":"SEPAY-MOMO-delta--1"},"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[320,321]}`
+
+**Expected:** `"PENDING; amount remains 80000"`
+
+**Actual:** `{"response":{"message":"OK"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.00","orderId":34},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=SEPAY-MOMO-delta--1; retest/assertion-results.json: case=SEPAY-MOMO-delta--1; retest/api-evidence.json: records 320, 321
+
+**Bug:** None
+
+## SEPAY-MOMO-delta-0 — PASS
+
+**Description:** SEPAY MOMO delta 0
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/buy-now — body và query ở HTTP evidence
+2. POST /api/webhooks/sepay — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"transferType":"in","transferAmount":80000.0,"content":"GJH-3C4E22EF","referenceCode":"SEPAY-MOMO-delta-0"},"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[322,323]}`
+
+**Expected:** `"PAID; amount remains 80000"`
+
+**Actual:** `{"response":{"message":"OK"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":35},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=SEPAY-MOMO-delta-0; retest/assertion-results.json: case=SEPAY-MOMO-delta-0; retest/api-evidence.json: records 322, 323
+
+**Bug:** None
+
+## SEPAY-MOMO-delta-1 — PASS
+
+**Description:** SEPAY MOMO delta 1
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/buy-now — body và query ở HTTP evidence
+2. POST /api/webhooks/sepay — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"transferType":"in","transferAmount":80000.01,"content":"GJH-A802C2BE","referenceCode":"SEPAY-MOMO-delta-1"},"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[324,325]}`
+
+**Expected:** `"PAID; amount remains 80000"`
+
+**Actual:** `{"response":{"message":"OK"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.00","discount_amount":"0.00","shipping_fee":"30000.00","total_amount":"80000.00","amount":"80000.00","payment_status":"PAID","payment_record_status":"SUCCESS","items_subtotal":"50000.00","orderId":36},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=SEPAY-MOMO-delta-1; retest/assertion-results.json: case=SEPAY-MOMO-delta-1; retest/api-evidence.json: records 324, 325
+
+**Bug:** None
+
+## BUY-negative-GHN-fault-injection — PASS
+
+**Description:** BUY negative GHN fault injection
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders/buy-now — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"variantId":40,"quantity":1,"addressId":2,"paymentMethod":"COD"},"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":"Robustness characterization; GHN stub=-50001, price=50000.99, quantity=1; not a normal carrier response","httpRecords":[326]}`
+
+**Expected:** `"Observe -0.01 persistence; no business min inferred"`
+
+**Actual:** `{"response":{"id":37,"orderCode":"GJH-36E2D139","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"COD","subtotal":50000.99,"discountAmount":0,"shippingFee":-50001,"totalAmount":-0.01,"promoCode":null,"note":null,"shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":37,"productId":1,"productSlug":"bva-juice","variantId":40,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.99,"quantity":1,"subtotal":50000.99,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":null,"createdAt":"2026-08-31T22:55:58.1711759","updatedAt":"2026-08-31T22:55:58.1711759"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.99","discount_amount":"0.00","shipping_fee":"-50001.00","total_amount":"-0.01","amount":"-0.01","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.99","orderId":37},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-negative-GHN-fault-injection; retest/assertion-results.json: case=BUY-negative-GHN-fault-injection; retest/api-evidence.json: records 326
+
+**Bug:** None
+
+## CART-negative-GHN-fault-injection — PASS
+
+**Description:** CART negative GHN fault injection
+
+**Pre-condition:** Fixture cô lập: CUSTOMER active, JWT test, địa chỉ thuộc customer, product/variant active và tồn kho 1000 trước tạo đơn; giá originalPrice=salePrice, quantity=1 trừ case input không hợp lệ. CART có cart item của customer. GHN và blacklist mock. Promotion qua admin API, active, thời gian hiệu lực bao phủ lần chạy.
+
+**Steps:**
+1. POST /api/orders — body và query ở HTTP evidence
+
+**Test data:** `{"input":{"cartItemIds":[16],"addressId":2,"paymentMethod":"COD"},"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":"Robustness characterization; GHN stub=-50001, price=50000.99, quantity=1; not a normal carrier response","httpRecords":[327]}`
+
+**Expected:** `"Observe -0.01 persistence; no business min inferred"`
+
+**Actual:** `{"response":{"id":38,"orderCode":"GJH-7FE98717","status":"PENDING","paymentStatus":"PENDING","paymentMethod":"COD","subtotal":50000.99,"discountAmount":0,"shippingFee":-50001,"totalAmount":-0.01,"promoCode":null,"note":null,"shippingAddress":{"fullName":"Khach kiem thu","phone":"0900000000","province":"Hồ Chí Minh","district":"Quận 1","ward":"Phường kiểm thử","detail":"Test only - do not ship"},"items":[{"id":38,"productId":1,"productSlug":"bva-juice","variantId":41,"productName":"BVA juice","variantName":"","imageUrl":null,"unitPrice":50000.99,"quantity":1,"subtotal":50000.99,"hasReviewed":false}],"cancelReason":null,"cancelledBy":null,"expiresAt":null,"createdAt":"2026-08-31T22:55:58.1993378","updatedAt":"2026-08-31T22:55:58.1993378"},"dbAfterCreate":null,"dbAfterCallback":null,"db":{"subtotal":"50000.99","discount_amount":"0.00","shipping_fee":"-50001.00","total_amount":"-0.01","amount":"-0.01","payment_status":"PENDING","payment_record_status":"PENDING","items_subtotal":"50000.99","orderId":38},"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-negative-GHN-fault-injection; retest/assertion-results.json: case=CART-negative-GHN-fault-injection; retest/api-evidence.json: records 327
+
+**Bug:** None
+
+## MYSQL-DECIMAL--0.01 — BLOCKED
+
+**Description:** MYSQL DECIMAL  0.01
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":"-0.01","price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Exact storage or overflow rejection on actual MySQL"`
+
+**Actual:** `{"response":"MySQL credentials unavailable; H2 result must not substitute for MySQL.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=MYSQL-DECIMAL--0.01; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## MYSQL-DECIMAL-0 — BLOCKED
+
+**Description:** MYSQL DECIMAL 0
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":"0","price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Exact storage or overflow rejection on actual MySQL"`
+
+**Actual:** `{"response":"MySQL credentials unavailable; H2 result must not substitute for MySQL.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=MYSQL-DECIMAL-0; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## MYSQL-DECIMAL-0.01 — BLOCKED
+
+**Description:** MYSQL DECIMAL 0.01
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":"0.01","price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Exact storage or overflow rejection on actual MySQL"`
+
+**Actual:** `{"response":"MySQL credentials unavailable; H2 result must not substitute for MySQL.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=MYSQL-DECIMAL-0.01; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## MYSQL-DECIMAL-9999999999.98 — BLOCKED
+
+**Description:** MYSQL DECIMAL 9999999999.98
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":"9999999999.98","price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Exact storage or overflow rejection on actual MySQL"`
+
+**Actual:** `{"response":"MySQL credentials unavailable; H2 result must not substitute for MySQL.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=MYSQL-DECIMAL-9999999999.98; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## MYSQL-DECIMAL-9999999999.99 — BLOCKED
+
+**Description:** MYSQL DECIMAL 9999999999.99
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":"9999999999.99","price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Exact storage or overflow rejection on actual MySQL"`
+
+**Actual:** `{"response":"MySQL credentials unavailable; H2 result must not substitute for MySQL.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=MYSQL-DECIMAL-9999999999.99; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## MYSQL-DECIMAL-10000000000.00 — BLOCKED
+
+**Description:** MYSQL DECIMAL 10000000000.00
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":"10000000000.00","price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Exact storage or overflow rejection on actual MySQL"`
+
+**Actual:** `{"response":"MySQL credentials unavailable; H2 result must not substitute for MySQL.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=MYSQL-DECIMAL-10000000000.00; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## BUY-upper-9999999999.98 — BLOCKED
+
+**Description:** BUY upper 9999999999.98
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Assess storage boundary without unrealistic sales data"`
+
+**Actual:** `{"response":"No realistic catalog/stock fixture produces this total. No huge order fabricated. See separate storage probe statuses; H2 does not establish MySQL behavior.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-upper-9999999999.98; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## BUY-upper-9999999999.99 — BLOCKED
+
+**Description:** BUY upper 9999999999.99
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Assess storage boundary without unrealistic sales data"`
+
+**Actual:** `{"response":"No realistic catalog/stock fixture produces this total. No huge order fabricated. See separate storage probe statuses; H2 does not establish MySQL behavior.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-upper-9999999999.99; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## BUY-upper-10000000000.00 — BLOCKED
+
+**Description:** BUY upper 10000000000.00
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Assess storage boundary without unrealistic sales data"`
+
+**Actual:** `{"response":"No realistic catalog/stock fixture produces this total. No huge order fabricated. See separate storage probe statuses; H2 does not establish MySQL behavior.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=BUY-upper-10000000000.00; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## CART-upper-9999999999.98 — BLOCKED
+
+**Description:** CART upper 9999999999.98
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Assess storage boundary without unrealistic sales data"`
+
+**Actual:** `{"response":"No realistic catalog/stock fixture produces this total. No huge order fabricated. See separate storage probe statuses; H2 does not establish MySQL behavior.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-upper-9999999999.98; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## CART-upper-9999999999.99 — BLOCKED
+
+**Description:** CART upper 9999999999.99
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Assess storage boundary without unrealistic sales data"`
+
+**Actual:** `{"response":"No realistic catalog/stock fixture produces this total. No huge order fabricated. See separate storage probe statuses; H2 does not establish MySQL behavior.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-upper-9999999999.99; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## CART-upper-10000000000.00 — BLOCKED
+
+**Description:** CART upper 10000000000.00
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Assess storage boundary without unrealistic sales data"`
+
+**Actual:** `{"response":"No realistic catalog/stock fixture produces this total. No huge order fabricated. See separate storage probe statuses; H2 does not establish MySQL behavior.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=CART-upper-10000000000.00; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## LIVE-GHN — BLOCKED
+
+**Description:** LIVE GHN
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Real GHN quote and carrier geography"`
+
+**Actual:** `{"response":"Not contacted; deterministic GHN stub is not evidence of live carrier behavior.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=LIVE-GHN; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None
+
+## LIVE-VNPAY — BLOCKED
+
+**Description:** LIVE VNPAY
+
+**Pre-condition:** Cần fixture catalog/stock hợp lý cho biên API; quyền truy cập MySQL đối với storage probe; cấu hình/môi trường dịch vụ thật đối với LIVE case. Điều kiện tương ứng chưa đáp ứng.
+
+**Steps:**
+1. Xác nhận điều kiện môi trường tương ứng.
+2. Khi được mở chặn: gọi API hoặc MySQL probe với giá trị trong ID/input; đọc lại Order/Payment hoặc giá trị lưu DB và so với expected. Hiện chưa thực thi.
+
+**Test data:** `{"input":null,"price":null,"quantity":null,"promotion":[],"before":null,"layerNote":null,"httpRecords":[]}`
+
+**Expected:** `"Gateway accepts amount and delivers callbacks"`
+
+**Actual:** `{"response":"Only local create-url and correctly signed simulated IPN/Return executed; no real payment.","dbAfterCreate":null,"dbAfterCallback":null,"db":null,"failedChecks":[]}`
+
+**Evidence:** retest/test-results.json: id=LIVE-VNPAY; retest/test-environment.json; ../order-total-amount-bva/mysql-access-blocked.log
+
+**Bug:** None

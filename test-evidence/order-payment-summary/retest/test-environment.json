@@ -1,0 +1,8 @@
+{
+  "isolation" : "ephemeral in-memory DB; existing MySQL untouched",
+  "schema" : "qlpt293_bva_e07ebda11aff",
+  "database" : "H2 MySQL mode; JPA generated schema, NOT MySQL",
+  "externalServices" : "GHN and token blacklist mocked; local signed VNPay/SePay callbacks",
+  "startedAt" : "2026-08-31T15:55:32.686521900Z",
+  "limitation" : "MySQL login rejected project-config credentials; H2 cannot prove production MySQL behavior"
+}

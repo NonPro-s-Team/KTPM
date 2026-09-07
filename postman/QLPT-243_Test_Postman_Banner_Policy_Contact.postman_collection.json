@@ -1,0 +1,1288 @@
+{
+  "info": {
+    "_postman_id": "10ff9e22-1980-4705-af51-7b9c4c456b07",
+    "name": "QLPT-243_Test_Postman_Banner_Policy_Contact",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57046431",
+    "_collection_link": "https://go.postman.co/collection/57046431-10ff9e22-1980-4705-af51-7b9c4c456b07?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "06 - Banner Copy",
+      "item": [
+        {
+          "name": "01. GET - Banner Active",
+          "item": [
+            {
+              "name": "TC-01 - Get active banners",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response là mảng\", function () {",
+                      "    pm.expect(pm.response.json()).to.be.an(\"array\");",
+                      "});",
+                      "",
+                      "pm.test(\"Tất cả banner trả về đều isActive = true\", function () {",
+                      "    const banners = pm.response.json();",
+                      "    banners.forEach(b => pm.expect(b.isActive).to.eql(true));",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{customer_access_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/banners",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "banners"
+                  ]
+                },
+                "description": "Lấy danh sách banner đang active"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-02 - Inactive banner not returned",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response là mảng\", function () {",
+                      "    pm.expect(pm.response.json()).to.be.an(\"array\");",
+                      "});",
+                      "",
+                      "pm.test(\"Tất cả banner trả về đều isActive = true\", function () {",
+                      "    const banners = pm.response.json();",
+                      "    banners.forEach(b => pm.expect(b.isActive).to.eql(true));",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{customer_access_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/banners",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "banners"
+                  ]
+                },
+                "description": "Banner có isActive=false KHÔNG xuất hiện trong danh sách trả về"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-03 - No active banner",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Trả về mảng, có thể rỗng nếu không có banner active\", function () {",
+                      "    pm.expect(pm.response.json()).to.be.an(\"array\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/banners",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "banners"
+                  ]
+                },
+                "description": "Không có banner nào active"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-04 - Sort order check",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Banner được sắp xếp đúng theo sortOrder tăng dần\", function () {",
+                      "    const banners = pm.response.json();",
+                      "    const orders = banners.map(b => b.sortOrder);",
+                      "    const sorted = [...orders].sort((a, b) => a - b);",
+                      "    pm.expect(orders).to.eql(sorted);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/banners",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "banners"
+                  ]
+                },
+                "description": "Kiểm tra thứ tự hiển thị đúng theo sortOrder"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-05 - No auth required",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response là mảng\", function () {",
+                      "    pm.expect(pm.response.json()).to.be.an(\"array\");",
+                      "});",
+                      "",
+                      "pm.test(\"Tất cả banner trả về đều isActive = true\", function () {",
+                      "    const banners = pm.response.json();",
+                      "    banners.forEach(b => pm.expect(b.isActive).to.eql(true));",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/banners",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "banners"
+                  ]
+                },
+                "description": "Endpoint public, không cần đăng nhập"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-06 - Expired banner (cần xác nhận BA)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// ⚠ Entity Banner không có field ngày hết hạn (startDate/endDate).",
+                      "// Case này cần xác nhận với BA trước khi test — xem cột Ghi chú trong file Excel.",
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/banners",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "banners"
+                  ]
+                },
+                "description": "Banner đã hết hạn hiển thị (theo thời gian) có còn được trả về không"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07 - Contact Copy",
+      "item": [
+        {
+          "name": "01. POST - Create Contact",
+          "item": [
+            {
+              "name": "TC-07 - Create contact (valid)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Contact được tạo, có id và createdAt\", function () {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body).to.have.property(\"id\");",
+                      "    pm.expect(body).to.have.property(\"createdAt\");",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Nguyen Van A\",\n    \"email\": \"{{contact_valid_email}}\",\n    \"phone\": \"0901234567\",\n    \"subject\": \"Hỏi về đơn hàng\",\n    \"message\": \"Tôi muốn hỏi về tình trạng đơn hàng của mình.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                },
+                "description": "Gửi liên hệ với đầy đủ thông tin hợp lệ"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-08 - Missing fullName",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Error body có đúng format {status, message, timestamp}\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err).to.have.property(\"status\");",
+                      "    pm.expect(err).to.have.property(\"message\");",
+                      "    pm.expect(err).to.have.property(\"timestamp\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"{{contact_valid_email}}\",\n    \"phone\": \"0901234567\",\n    \"subject\": \"Hỏi về đơn hàng\",\n    \"message\": \"Nội dung liên hệ.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                },
+                "description": "Thiếu họ tên (fullName)"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-09 - Missing email",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Error body có đúng format {status, message, timestamp}\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err).to.have.property(\"status\");",
+                      "    pm.expect(err).to.have.property(\"message\");",
+                      "    pm.expect(err).to.have.property(\"timestamp\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Nguyen Van A\",\n    \"phone\": \"0901234567\",\n    \"subject\": \"Hỏi về đơn hàng\",\n    \"message\": \"Nội dung liên hệ.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                },
+                "description": "Thiếu email"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-10 - Missing message",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Error body có đúng format {status, message, timestamp}\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err).to.have.property(\"status\");",
+                      "    pm.expect(err).to.have.property(\"message\");",
+                      "    pm.expect(err).to.have.property(\"timestamp\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Nguyen Van A\",\n    \"email\": \"{{contact_valid_email}}\",\n    \"phone\": \"0901234567\",\n    \"subject\": \"Hỏi về đơn hàng\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                },
+                "description": "Thiếu chủ đề (subject)"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-11 - Missing subject",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Error body có đúng format {status, message, timestamp}\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err).to.have.property(\"status\");",
+                      "    pm.expect(err).to.have.property(\"message\");",
+                      "    pm.expect(err).to.have.property(\"timestamp\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Nguyen Van A\",\n    \"email\": \"{{contact_valid_email}}\",\n    \"phone\": \"0901234567\",\n    \"message\": \"Nội dung liên hệ.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                },
+                "description": "Thiếu chủ đề (subject)"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-12 - Invalid email format",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Error body có đúng format {status, message, timestamp}\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err).to.have.property(\"status\");",
+                      "    pm.expect(err).to.have.property(\"message\");",
+                      "    pm.expect(err).to.have.property(\"timestamp\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Nguyen Van A\",\n    \"email\": \"{{contact_invalid_email}}\",\n    \"phone\": \"0901234567\",\n    \"subject\": \"Hỏi về đơn hàng\",\n    \"message\": \"Nội dung liên hệ.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                },
+                "description": "Thiếu emailGửi liên hệ với email sai định dạng"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-13 - Missing phone (optional)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Contact được tạo, có id và createdAt\", function () {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body).to.have.property(\"id\");",
+                      "    pm.expect(body).to.have.property(\"createdAt\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Nguyen Van A\",\n    \"email\": \"{{contact_valid_email}}\",\n    \"subject\": \"Hỏi về đơn hàng\",\n    \"message\": \"Nội dung liên hệ.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                },
+                "description": "Không truyền phone (field không bắt buộc)"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-14 - fullName too long (>100 chars)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Error body có đúng format {status, message, timestamp}\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err).to.have.property(\"status\");",
+                      "    pm.expect(err).to.have.property(\"message\");",
+                      "    pm.expect(err).to.have.property(\"timestamp\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"{{twitter_bearer_token}}\",\n    \"email\": \"{{contact_valid_email}}\",\n    \"phone\": \"0901234567\",\n    \"subject\": \"Hỏi về đơn hàng\",\n    \"message\": \"Nội dung liên hệ.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                },
+                "description": "Họ tên vượt quá độ dài cho phép"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-15 - subject too long (>200 chars)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Error body có đúng format {status, message, timestamp}\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err).to.have.property(\"status\");",
+                      "    pm.expect(err).to.have.property(\"message\");",
+                      "    pm.expect(err).to.have.property(\"timestamp\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Nguyen Van A\",\n    \"email\": \"{{contact_valid_email}}\",\n    \"phone\": \"0901234567\",\n    \"subject\": \"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\",\n    \"message\": \"Nội dung liên hệ.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                },
+                "description": "Chủ đề vượt quá độ dài cho phép"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-16 - phone too long (>15 chars)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Error body có đúng format {status, message, timestamp}\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err).to.have.property(\"status\");",
+                      "    pm.expect(err).to.have.property(\"message\");",
+                      "    pm.expect(err).to.have.property(\"timestamp\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Nguyen Van A\",\n    \"email\": \"{{contact_valid_email}}\",\n    \"phone\": \"0000000000000000\",\n    \"subject\": \"Hỏi về đơn hàng\",\n    \"message\": \"Nội dung liên hệ.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                },
+                "description": "Số điện thoại vượt quá độ dài cho phép"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-17 - All fields blank",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Error body có đúng format {status, message, timestamp}\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err).to.have.property(\"status\");",
+                      "    pm.expect(err).to.have.property(\"message\");",
+                      "    pm.expect(err).to.have.property(\"timestamp\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"\",\n    \"email\": \"\",\n    \"phone\": \"\",\n    \"subject\": \"\",\n    \"message\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "TC-18 - No auth required",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Contact được tạo, có id và createdAt\", function () {",
+                      "    const body = pm.response.json();",
+                      "    pm.expect(body).to.have.property(\"id\");",
+                      "    pm.expect(body).to.have.property(\"createdAt\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Nguyen Van A\",\n    \"email\": \"{{contact_valid_email}}\",\n    \"phone\": \"0901234567\",\n    \"subject\": \"Hỏi về đơn hàng\",\n    \"message\": \"Nội dung liên hệ.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/contacts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08 - Policy Copy",
+      "item": [
+        {
+          "name": "01. GET - Policy List",
+          "item": [
+            {
+              "name": "TC-19 - Get all active policies",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Tất cả policy trả về đều isActive = true\", function () {",
+                      "    const policies = pm.response.json();",
+                      "    policies.forEach(p => pm.expect(p.isActive).to.eql(true));",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/policies",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "policies"
+                  ]
+                },
+                "description": "Lấy danh sách toàn bộ policy đang active"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-20 - Inactive policy not returned",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Tất cả policy trả về đều isActive = true\", function () {",
+                      "    const policies = pm.response.json();",
+                      "    policies.forEach(p => pm.expect(p.isActive).to.eql(true));",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/policies",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "policies"
+                  ]
+                },
+                "description": "Policy có isActive=false KHÔNG xuất hiện trong danh sách"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "02. GET - Policy By Type",
+          "item": [
+            {
+              "name": "TC-21 - Get by type SHIPPING",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Trả về đúng type đã yêu cầu\", function () {",
+                      "    const body = pm.response.json();",
+                      "    const requestedType = pm.request.url.path[pm.request.url.path.length - 1].toUpperCase();",
+                      "    pm.expect(body.type).to.eql(requestedType);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/policies/SHIPPING",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "policies",
+                    "SHIPPING"
+                  ]
+                },
+                "description": "Lấy policy loại vận chuyển"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-22 - Get by type RETURN",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Trả về đúng type đã yêu cầu\", function () {",
+                      "    const body = pm.response.json();",
+                      "    const requestedType = pm.request.url.path[pm.request.url.path.length - 1].toUpperCase();",
+                      "    pm.expect(body.type).to.eql(requestedType);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/policies/RETURN",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "policies",
+                    "RETURN"
+                  ]
+                },
+                "description": "Lấy policy loại đổi trả"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-23 - Get by type WARRANTY",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Trả về đúng type đã yêu cầu\", function () {",
+                      "    const body = pm.response.json();",
+                      "    const requestedType = pm.request.url.path[pm.request.url.path.length - 1].toUpperCase();",
+                      "    pm.expect(body.type).to.eql(requestedType);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/policies/WARRANTY",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "policies",
+                    "WARRANTY"
+                  ]
+                },
+                "description": "Lấy policy loại bảo hành"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-24 - Get by type TERMS",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Trả về đúng type đã yêu cầu\", function () {",
+                      "    const body = pm.response.json();",
+                      "    const requestedType = pm.request.url.path[pm.request.url.path.length - 1].toUpperCase();",
+                      "    pm.expect(body.type).to.eql(requestedType);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/policies/TERMS",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "policies",
+                    "TERMS"
+                  ]
+                },
+                "description": "Lấy policy loại điều khoản"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-25 - Invalid type value",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Message liệt kê đủ 4 loại hợp lệ\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err.message).to.include(\"SHIPPING\");",
+                      "    pm.expect(err.message).to.include(\"RETURN\");",
+                      "    pm.expect(err.message).to.include(\"WARRANTY\");",
+                      "    pm.expect(err.message).to.include(\"TERMS\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/policies/ABC",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "policies",
+                    "ABC"
+                  ]
+                },
+                "description": "Truyền type không tồn tại trong enum"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-26 - Type exists but inactive",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code là 404\", function () {",
+                      "    pm.response.to.have.status(404);",
+                      "});",
+                      "",
+                      "pm.test(\"Error body có message rõ ràng\", function () {",
+                      "    const err = pm.response.json();",
+                      "    pm.expect(err).to.have.property(\"message\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/policies/SHIPPING",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "policies",
+                    "SHIPPING"
+                  ]
+                },
+                "description": "Policy loại đó tồn tại trong DB nhưng đang bị tắt (isActive=false)"
+              },
+              "response": []
+            },
+            {
+              "name": "TC-27 - Empty type param",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code kiểm tra theo case (400/404 tuỳ Spring xử lý)\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([400, 404]);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/policies",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "policies"
+                  ]
+                },
+                "description": "Truyền type rỗng"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

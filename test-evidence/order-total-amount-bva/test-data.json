@@ -1,0 +1,505 @@
+[
+  {
+    "case": "BUY-baseline-fallback",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "variantId": 2,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-baseline-fallback"
+    },
+    "expected": {
+      "total": "80000",
+      "subtotal": "50000",
+      "discount": "0",
+      "shipping": "30000"
+    }
+  },
+  {
+    "case": "BUY-baseline-ghn-stub",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "variantId": 3,
+      "quantity": 1,
+      "addressId": 2,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-baseline-ghn-stub"
+    },
+    "expected": {
+      "total": "69000",
+      "subtotal": "50000",
+      "discount": "0",
+      "shipping": "19000"
+    }
+  },
+  {
+    "case": "BUY-free-shipping",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "variantId": 4,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-free-shipping",
+      "promoCode": "BVA_d80504c6"
+    },
+    "expected": {
+      "total": "49999.99",
+      "subtotal": "50000",
+      "discount": "0.01",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "BUY-lower-plus-cent",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "variantId": 5,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-lower-plus-cent",
+      "promoCode": "BVA_bb7eb7ea"
+    },
+    "expected": {
+      "total": "0.01",
+      "subtotal": "50000",
+      "discount": "49999.99",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "BUY-lower-zero",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "variantId": 6,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-lower-zero",
+      "promoCode": "BVA_3b64f248"
+    },
+    "expected": {
+      "total": "0",
+      "subtotal": "50000",
+      "discount": "50000",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "BUY-lower-minus-candidate-clamped",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "variantId": 7,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-lower-minus-candidate-clamped",
+      "promoCode": "BVA_13883794"
+    },
+    "expected": {
+      "total": "0",
+      "subtotal": "50000",
+      "discount": "50000",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "BUY-discount-below-subtotal-with-fee",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "variantId": 8,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-discount-below-subtotal-with-fee",
+      "promoCode": "BVA_9ce68395"
+    },
+    "expected": {
+      "total": "30000.01",
+      "subtotal": "50000",
+      "discount": "49999.99",
+      "shipping": "30000"
+    }
+  },
+  {
+    "case": "BUY-discount-equal-subtotal-with-fee",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "variantId": 9,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-discount-equal-subtotal-with-fee",
+      "promoCode": "BVA_ddbdca96"
+    },
+    "expected": {
+      "total": "30000",
+      "subtotal": "50000",
+      "discount": "50000",
+      "shipping": "30000"
+    }
+  },
+  {
+    "case": "BUY-discount-above-subtotal-with-fee",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "variantId": 10,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-discount-above-subtotal-with-fee",
+      "promoCode": "BVA_04175cab"
+    },
+    "expected": {
+      "total": "30000",
+      "subtotal": "50000",
+      "discount": "50000",
+      "shipping": "30000"
+    }
+  },
+  {
+    "case": "BUY-percent-floor-below",
+    "price": "50009.99",
+    "quantity": 1,
+    "request": {
+      "variantId": 11,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-percent-floor-below",
+      "promoCode": "BVA_468b76bb"
+    },
+    "expected": {
+      "total": "45009.99",
+      "subtotal": "50009.99",
+      "discount": "5000",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "BUY-percent-floor-at",
+    "price": "50010.00",
+    "quantity": 1,
+    "request": {
+      "variantId": 12,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-percent-floor-at",
+      "promoCode": "BVA_36134915"
+    },
+    "expected": {
+      "total": "45009",
+      "subtotal": "50010.00",
+      "discount": "5001",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "BUY-percent-floor-above",
+    "price": "50010.01",
+    "quantity": 1,
+    "request": {
+      "variantId": 13,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-percent-floor-above",
+      "promoCode": "BVA_46e15bf4"
+    },
+    "expected": {
+      "total": "45009.01",
+      "subtotal": "50010.01",
+      "discount": "5001",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "BUY-percent-100",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "variantId": 14,
+      "quantity": 1,
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 BUY-percent-100",
+      "promoCode": "BVA_51c564a4"
+    },
+    "expected": {
+      "total": "0",
+      "subtotal": "50000",
+      "discount": "50000",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "CART-baseline-fallback",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        1
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-baseline-fallback"
+    },
+    "expected": {
+      "total": "80000",
+      "subtotal": "50000",
+      "discount": "0",
+      "shipping": "30000"
+    }
+  },
+  {
+    "case": "CART-baseline-ghn-stub",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        2
+      ],
+      "addressId": 2,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-baseline-ghn-stub"
+    },
+    "expected": {
+      "total": "69000",
+      "subtotal": "50000",
+      "discount": "0",
+      "shipping": "19000"
+    }
+  },
+  {
+    "case": "CART-free-shipping",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        3
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-free-shipping",
+      "promoCode": "BVA_0c2e4fc9"
+    },
+    "expected": {
+      "total": "49999.99",
+      "subtotal": "50000",
+      "discount": "0.01",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "CART-lower-plus-cent",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        4
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-lower-plus-cent",
+      "promoCode": "BVA_ec3a7f8e"
+    },
+    "expected": {
+      "total": "0.01",
+      "subtotal": "50000",
+      "discount": "49999.99",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "CART-lower-zero",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        5
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-lower-zero",
+      "promoCode": "BVA_0a0c13d4"
+    },
+    "expected": {
+      "total": "0",
+      "subtotal": "50000",
+      "discount": "50000",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "CART-lower-minus-candidate-clamped",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        6
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-lower-minus-candidate-clamped",
+      "promoCode": "BVA_19e22fcf"
+    },
+    "expected": {
+      "total": "0",
+      "subtotal": "50000",
+      "discount": "50000",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "CART-discount-below-subtotal-with-fee",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        7
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-discount-below-subtotal-with-fee",
+      "promoCode": "BVA_27db007f"
+    },
+    "expected": {
+      "total": "30000.01",
+      "subtotal": "50000",
+      "discount": "49999.99",
+      "shipping": "30000"
+    }
+  },
+  {
+    "case": "CART-discount-equal-subtotal-with-fee",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        8
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-discount-equal-subtotal-with-fee",
+      "promoCode": "BVA_dc2277e9"
+    },
+    "expected": {
+      "total": "30000",
+      "subtotal": "50000",
+      "discount": "50000",
+      "shipping": "30000"
+    }
+  },
+  {
+    "case": "CART-discount-above-subtotal-with-fee",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        9
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-discount-above-subtotal-with-fee",
+      "promoCode": "BVA_906cf0d6"
+    },
+    "expected": {
+      "total": "30000",
+      "subtotal": "50000",
+      "discount": "50000",
+      "shipping": "30000"
+    }
+  },
+  {
+    "case": "CART-percent-floor-below",
+    "price": "50009.99",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        10
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-percent-floor-below",
+      "promoCode": "BVA_818042b2"
+    },
+    "expected": {
+      "total": "45009.99",
+      "subtotal": "50009.99",
+      "discount": "5000",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "CART-percent-floor-at",
+    "price": "50010.00",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        11
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-percent-floor-at",
+      "promoCode": "BVA_a33532cd"
+    },
+    "expected": {
+      "total": "45009",
+      "subtotal": "50010.00",
+      "discount": "5001",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "CART-percent-floor-above",
+    "price": "50010.01",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        12
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-percent-floor-above",
+      "promoCode": "BVA_36b8164e"
+    },
+    "expected": {
+      "total": "45009.01",
+      "subtotal": "50010.01",
+      "discount": "5001",
+      "shipping": "0"
+    }
+  },
+  {
+    "case": "CART-percent-100",
+    "price": "50000",
+    "quantity": 1,
+    "request": {
+      "cartItemIds": [
+        13
+      ],
+      "addressId": 1,
+      "paymentMethod": "VNPAY",
+      "note": "QLPT-293 CART-percent-100",
+      "promoCode": "BVA_fad98b7b"
+    },
+    "expected": {
+      "total": "0",
+      "subtotal": "50000",
+      "discount": "50000",
+      "shipping": "0"
+    }
+  }
+]

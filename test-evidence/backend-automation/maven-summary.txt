@@ -1,0 +1,18 @@
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.39 s -- in com.greenjuicehub.backend.BackendApplicationTests
+[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.158 s -- in com.greenjuicehub.backend.controller.AdminControllersUnitTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.093 s -- in com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.964 s -- in com.greenjuicehub.backend.controller.CartControllerMockMvcIntegrationTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.789 s -- in com.greenjuicehub.backend.controller.OrderControllerMockMvcIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.763 s -- in com.greenjuicehub.backend.controller.PaymentControllerMockMvcIntegrationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.569 s -- in com.greenjuicehub.backend.controller.ProductControllerMockMvcIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.559 s -- in com.greenjuicehub.backend.controller.PromotionControllerMockMvcIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.568 s -- in com.greenjuicehub.backend.controller.ShippingControllerMockMvcIntegrationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.475 s -- in com.greenjuicehub.backend.controller.WebhookControllerMockMvcIntegrationTest
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.715 s -- in com.greenjuicehub.backend.service.order.OrderServiceImplTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.038 s -- in com.greenjuicehub.backend.service.payment.VnpayServiceImplTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 s -- in com.greenjuicehub.backend.service.sepay.SePayWebhookServiceImplTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.217 s -- in com.greenjuicehub.backend.service.shipping.GhnServiceTest
+[INFO] Tests run: 103, Failures: 0, Errors: 0, Skipped: 3
+[INFO] BUILD SUCCESS
+[INFO] Total time:  03:08 min
+[INFO] Finished at: 2026-08-30T23:25:22+07:00

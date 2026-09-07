@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Green Juice Hub browser tests" time="6.398" tests="4" failures="0">
+  <testsuite name="Root Suite" timestamp="2026-08-30T17:05:47" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Application smoke" timestamp="2026-08-30T17:05:47" tests="4" file="E:\KCPM\KTPM\e2e\tests\smoke_test.js" time="6.397" failures="0">
+    <testcase name="Application smoke: Login page renders its form @smoke" time="1.132" classname="Login page renders its form @smoke">
+    </testcase>
+    <testcase name="Application smoke: Empty login input displays validation @smoke" time="1.805" classname="Empty login input displays validation @smoke">
+    </testcase>
+    <testcase name="Application smoke: Anonymous customer cannot open checkout @smoke" time="1.002" classname="Anonymous customer cannot open checkout @smoke">
+    </testcase>
+    <testcase name="Application smoke: Unknown route displays the application 404 @smoke" time="0.990" classname="Unknown route displays the application 404 @smoke">
+    </testcase>
+  </testsuite>
+</testsuites>
