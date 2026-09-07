@@ -1,52 +1,55 @@
-# Frontend
-frontend/node_modules/
-frontend/.env
-frontend/.env.local
-frontend/.env.production
-frontend/.env.railway
-frontend/.env.development
-frontend/dist/
-frontend/.vite/
+    # Frontend
+    frontend/node_modules/
+    frontend/.env
+    frontend/.env.local
+    frontend/.env.production
+    frontend/.env.railway
+    frontend/.env.development
+    frontend/dist/
+    frontend/.vite/
 
-# CodeceptJS / Playwright
-e2e/node_modules/
-e2e/output/*
-!e2e/output/.gitkeep
+    # Backend
+    backend/target/
+    backend/.env
+    backend/src/main/resources/application-local.yml
+    backend/src/main/resources/application-local.properties
+    backend/*.jar
+    backend/.mvn/
 
-# Backend
-backend/target/
-.m2/
-backend/.env
-backend/src/main/resources/application-local.yml
-backend/src/main/resources/application-local.properties
-backend/*.jar
-backend/.mvn/
+    # Test
+    e2e-tests/node_modules/
+    e2e-tests/node_modules/bin/
+    e2e-tests/.env
+    e2e-tests/.env.local
+    e2e-tests/.env.production
+    e2e-tests/.env.railway
+    e2e-tests/.env.development
+    e2e-tests/dist/
+    e2e-tests/.vite/
+    e2e-tests/.cypress/
+    e2e-tests/runcode.txt
+    # Test
+e2e-tests/.env
+e2e-tests/.env.*
+node_modules/
+    node_modules/
 
-# IDE
-.idea/
-.vscode/
-*.iml
-*.class
+    # IDE
+    .idea/
+    .vscode/
+    *.iml
+    *.class
 
-# OS
-.DS_Store
-Thumbs.db
+    # OS
+    .DS_Store
+    Thumbs.db
 
-# Logs
-*.log
-logs/
+    # Logs
+    *.log
+    logs/
 
-# Local evidence upload archives
-test-evidence/*.zip
-
-# Database backups and local data dumps
-*.sql.bak
-greehub-docker-transfer/*.sql
-
-# Local Docker transfer credentials and large binary archives
-greehub-docker-transfer/.env
-greehub-docker-transfer/*.tar
-greehub-docker-transfer/*.tar.gz
+    # Database
+    *.sql.bak
 
 # Postman local reports may contain short-lived access/refresh tokens
 postman/results/*

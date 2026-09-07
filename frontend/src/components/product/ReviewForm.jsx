@@ -26,7 +26,10 @@ export default function ReviewForm({ productId, orderId, onSuccess }) {
   };
 
   return (
-    <div className="p-5 rounded-[var(--radius-lg)] border border-subtle bg-surface flex flex-col gap-4">
+    <div
+      className="p-5 rounded-[var(--radius-lg)] border border-subtle bg-surface flex flex-col gap-4"
+      data-testid="review-form"
+    >
       <h4 className="text-sm font-semibold text-primary">Viết đánh giá của bạn</h4>
 
       {/* Star input */}
@@ -39,6 +42,7 @@ export default function ReviewForm({ productId, orderId, onSuccess }) {
       <div>
         <p className="text-xs text-secondary mb-2">Nhận xét (tuỳ chọn)</p>
         <textarea
+          data-testid="review-comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."
@@ -51,13 +55,17 @@ export default function ReviewForm({ productId, orderId, onSuccess }) {
 
       {/* Error */}
       {error && (
-        <p className="text-xs text-red-600 bg-red-50 px-3 py-2 rounded-[var(--radius-md)]">
+        <p
+          className="text-xs text-red-600 bg-red-50 px-3 py-2 rounded-[var(--radius-md)]"
+          data-testid="review-error-message"
+        >
           {error}
         </p>
       )}
 
       {/* Submit */}
       <button
+        data-testid="review-submit-btn"
         onClick={handleSubmit}
         disabled={submitting}
         className="self-start px-5 py-2.5 rounded-[var(--radius-pill)] text-sm font-semibold
