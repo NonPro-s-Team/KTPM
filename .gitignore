@@ -19,7 +19,6 @@
     # Test
     e2e-tests/node_modules/
     e2e-tests/node_modules/bin/
-
     e2e-tests/.env
     e2e-tests/.env.local
     e2e-tests/.env.production
@@ -29,6 +28,8 @@
     e2e-tests/.vite/
     e2e-tests/.cypress/
     e2e-tests/runcode.txt
+    
+    node_modules/
     
     # IDE
     .idea/
