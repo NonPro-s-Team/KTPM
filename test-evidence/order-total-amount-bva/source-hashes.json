@@ -1,0 +1,926 @@
+[
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\BackendApplication.java",
+    "sha256": "89D3306A67515B89564EF9FC228C81BDDCA7F31D76BD9192109E8942ABC1509D"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\config\\AppConfig.java",
+    "sha256": "303D0BD3BBF000215FAE0C6D3D41439A2D32C093FD78DFFABDC4FDC0B440E618"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\config\\CorsConfig.java",
+    "sha256": "ECB8B8039B7D4C03EEFE5532571E42D52112AF096D0BB2F87753A785E4804E38"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\config\\RedisConfig.java",
+    "sha256": "C044739EEFD193C697FDF1E47929F641CD4E2F0594A806E1ABB0EAF358AF9A8A"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\config\\SecurityConfig.java",
+    "sha256": "ED4E15AF88B911F879DC96BF5B5708359D46F9793159CCDEB398837586455746"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\config\\properties\\GeminiProperties.java",
+    "sha256": "DB646A87A511EE25D297EE322FA8C26FC1568DAD5AA42045F0A436B5C52E1761"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\config\\properties\\GhnProperties.java",
+    "sha256": "06E3662FAE45CF5A39A25989539F83A7C0D456F5330067A71AC36AEABF67962E"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\config\\properties\\JwtProperties.java",
+    "sha256": "66827771B1F6C0843E10BDF6E1B987FAED112CFA508839DF3A4DB4B004927C73"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\config\\properties\\OtpProperties.java",
+    "sha256": "663A5919D80F41EFCBAA24D79BE5F8EAF5E168C46FAEF635FC0D7FB7170134FA"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\config\\properties\\SePayProperties.java",
+    "sha256": "BACDC9E61D155DDBDE0BD0A75B44D85B1119FBA4C3D87ABEB10E7C1E9B19A3B3"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\config\\properties\\VnpayProperties.java",
+    "sha256": "D22183770B9D92E3964FF3F5E1392BDA73460AEB649787E5C12F16858F12337C"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AddressController.java",
+    "sha256": "9565B6356D5DEDDD34E0B595688D1E5C9BDB89B8DA3C06B7128251E7F2653F6E"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AdminBannerController.java",
+    "sha256": "579C2DDC3927A21AAC548950D23B06F4A171FB509899E7957EE88F9400AD0891"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AdminContactController.java",
+    "sha256": "8C98BF3253A65227C2CAF0156E6A13CF677B0084A07E63C28B978515A68559CE"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AdminOrderController.java",
+    "sha256": "DD6FBC81DA6FEBBD4146E3C252D13E850336DD2FB9FD7012423F5E431047C49B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AdminPolicyController.java",
+    "sha256": "97EFDBF6D2917EB3A52E1F61DE0A19A179D090462EF5D83387B0F5B15344A0BB"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AdminProductController.java",
+    "sha256": "25F08D09845459A2D2CDBB5CA32CD42EE3863CB39A225237AD1FEE0A5C404AA7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AdminPromotionController.java",
+    "sha256": "E449D5896275CFEC6163BDCE29BFBA4173C2B82431A96F47EEA9154099A80D59"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AdminReviewController.java",
+    "sha256": "7B9D8A122CAF68DCC67C0A0E204B1E575BDE9D7A2435B085E8AF31F2CDEE082E"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AdminTagController.java",
+    "sha256": "49A4B4C0658385D4155F34752C484B095EB2F707FA65BF6EF275D1847EC1A225"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AdminUserController.java",
+    "sha256": "D8B631034927E5B2D8AAC05EDAD040A20BDBC1DB5C01B096ACBACE490C3F994D"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\AuthController.java",
+    "sha256": "26673F7B7B2CC7733D8C92A6C445DC650A114C3D50B15D3DC90BAFE94A16D98B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\BannerController.java",
+    "sha256": "3E0C26F389519117BC2A46DA17C9A755ECE50923F2E0BDD09C81E501FDD920EF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\CartController.java",
+    "sha256": "23EBCD7AF24ED0D11F683CA5050A919933A2818DBB7F18648A0B71340E41BA41"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\ContactController.java",
+    "sha256": "BD5E0ECE50FF8B0D68E127F5F8CA119B4AE0E2D9A4F4056CA0873AFD7869890B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\DashboardController.java",
+    "sha256": "539734DE1094F2EFFFA8391F64EB88A3E868FBB94C82EAD72D97A866E6E4F7DA"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\OrderController.java",
+    "sha256": "0936822635D8E23389001A61B7BF1CEDA60BC5907175BB2FC2A306A45FAE2911"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\PaymentController.java",
+    "sha256": "0BFEEDDA85FDAE7AA7FA928F9473FE4B66BDB548D01FD0017D307B9C255330AB"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\PolicyController.java",
+    "sha256": "B7B33BE2434164999307B5FE45744061BE7C05627ACDC158A6EE72BC8FA4F5B9"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\ProductController.java",
+    "sha256": "15A6E329DCF30A4FA8515F42395D05816B5BEAC6F68C6294C582BCAFBB3819A7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\PromotionController.java",
+    "sha256": "688C790EC0A2DA9EABBE24AF62D343CE587A817682FBE09A86EE132E18080EB7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\RecommendationController.java",
+    "sha256": "C01974486B1A935EBC79D2C783FF4B23CC4ABB4D556EDC4F217ED6B84B1BF6E5"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\ReviewController.java",
+    "sha256": "0E2250C6671EDB8564A7A391E3001D602ECAB5E3615428765A6A6FB746CE7FEC"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\ShippingController.java",
+    "sha256": "598601D5A7E01EEBE6992FE0ADC6041556518256B40B812EE7647767391510A8"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\ShippingFeeController.java",
+    "sha256": "B5F2D60197184277F02E7B5011BB8E98E7B28515CEC4AF6362AF3E9966F1057B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\UserController.java",
+    "sha256": "B75917C81079E9164EF5016B7CA03D817BF9FC3FA0C9CE65D8F21F738F58BBDB"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\controller\\WebhookController.java",
+    "sha256": "7B5C9AB2DC4800CBA735556B32416AF8F2DE8718387E32F8DC7C8BD07A6FCD12"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\PageResponse.java",
+    "sha256": "7D53FA737B5DC3881F291FFCE70F9DF6F6FDF3235B8DF96B599B261D1FFA1845"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\address\\request\\CreateAddressRequest.java",
+    "sha256": "DD686D59D8FA561F93C589105F775F7D0A80B3BC6DFA983C0C7C4CA0BF391832"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\address\\request\\UpdateAddressRequest.java",
+    "sha256": "DCEDA7BA5EC9EF2DEB46AD8B645BC47C28B244254D10DD0F363F59746BC28DBF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\address\\response\\AddressResponse.java",
+    "sha256": "5E0A2621D56A54CC5810CAACB874A73662ABA92201F4604E64058AA36F12727F"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminOrder\\request\\AdminRefundRequest.java",
+    "sha256": "72E845460F7FFA33C047B25C733000EBBAEA3DEA2F45C3CCFFB02CCC6259D9E2"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminOrder\\request\\AdminUpdateOrderStatusRequest.java",
+    "sha256": "ACFE73C9964D13050B7CDDA6517659DBD39957839DD4A2BBD6FEC522703285C7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminOrder\\response\\TopProductResponse.java",
+    "sha256": "9075CB62A617BFCBFF130666B6BD8A0070D831BE0677D3B096B65E50AF839040"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminProduct\\request\\SaveCategoryRequest.java",
+    "sha256": "F21D8991145E621038A0B790FCC572D5D6978D0EC3E364637B472CBBFD4873AF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminProduct\\request\\SaveFlavorRequest.java",
+    "sha256": "8A232012031F32DF068F42A4CAAA069E53958F07ABED5ACBF42ACF962CA83D89"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminProduct\\request\\SaveProductRequest.java",
+    "sha256": "DA81B0A055E8D2FA60D48B1A16167DCB91C3D444E97B594260202005ECEC5D32"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminProduct\\request\\SaveSizeRequest.java",
+    "sha256": "1107F9259E6CC051E926895F62592F6817B7EAD40483EFF43FCB0199EFB210E3"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminProduct\\request\\SaveVariantRequest.java",
+    "sha256": "5E4543E3605FDE0DDB1D0668D815BE5429DCBBF646FC2758ACE6C44D5EFA2CAA"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminProduct\\response\\AdminProductDetailResponse.java",
+    "sha256": "0E2B28AC63E56914A1412391AE4D1D420163175A631B924AE981ACC76968DCFD"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminProduct\\response\\AdminProductImageResponse.java",
+    "sha256": "F94F2008830E3BD74805DBBBA5DF8432B9EE2100FEE7D077C19BF92710898963"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminProduct\\response\\AdminProductRowResponse.java",
+    "sha256": "28374633616F783984D79D5AACC1898E17C2479DDB51CC506909E223DB9E3915"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminProduct\\response\\AdminVariantResponse.java",
+    "sha256": "EFA0D4CC0F001AD0E8108325DAE3EF761F6170603EEC2084D75DA938947D7F87"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminPromotion\\request\\SavePromotionRequest.java",
+    "sha256": "E48428BC25CEA534B345D2BD551B9872CBB0763167D90171221CE642A023C65D"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminPromotion\\response\\AdminPromotionResponse.java",
+    "sha256": "BA870D8CBE46DD11328F1E5C77E1BD85CBD7E7A2B3EAC25565CDB6C829D2C672"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminPromotion\\response\\PromotionUsageResponse.java",
+    "sha256": "3850A68819DA81AE9E21DD20C628B3BCC1C4735F24A6E9696F20E7F542D512F0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminUser\\request\\CreatePersonalPromoRequest.java",
+    "sha256": "B243835EB4AFA440F6BEE6C6457AD4861AB63E8A3EFF6E2689D735A9ABC2AE6F"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminUser\\request\\UpdateUserRoleRequest.java",
+    "sha256": "E354C95E28554C1A309C7C06FAFEFEC6E0091BA40FEFD1FF5BEFD190A55D421B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\adminUser\\response\\AdminUserResponse.java",
+    "sha256": "16121ECFBC8DDDD42F719973511CFE33110CF26A18DDF1C2D7630BDC4C7AD95A"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\request\\ChangePasswordRequest.java",
+    "sha256": "24C0AA204EEF9730EF5A3BCE2B941A654C6F3B900CB3FC867C3B79A9D0FCE4CF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\request\\CheckAccountRequest.java",
+    "sha256": "DA8C9CF65D86624B02D7D56F5BF71B671A21EAEE26C98EFF22216F38F8599348"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\request\\GoogleLoginRequest.java",
+    "sha256": "3233CF8178AC95899BBBB9644B990AE152C576BEF3A1E0BAFFB50EFAC2D4CC19"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\request\\LoginPasswordRequest.java",
+    "sha256": "D3463E88A54A2A2E01E0CBBD6F574789CD8188A31121C16A7F5C13EB735D2B50"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\request\\ResetPasswordRequest.java",
+    "sha256": "42848A6FA27FAD0A3CEBCBD809A9A426CC59D6F923A374444FA4A7263066EE5E"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\request\\SendOtpRequest.java",
+    "sha256": "4EC08AF304614BF2EED2D074804BFD7BEC22AE8035956E48B3FB32E8722CD1D9"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\request\\SetPasswordRequest.java",
+    "sha256": "C5000EBB5B346A36A9834DE679650D5319B4B1AC535C1DFCF95E258B64FB781E"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\request\\VerifyOtpRequest.java",
+    "sha256": "920B2AA96DF58C362BA6531F3A9A472217391ED7CBEAE56B61A9849A9B1FA937"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\response\\AccountCheckResponse.java",
+    "sha256": "FBB9CEAA8BADF7091BC21D19CA157CF413853EB116930F509EB25D03F936B247"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\response\\AuthResponse.java",
+    "sha256": "5E742B9B6A3D086E2D3BE06F70B6D0AB2848D6455C4AEC01465D7452588A7DF1"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\auth\\response\\OtpResponse.java",
+    "sha256": "B002A15AB82359CC946B5C08373D1E5FB471FFBD280D62A03B271ED45BF6A8F0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\banner\\request\\SaveBannerRequest.java",
+    "sha256": "53F7CA568CB29ED431F8873251D22E60D78BF3127F65B56086ACEA4A44B3BF83"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\banner\\response\\BannerResponse.java",
+    "sha256": "6FCEE59FD4800F5BF64E5CDBF6C72804CC69B0398F6B116E0D31DAA2936F13C0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\cart\\request\\AddToCartRequest.java",
+    "sha256": "B5ED567A6AC7F4AC740BF3C961D9853BEB782D1D884EB0CE9423EE8407010A1A"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\cart\\request\\UpdateCartItemRequest.java",
+    "sha256": "03B81BB5AFD827B250680EA63C7E8B80AD3701A7FABCBD9B6C7A684A8E9EE5C6"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\cart\\response\\CartItemResponse.java",
+    "sha256": "0E8B132004567B02C4439EBFE854E18AACB7D70A79EB047476A63BB147DBF431"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\cart\\response\\CartResponse.java",
+    "sha256": "2E22F4D521723781A936F91958BA62FF9A2BF54032034F9C9451C0BE744A7511"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\contact\\request\\CreateContactRequest.java",
+    "sha256": "C276F56457FC02FCAA805D45F151215A5BB46BC66964A4E54A742D44884E8F47"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\contact\\request\\ReplyContactRequest.java",
+    "sha256": "6C2BFE8028B7BDB3ECA766E8125EEB57EFE6C9FEA6B87976639FB803CC9371F8"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\contact\\response\\ContactResponse.java",
+    "sha256": "F3312A67B96D51C06A0FDA5448AF2D8C4551240B3EBE670856040C1B450A0AD5"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\contact\\response\\ContactStatsResponse.java",
+    "sha256": "55A199A1D004D4B63ECBE0551196ED083153C48F1A2291B8AE2AD543429735E0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\dashboard\\response\\DashboardSummaryResponse.java",
+    "sha256": "1160996EF9CA36514A801AAB45BF50C76AF453E94C516A443CBFF30B6D224D2C"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\dashboard\\response\\RevenuePointResponse.java",
+    "sha256": "123CB84C85B9D16929A253BCE67F1C431B633C528BA4B76DE79BB3E62E35AEDA"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\request\\ApplyPromoRequest.java",
+    "sha256": "A4D3682AC0FD178A2C72B6CA814496189AF39CAFEC7B6CF3A28FE52B2BBF7129"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\request\\BuyNowRequest.java",
+    "sha256": "FC40149754EBC3E29129765EFE93DE1813FB75AC8C0375C051547018E76D08A7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\request\\GetAvailablePromosRequest.java",
+    "sha256": "74E49BA4E0FCB10DBA2FF8826BF193D7B7F14E094493F7ADBD4AE173EE0AF4F6"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\request\\PlaceOrderRequest.java",
+    "sha256": "0BA7D2BC515BE12AF85C6B1BE7AD3E6B48FD97AF2DDD07565969426746B1AE47"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\request\\ShippingFeeRequest.java",
+    "sha256": "31F172646A05A9920A4FF1F8EB19739EB3ED50D66D3D6D6DBD481F3386869C9D"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\response\\ApplyPromoResponse.java",
+    "sha256": "07B74D609ED7F4EFDD8F8C4EF8626BD13B926F20F82335B222CC8C761B61151D"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\response\\AvailablePromoResponse.java",
+    "sha256": "77A903A89FB8B601E5B89F770108D4DDB06C2EF69F7F0450D98BA06CCE8DC572"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\response\\OrderItemResponse.java",
+    "sha256": "E3249593F5D06EA4057515A73115AE7FD214C11FE20A928CC4B48889EFB23D34"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\response\\OrderResponse.java",
+    "sha256": "3BFBBEA27709D60283E53DAB23467A1B599DDD21E8002DC6CCC735C5847B2669"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\response\\ShippingAddressResponse.java",
+    "sha256": "6B27BF564740ED6EF77CA63163C1821B7EE9AD725F0C79152DA246B79C6A8C6F"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\order\\response\\ShippingFeeResponse.java",
+    "sha256": "46145ECA012837652CA5DC7FA0B781AE6B2220AD6C1FF0592A27195748479F45"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\payment\\request\\CreatePaymentRequest.java",
+    "sha256": "F49AE0522BAD416D2C10955BEA10F0DB6E3886D50EAF695BCB53DCE4E62E05F7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\policy\\request\\SavePolicyRequest.java",
+    "sha256": "0E6ACF90EBDE2F40FA41BC28984789FBAF6D97230BB374F9F3D2F07F521553F7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\policy\\response\\PolicyResponse.java",
+    "sha256": "5EE259AC08C6A08E97974309E7893D409AEBE20BB40AC8CD9BC5CED2F6992E1B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\product\\request\\ProductFilterRequest.java",
+    "sha256": "4969E615685F359B9BE74998203B068A4F09AC9372367886A927704FB0370362"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\product\\response\\CategoryResponse.java",
+    "sha256": "44CFEACFE821224A46DA2741DF91CF593C2208EC00CB4C04D4B4FE3C76D83436"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\product\\response\\FlavorResponse.java",
+    "sha256": "FFB07D3A7C92A4C616754A3540EEF435173A849E6C70D047B0B0CE80576189A8"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\product\\response\\ProductDetailResponse.java",
+    "sha256": "AE18ADD0B7D4AA341BD7AA7FB51AFC2399987A170A18283D292BACC6D47107EB"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\product\\response\\ProductSummaryResponse.java",
+    "sha256": "72065065462E972F3DBAFB2740D0CB85EEC7EA3B8D12D43C95CBA8177E9799F6"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\product\\response\\ProductVariantResponse.java",
+    "sha256": "B2A6062D3755B43E655E137202DAAFF43C3CA31C1A208E239C4DDB85016FC108"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\product\\response\\SizeResponse.java",
+    "sha256": "4DB3223510059E2763DFCA822B4198F24FAF281575EF3BEFA791514FF874F4C0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\product\\response\\TagDefinitionResponse.java",
+    "sha256": "F751638B9D50CA6AA016B3A5A8129AC42C11B3A111BDD1DB8F51AD3E769CF97C"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\recommendation\\request\\RecommendationRequest.java",
+    "sha256": "9B4A160500714755865AE970606A469E70D7469077F46DEBAFF0D3D7D66E048E"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\recommendation\\response\\RecommendationResponse.java",
+    "sha256": "9802A2AFAA5A16321950B48E301F00E74625C5AED0EEE6A5910F96E818B9D7B5"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\review\\request\\CreateReviewRequest.java",
+    "sha256": "E288E95DF5118383E7F071E165E956DCDD82B9A66B6758A37C37F198EDC2079F"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\review\\response\\ProductRatingResponse.java",
+    "sha256": "3E860C9254B60811B399B912A15D895B5445B3EE833F2B33017520075DCB34FD"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\review\\response\\ReviewResponse.java",
+    "sha256": "0457A6B54C514706250039BB875A37BED4831AF016FD775FA12D19353A08663C"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\sepay\\request\\SePayWebhookRequest.java",
+    "sha256": "15AD08BEBCBEF9E9206358675B2BE204B3D9E612135AEA49F60C2333C018CE3B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\user\\request\\ChangePasswordRequest.java",
+    "sha256": "8DB69F9CB7F6018A9501FC351C9279AA114B3C85D1B6761E9EE9C9A269C29ADA"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\user\\request\\UpdateProfileRequest.java",
+    "sha256": "9AA3CEA31EA06A85E3AAC151A294BA18F031948C4790DB5286A93229D9344EB3"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\dto\\user\\response\\UserProfileResponse.java",
+    "sha256": "FA66CBA49683F0AC4D123DE9E852BD96CB94D2C208418B57BD4531422407C3DF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Address.java",
+    "sha256": "F9220D3891B7C0093314CBAB07E573B863F7A5EE863E12F411BC622B6EDD1C6C"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Banner.java",
+    "sha256": "15DC682A0ACE4F52785F0CA0F113AD2A168EC2ECAF292348C1F4A93A86239C19"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Cart.java",
+    "sha256": "7F1EAE4DD89327341DFEC47DF6CD22D24D7B5BA32F1AEDFD4964404AD3019ED9"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\CartItem.java",
+    "sha256": "E591545669FD52A39F06A7D7C6E20A497BC51180CBAF61FE7457EB2ED813DC07"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Category.java",
+    "sha256": "B90D4C3DF96C949E4E705388EE0F86939C6712C4142E812B4C5E590EDFB4BDF9"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Contact.java",
+    "sha256": "8818959F0B8C6E915EED578E1CCD1D6C292A450F7B32D102F465212A44D31526"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Flavor.java",
+    "sha256": "EA4C2D0ADC4226F79BEAF1BB157E2113532691D3F939F507B6ABC5F4CD9B03BF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Order.java",
+    "sha256": "D11D489A6DDA5C9E46729FC2B1485F509010AE71319FCF5E884878A5F3B32DCE"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\OrderItem.java",
+    "sha256": "E0E1F5C188FA111BC4E35F485D23BC81900F90F7008DDFE552C02AF792CD1C45"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\OtpVerification.java",
+    "sha256": "560301E25BDB8D24E4EF5FFD5D1DDA5270D80750E836092C5984E34AE80E7BBA"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Payment.java",
+    "sha256": "4F031F4E8383F452249EBBB50E65116CBC08FC3C78A37A0551B842F0F57947E6"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Product.java",
+    "sha256": "7C72136F3F99E8B0A995D0A1D392A078A09B402F57AB571718CE38E90C7F42FC"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\ProductImage.java",
+    "sha256": "101C6E06E9310A0B093D172CB13816E0C17004A604F665CB94AF7133FB76D146"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\ProductTag.java",
+    "sha256": "D07F90DB29207F9E7DDDC5DBD68C118EF16EBD1654C3107B90FDD07FF1664DA3"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\ProductVariant.java",
+    "sha256": "04E67898929F55AEE0231BA5175B3A0CD6650427CB1FA33801C0E65E33F0D227"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Promotion.java",
+    "sha256": "327247F676DFA926CA5E66AE626F995707C5FCC2EFB8A0301E6D0263D8547D78"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\PromotionUsage.java",
+    "sha256": "A5D2D48850FBBB4C81AD3B6CB33051A108E10D493A54248C39BBB7DBF7C22764"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Review.java",
+    "sha256": "C7EA776E1C619EBD04C47ACA5214516E009D293DA8AC6E2B1B7193AFD737E8A7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\ShippingPolicy.java",
+    "sha256": "5F06D96CF3465B61F96762430F7E50FDA311D7670023A1F01C4CF65CAFD0C11D"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\Size.java",
+    "sha256": "B95A8CA92984E5D3D5416002C9579A7A735995859F75DA9F11B5C9814256D15B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\SocialAccount.java",
+    "sha256": "4577A4080E85ADF5FF4DE1DAFB1C326396C06E0FFCF8EADC6538E495354ED0BB"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\TagDefinition.java",
+    "sha256": "37A94D03877070CEC4D117CA1C9A822B7B2BF6DFD710CD26D5E6211325EA43D7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\entity\\User.java",
+    "sha256": "CBFE06AD99D7BA8EFEAD397F76D3651E3CC409CA8DAD7286484D5A061A89EEAF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\exception\\AppException.java",
+    "sha256": "4A03C0BA752719F61D876ED92AA17D5680444DD61D70E6DB343582BCE5F78A3E"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\exception\\GlobalExceptionHandler.java",
+    "sha256": "607BC9BB127CD613AB145771EEB899D3F6B5B1016A19703EF7D31439918DF332"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\mapper\\AddressMapper.java",
+    "sha256": "AFD19603EB35DEE1EA8CAE02EF45457AC92D0EC2B070CC4CEF46660679D9A06B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\mapper\\AuthMapper.java",
+    "sha256": "2ACE2417A0D344483DCDBDE03243FA6FAED099670E2139B5081EBCABB8D33880"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\mapper\\BannerMapper.java",
+    "sha256": "07587B466C2458490618BF7A5DAA68843E502D35832398EB9859D26028D57AC3"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\mapper\\CartMapper.java",
+    "sha256": "3D2494640C0A6BE5836CF0685B0523421EF0ECECE32261B55CF3D107FECC013B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\mapper\\ContactMapper.java",
+    "sha256": "356BB838411E2A110B9AADF03837812B160C53272243BCBED35D2E4F3F5CE841"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\mapper\\OrderMapper.java",
+    "sha256": "A1D37BED27A74B629B60F543D5AC63A7C0498EAD875B00A0AEEF782AFA258F92"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\mapper\\ProductMapper.java",
+    "sha256": "FE3D8861373B4E1433C7C22C4BC75B63A05F896E4000DEBAB37154D8F240B3DD"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\mapper\\PromotionMapper.java",
+    "sha256": "C687AA43DCC3A811DF6A858B0AD76B2B0561F65193A400C667E71A08CA637151"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\mapper\\ReviewMapper.java",
+    "sha256": "0693DACB79CEDFDD5B4A45829150AE9365A57B16579F177F9F2851EE00A8C9CF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\mapper\\UserMapper.java",
+    "sha256": "8A695CA88B92E40F6174EC569B471D661F5394FA68BCC5B5AB6FA74D012A8C1B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\middleware\\JwtAuthFilter.java",
+    "sha256": "40D570DC44F91106B1800436E104D0175F6089FA80A5BEE80C079EC522E6D95A"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\AddressRepository.java",
+    "sha256": "0057CFB61F34DA5323CB2E435040203DF7302E658DDD8150B696D6988662B971"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\BannerRepository.java",
+    "sha256": "D6A41404B1EED3A5CDF9F9426ABC135C0FD8B1386607B955C45AD53FAC1644FB"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\CartItemRepository.java",
+    "sha256": "264306883A22ABEDF6551F840496E2A169C6EF4866AE931AED86139EC3A5ABD2"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\CartRepository.java",
+    "sha256": "512984F035DEC0BC694B3554A458696D438143487C793166057F65CD414001B0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\CategoryRepository.java",
+    "sha256": "0ADEA4C6FB821662D5F3190E03C8296E9D50D72AF39B4E90055E7307221289F2"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\ContactRepository.java",
+    "sha256": "0053325AAB281B181754C230B5A8B93527073AF0653B047E3E83A60899943FAA"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\FlavorRepository.java",
+    "sha256": "9045A4E27C9F460C0478E650B65A7055F4D60C4AE2699D62CA0E49B2EC6B2A53"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\OrderItemRepository.java",
+    "sha256": "45B0D9B56F0B2BF068623A14832664C3C4ECBC44754CF1453B804D713108C213"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\OrderRepository.java",
+    "sha256": "66A66B3D733DC52047486668E19B5EEEE0E4536D71F9B64E658FD8253F6FEF13"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\OtpVerificationRepository.java",
+    "sha256": "4385379FF9A7A7FEECCAAA8942394E6EFA8002E988BADE83099E8A13840509C1"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\PaymentRepository.java",
+    "sha256": "AF461194219D06110B47B3441B42D408A9445C9E57E7A45093E36C7429C8CBF6"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\PolicyRepository.java",
+    "sha256": "6712CE4D09BF31C99884BF38F280B8509DEB2653B81B7F223703967E226FEAA9"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\ProductImageRepository.java",
+    "sha256": "2D94657D1AC798A8AB1339AF6A65F5954B79DE1AF627A5E2F604BF3C726C9C05"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\ProductRepository.java",
+    "sha256": "5A10A0FCDD3B13E80FD1EB15B42F2CF88672F85B6FA797796D4FAA3DBEDBB48A"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\ProductTagRepository.java",
+    "sha256": "2F4FC08A532CE1C297F1E833B20ACB8296C61DCCF59BE66B618FD15E1C8E134F"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\ProductVariantRepository.java",
+    "sha256": "6DCED9FFA5B04B6BA87DA1355308D3A207F39A0CB4B09F40E5A04C13B0D562F4"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\PromotionRepository.java",
+    "sha256": "C1A43A2A2D94F92207A4A6F0E047F6D6342E834BE2F224866F92F19D68FADF0C"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\PromotionUsageRepository.java",
+    "sha256": "6020D7C9A8879C46CC7D33C43AA8CD0CB3E127F79BCF7BDE7C0A448D6A5C0F6B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\ReviewRepository.java",
+    "sha256": "F84CC4A7376E18196BD4CAA72DAFC7AA3085EF4CA0B35AEC4A83AE960FF0A35C"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\SizeRepository.java",
+    "sha256": "BFD9F16D3BCEAECFB8B46F32C0DB234FD9518617E4CFE8E8D813AA660BE894D7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\SocialAccountRepository.java",
+    "sha256": "DCCF2E9A146278829B411806C903752B0B48253F63EB49A698BA5071FC32AC82"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\TagDefinitionRepository.java",
+    "sha256": "06A4EC66C4F205D89CE30FEE202D5AD1E3306E2802DAF28CD8393741EA4EBE73"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\repository\\UserRepository.java",
+    "sha256": "5A7A0869AB9DD5ABB53916E15A38DA9F4F40E098F3AB89C93C82F1572B60BEC0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\auth\\CaptchaVerifier.java",
+    "sha256": "CCE2C891F93FDA169D067CC6E9DAF60871FB934C4BA39A391ACA8799F81257E4"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\auth\\IAuthService.java",
+    "sha256": "4FD07143FF4436AAA344ABBE3CB6DEF561B044C42A4A76B8A72DF0F2252DC2D3"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\auth\\ITempTokenService.java",
+    "sha256": "064A6B7B28C4F0CAD8C512C40D276125F34081F893D88C049FCC856350AB0E55"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\auth\\OtpLockService.java",
+    "sha256": "B32C0141C44DCEF3842B454E922AEF93941004496C6B5AECF3E2FEA6A010B986"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\auth\\PasswordAttemptService.java",
+    "sha256": "40E301AA7BCC7B0C89055C2EC6F97CC7537BB1E8BD55D610E55AA2FA282721F0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\auth\\TokenBlacklistService.java",
+    "sha256": "050243DE7671AD336014F85964C8EE94D59861871C11F2DBD93311360C90C4EB"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\auth\\impl\\AuthServiceImpl.java",
+    "sha256": "46E4ED98429B83CC728BE49B74CDBD996248437F759ED33EE96C86741C5B1784"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\auth\\impl\\GoogleTokenVerifier.java",
+    "sha256": "7C202F36BB699AEF538B9A5360BEF6337E8D51F83D12037BDEE543D7DCB9B141"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\auth\\impl\\TempTokenServiceImpl.java",
+    "sha256": "3B07C7FF99E20EC9D4CFAC0C42C13B8DF0968A0012E3E1D91E41C21FBC9EE1B2"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\banner\\IBannerService.java",
+    "sha256": "06B0182C47A58D54C4DC5321AC7199D3895358C6DC34610A4C3F4129E26D8D6A"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\banner\\impl\\BannerServiceImpl.java",
+    "sha256": "4B48E9A026E42A68A7BAEEF5AF6932EE357B11E23AE83077AB1967964BF2ED02"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\cart\\ICartService.java",
+    "sha256": "E5EF265F023CC4F9B1633415D2AAA1BD78666881BBF454BB1CFC998A04A88285"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\cart\\impl\\CartServiceImpl.java",
+    "sha256": "851CEBB45F50953952D269B0A2CBEAF5883BA241A453F25F629804A11C632D1B"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\contact\\IAdminContactService.java",
+    "sha256": "98032ED99BC3E318E434F89F7396F57119324E45B9449EEE3A4943E895E12425"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\contact\\IContactService.java",
+    "sha256": "34D63D06A8ED8EEC6163E13681039E9B96EAB296CBC6078B97DACCE8F6068B8A"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\contact\\impl\\AdminContactServiceImpl.java",
+    "sha256": "3176350DAB3FF1BED9C036559CA2640D4AA8EF0985F1F74EC6F664907DBEC4BE"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\contact\\impl\\ContactServiceImpl.java",
+    "sha256": "D734289CB83E8F2D1B1594BC99FEC784C6005FB41B6E0F134E5574307C5EB810"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\dashboard\\IDashboardService.java",
+    "sha256": "686676291467A3161F52CAFC71E80B129C221B9FF32653F92D5CF3925A034324"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\dashboard\\impl\\DashboardServiceImpl.java",
+    "sha256": "470709A328EDA6328079007BA90EA887F995D35D57C239502F1F3349AAD35268"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\email\\EmailService.java",
+    "sha256": "8D5425BAF754D5D53728697A850C9B33F5997F12FFABB824BA0D15AE18E1F26F"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\AutoCancelScheduler.java",
+    "sha256": "26800F1E40617B64BC4FEFD024599700027B01FA251645E2F1283F6611651DAF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\AutoDeliverScheduler.java",
+    "sha256": "C470CB1DCB6C3A23C2C597643AFBAC2D86768314EAA9D4DD2A4F7AC8A13E6D25"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\IAdminOrderService.java",
+    "sha256": "60B1C447596E8D5AE63D1DDEF2B3C34C3723EE1FA5707AF85917206513A29874"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\IOrderService.java",
+    "sha256": "D9ADB9FCA2652933788E594FD7854572B9EE04898340104A98BE369BF716D8F0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\impl\\AdminOrderServiceImpl.java",
+    "sha256": "FE36B773E69C9DCC37F8E5DD3FB7B7F6A9BD1C9D62C543569DBE5DDB851E6415"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\order\\impl\\OrderServiceImpl.java",
+    "sha256": "67689199C2B9FB026364B140A77B40C1954D913554177091D86370D19AF3753F"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\payment\\IVnpayService.java",
+    "sha256": "60FA6E8BFBC7CF6452B611CF3C2E801469275B9DCCE9BDF00FF4FA45F7674605"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\payment\\impl\\VnpayServiceImpl.java",
+    "sha256": "03F79F382278328F372C454DC050190A6B89C6C5180E0E95E9F3709F6C112FD7"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\policy\\IAdminPolicyService.java",
+    "sha256": "5506F8C8F55FB59BBA4EC8AD07507D8A5E6FC881296AA3E686D193C48B7E0000"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\policy\\IPolicyService.java",
+    "sha256": "55721F2F2239D4701E809C2ABFB6E1B22239E1FDA3BF1BD8FBD7664C2711080A"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\policy\\impl\\AdminPolicyServiceImpl.java",
+    "sha256": "C7C5D2CAF5886F946B5DFB978224E9E3B278BAC737D867426E48C8DC43E4CED3"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\policy\\impl\\PolicyServiceImpl.java",
+    "sha256": "9CA824A72511EAF07827D32EFF6F28B236488EF99D4F7FCBD35AD892AD18280F"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\product\\IAdminProductService.java",
+    "sha256": "734845B6541F6E0C313D4B91FE175762E6CDD0F008A352EB477320E386A81E8E"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\product\\IProductService.java",
+    "sha256": "001E036F96F9F81201B0FC014D6BE2087E337FFB1FA9993F8DBE765FBF351618"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\product\\impl\\AdminProductServiceImpl.java",
+    "sha256": "9B66080BB257C5D7323696993B2E7146CB78A97DF241DCF33D1B58E806D724C6"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\product\\impl\\ProductServiceImpl.java",
+    "sha256": "FA6C7B9DC053249DC5035716DCB4E328727E8E863D0F167F396B76092BED0D1C"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\promotion\\IAdminPromotionService.java",
+    "sha256": "63D463E6C3883F59B225D3BF6CF6DC1E937DD7E4F283EDEA7E8E0745D73033D6"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\promotion\\IPromotionService.java",
+    "sha256": "1E5CB312D7D2F5A703A0256B8D24E9C1C3EE55A80D0EA8F888249369F2812B43"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\promotion\\impl\\AdminPromotionServiceImpl.java",
+    "sha256": "FF554D65C2768063BB75CE6FD3CB9BA350D299C244AA774E6C0277BC45733E91"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\promotion\\impl\\PromotionServiceImpl.java",
+    "sha256": "9302540FB4CB71EA2B3CDA1ABCD67832F2302E2BBF17B1E6B902F8CFC4777565"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\recommendation\\IRecommendationService.java",
+    "sha256": "021C4792AC25982B4F1CFC09CE7D5F9434573CE5F24FB535982B8DFD77AAE2EB"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\recommendation\\impl\\GeminiRecommendationServiceImpl.java",
+    "sha256": "D4BD52A2C9A826A20D1831382E6E9CF6B031C1D1FF2B45BC20988D1559AEDAEF"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\recommendation\\prompt\\RecommendationPromptBuilder.java",
+    "sha256": "F13DF2C3953C98E0B67966B7C5FF57193A56ECBC40820A156858930EEFAD5E51"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\review\\IReviewService.java",
+    "sha256": "34D1EF4168369C08C6FD71B2687067574DB1D4C578C778B02577D05A51700121"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\review\\impl\\ReviewServiceImpl.java",
+    "sha256": "53C38D3561ADD77C290A7D6462E97E7C4DDD2FCAC7071F90A3597CD3BD844A94"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\sepay\\ISePayWebhookService.java",
+    "sha256": "59D9CF49CFDB0B2D16D3F2BB705109C9C6C285B091D2BE13793CF889E6C90871"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\sepay\\impl\\SePayWebhookServiceImpl.java",
+    "sha256": "EC590C6A2C1FC5937E0E3E47627CA0A759FCE4150DD1E22946158065BE131869"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\shipping\\GhnService.java",
+    "sha256": "5B0AD691362FE75AE00643DBB99EE0350E53662EDB130DE43591EACDF82F0D21"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\shipping\\ShippingFeePolicy.java",
+    "sha256": "9947744649B807B42FA7731E38E88BF11B2149AF155C77B5EBC4C2F790D3541A"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\user\\IAddressService.java",
+    "sha256": "D873B5D5345E737B3475C6D1F244B3E09E558C17B9BB46DF83E1E3558FC8A5E0"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\user\\IAdminUserService.java",
+    "sha256": "1CA54121AE8B1CE63A1F4F1038F2D649D382741C04DB81AEF840450C79340A4F"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\user\\IUserService.java",
+    "sha256": "2DAC6F4B8048063FB6642F3CF7796A4340FCA959238083A10DE7D3DDDACA19FD"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\user\\impl\\AddressServiceImpl.java",
+    "sha256": "E320A450E66B8933EF1F63BBA2FA0ADEB0B468C6218CAC07D0E50AB81CE18F11"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\user\\impl\\AdminUserServiceImpl.java",
+    "sha256": "EC969E8335B1AF3CD45EE287B37EC330640E8D4930C26084F98C1D2886F8D565"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\service\\user\\impl\\UserServiceImpl.java",
+    "sha256": "78ED6D6636CA09ADD3F73A4BD019714758AD6D44C5298FCCE0B34F2DF23A9463"
+  },
+  {
+    "path": "backend\\src\\main\\java\\com\\greenjuicehub\\backend\\utils\\JwtUtil.java",
+    "sha256": "585E3AD98FBBDF0A2586F9056C4E7218B52E76C9C47D1ABAFCA26D00E1F1C4B4"
+  },
+  {
+    "path": "database\\schema.sql",
+    "sha256": "AAF6B705670C1E24AE839C9E75AFBC48711B8CB177856C824C72C3B574F31E37"
+  },
+  {
+    "path": "backend\\src\\test\\java\\com\\greenjuicehub\\backend\\e2e\\OrderAmountBvaIT.java",
+    "sha256": "04EE6213723C9E35DCFE9EA84C0A779DBDC02AFC23B498B43B2A5A9ED79822EA"
+  },
+  {
+    "path": "postman\\Order-Total-Amount-BVA-Evidence.postman_collection.json",
+    "sha256": "360744DD51056B12EE9AB23BEED09FF626BBCE8214D5B15E6ED71A6D3359E44E"
+  }
+]

@@ -1,0 +1,27 @@
+Actual Maven verification summary; application logs and credentials omitted.
+Command: mvnw -Dtest=*Test,*Tests,CheckoutBrowserIT verify
+
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.48 s -- in com.greenjuicehub.backend.BackendApplicationTests
+[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.989 s -- in com.greenjuicehub.backend.controller.AdminControllersUnitTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.764 s -- in com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.134 s -- in com.greenjuicehub.backend.controller.CartControllerMockMvcIntegrationTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.938 s -- in com.greenjuicehub.backend.controller.OrderControllerMockMvcIntegrationTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.762 s -- in com.greenjuicehub.backend.controller.PaymentControllerMockMvcIntegrationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.678 s -- in com.greenjuicehub.backend.controller.ProductControllerMockMvcIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.697 s -- in com.greenjuicehub.backend.controller.PromotionControllerMockMvcIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.661 s -- in com.greenjuicehub.backend.controller.ShippingControllerMockMvcIntegrationTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.020 s -- in com.greenjuicehub.backend.controller.ShippingFeeControllerMockMvcIntegrationTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.709 s -- in com.greenjuicehub.backend.controller.WebhookControllerMockMvcIntegrationTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 40.72 s -- in com.greenjuicehub.backend.e2e.CheckoutBrowserIT
+[WARNING] Tests run: 9, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.388 s -- in com.greenjuicehub.backend.service.cart.CartServiceImplTest
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.755 s -- in com.greenjuicehub.backend.service.order.OrderServiceImplTest
+[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.051 s -- in com.greenjuicehub.backend.service.payment.VnpayServiceImplTest
+[WARNING] Tests run: 6, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.458 s -- in com.greenjuicehub.backend.service.product.ProductServiceImplTest
+[WARNING] Tests run: 5, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.023 s -- in com.greenjuicehub.backend.service.promotion.PromotionServiceImplTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 s -- in com.greenjuicehub.backend.service.sepay.SePayWebhookServiceImplTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.224 s -- in com.greenjuicehub.backend.service.shipping.GhnServiceTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.029 s -- in com.greenjuicehub.backend.service.shipping.ShippingFeePolicyTest
+[INFO] Tests run: 133, Failures: 0, Errors: 0, Skipped: 3
+[INFO] BUILD SUCCESS
+[INFO] Total time:  01:12 min
+[INFO] Finished at: 2026-08-31T12:22:26+07:00

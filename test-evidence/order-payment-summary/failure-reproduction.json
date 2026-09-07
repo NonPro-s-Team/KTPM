@@ -1,0 +1,452 @@
+[
+  {
+    "case": "BUY-lower-zero",
+    "baselineStatus": "Fail",
+    "retestStatus": "Fail",
+    "preconditionsVerified": true,
+    "price": "50000",
+    "quantity": 1,
+    "stockBefore": 1000,
+    "promotion": {
+      "isActive": true,
+      "endsAt": "2026-09-02T22:55:54.5165697",
+      "type": "FIXED",
+      "minOrderValue": 0,
+      "startsAt": "2026-08-30T22:55:54.5165697",
+      "name": "QLPT293 BVA_03c9bd7e",
+      "freeShipping": true,
+      "target": "PUBLIC",
+      "value": 50000,
+      "code": "BVA_03c9bd7e"
+    },
+    "promotionCreateStatus": 201,
+    "recalculatedDiscount": 50000.0,
+    "shippingAfterFreePromotion": 0,
+    "recalculatedTotal": 0.0,
+    "db": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 5
+    },
+    "afterCallback": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 5
+    },
+    "failedChecks": [
+      {
+        "actual": "{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}",
+        "expected": "00",
+        "case": "BUY-lower-zero",
+        "status": "Fail",
+        "check": "exact amount accepted after URL issued"
+      },
+      {
+        "actual": "{\"orderId\":5,\"success\":false,\"orderCode\":\"GJH-7A160BA5\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}",
+        "expected": "confirmed=true, DB=PAID",
+        "case": "BUY-lower-zero",
+        "status": "Fail",
+        "check": "exact callback completes online order"
+      }
+    ],
+    "frequency": "2/2 independent runs for this case",
+    "bug": "QLPT-341",
+    "httpRecords": [
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56
+    ]
+  },
+  {
+    "case": "BUY-lower-minus-candidate-clamped",
+    "baselineStatus": "Fail",
+    "retestStatus": "Fail",
+    "preconditionsVerified": true,
+    "price": "50000",
+    "quantity": 1,
+    "stockBefore": 1000,
+    "promotion": {
+      "isActive": true,
+      "endsAt": "2026-09-02T22:55:54.6677856",
+      "type": "FIXED",
+      "minOrderValue": 0,
+      "startsAt": "2026-08-30T22:55:54.6677856",
+      "name": "QLPT293 BVA_91995f7a",
+      "freeShipping": true,
+      "target": "PUBLIC",
+      "value": 50000.01,
+      "code": "BVA_91995f7a"
+    },
+    "promotionCreateStatus": 201,
+    "recalculatedDiscount": 50000.0,
+    "shippingAfterFreePromotion": 0,
+    "recalculatedTotal": 0.0,
+    "db": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 6
+    },
+    "afterCallback": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 6
+    },
+    "failedChecks": [
+      {
+        "actual": "{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}",
+        "expected": "00",
+        "case": "BUY-lower-minus-candidate-clamped",
+        "status": "Fail",
+        "check": "exact amount accepted after URL issued"
+      },
+      {
+        "actual": "{\"orderId\":6,\"success\":false,\"orderCode\":\"GJH-A6617BEA\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}",
+        "expected": "confirmed=true, DB=PAID",
+        "case": "BUY-lower-minus-candidate-clamped",
+        "status": "Fail",
+        "check": "exact callback completes online order"
+      }
+    ],
+    "frequency": "2/2 independent runs for this case",
+    "bug": "QLPT-341",
+    "httpRecords": [
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64
+    ]
+  },
+  {
+    "case": "BUY-percent-100",
+    "baselineStatus": "Fail",
+    "retestStatus": "Fail",
+    "preconditionsVerified": true,
+    "price": "50000",
+    "quantity": 1,
+    "stockBefore": 1000,
+    "promotion": {
+      "isActive": true,
+      "endsAt": "2026-09-02T22:55:55.8033581",
+      "type": "PERCENT",
+      "minOrderValue": 0,
+      "startsAt": "2026-08-30T22:55:55.8033581",
+      "name": "QLPT293 BVA_d70fcf8d",
+      "freeShipping": true,
+      "target": "PUBLIC",
+      "value": 100,
+      "code": "BVA_d70fcf8d"
+    },
+    "promotionCreateStatus": 201,
+    "recalculatedDiscount": 50000.0,
+    "shippingAfterFreePromotion": 0,
+    "recalculatedTotal": 0.0,
+    "db": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 13
+    },
+    "afterCallback": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 13
+    },
+    "failedChecks": [
+      {
+        "actual": "{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}",
+        "expected": "00",
+        "case": "BUY-percent-100",
+        "status": "Fail",
+        "check": "exact amount accepted after URL issued"
+      },
+      {
+        "actual": "{\"orderId\":13,\"success\":false,\"orderCode\":\"GJH-FFC16166\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}",
+        "expected": "confirmed=true, DB=PAID",
+        "case": "BUY-percent-100",
+        "status": "Fail",
+        "check": "exact callback completes online order"
+      }
+    ],
+    "frequency": "2/2 independent runs for this case",
+    "bug": "QLPT-341",
+    "httpRecords": [
+      143,
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150
+    ]
+  },
+  {
+    "case": "CART-lower-zero",
+    "baselineStatus": "Fail",
+    "retestStatus": "Fail",
+    "preconditionsVerified": true,
+    "price": "50000",
+    "quantity": 1,
+    "stockBefore": 1000,
+    "promotion": {
+      "isActive": true,
+      "endsAt": "2026-09-02T22:55:56.5184003",
+      "type": "FIXED",
+      "minOrderValue": 0,
+      "startsAt": "2026-08-30T22:55:56.5184003",
+      "name": "QLPT293 BVA_c3b660f0",
+      "freeShipping": true,
+      "target": "PUBLIC",
+      "value": 50000,
+      "code": "BVA_c3b660f0"
+    },
+    "promotionCreateStatus": 201,
+    "recalculatedDiscount": 50000.0,
+    "shippingAfterFreePromotion": 0,
+    "recalculatedTotal": 0.0,
+    "db": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 18
+    },
+    "afterCallback": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 18
+    },
+    "failedChecks": [
+      {
+        "actual": "{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}",
+        "expected": "00",
+        "case": "CART-lower-zero",
+        "status": "Fail",
+        "check": "exact amount accepted after URL issued"
+      },
+      {
+        "actual": "{\"orderId\":18,\"success\":false,\"orderCode\":\"GJH-2CAA11F8\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}",
+        "expected": "confirmed=true, DB=PAID",
+        "case": "CART-lower-zero",
+        "status": "Fail",
+        "check": "exact callback completes online order"
+      }
+    ],
+    "frequency": "2/2 independent runs for this case",
+    "bug": "QLPT-341",
+    "httpRecords": [
+      199,
+      200,
+      201,
+      202,
+      203,
+      204,
+      205,
+      206
+    ]
+  },
+  {
+    "case": "CART-lower-minus-candidate-clamped",
+    "baselineStatus": "Fail",
+    "retestStatus": "Fail",
+    "preconditionsVerified": true,
+    "price": "50000",
+    "quantity": 1,
+    "stockBefore": 1000,
+    "promotion": {
+      "isActive": true,
+      "endsAt": "2026-09-02T22:55:56.6256607",
+      "type": "FIXED",
+      "minOrderValue": 0,
+      "startsAt": "2026-08-30T22:55:56.6256607",
+      "name": "QLPT293 BVA_fbf55fa8",
+      "freeShipping": true,
+      "target": "PUBLIC",
+      "value": 50000.01,
+      "code": "BVA_fbf55fa8"
+    },
+    "promotionCreateStatus": 201,
+    "recalculatedDiscount": 50000.0,
+    "shippingAfterFreePromotion": 0,
+    "recalculatedTotal": 0.0,
+    "db": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 19
+    },
+    "afterCallback": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 19
+    },
+    "failedChecks": [
+      {
+        "actual": "{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}",
+        "expected": "00",
+        "case": "CART-lower-minus-candidate-clamped",
+        "status": "Fail",
+        "check": "exact amount accepted after URL issued"
+      },
+      {
+        "actual": "{\"orderId\":19,\"success\":false,\"orderCode\":\"GJH-ED09BEEA\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}",
+        "expected": "confirmed=true, DB=PAID",
+        "case": "CART-lower-minus-candidate-clamped",
+        "status": "Fail",
+        "check": "exact callback completes online order"
+      }
+    ],
+    "frequency": "2/2 independent runs for this case",
+    "bug": "QLPT-341",
+    "httpRecords": [
+      207,
+      208,
+      209,
+      210,
+      211,
+      212,
+      213,
+      214
+    ]
+  },
+  {
+    "case": "CART-percent-100",
+    "baselineStatus": "Fail",
+    "retestStatus": "Fail",
+    "preconditionsVerified": true,
+    "price": "50000",
+    "quantity": 1,
+    "stockBefore": 1000,
+    "promotion": {
+      "isActive": true,
+      "endsAt": "2026-09-02T22:55:57.5568198",
+      "type": "PERCENT",
+      "minOrderValue": 0,
+      "startsAt": "2026-08-30T22:55:57.5568198",
+      "name": "QLPT293 BVA_9ebee000",
+      "freeShipping": true,
+      "target": "PUBLIC",
+      "value": 100,
+      "code": "BVA_9ebee000"
+    },
+    "promotionCreateStatus": 201,
+    "recalculatedDiscount": 50000.0,
+    "shippingAfterFreePromotion": 0,
+    "recalculatedTotal": 0.0,
+    "db": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 26
+    },
+    "afterCallback": {
+      "subtotal": "50000.00",
+      "discount_amount": "50000.00",
+      "shipping_fee": "0.00",
+      "total_amount": "0.00",
+      "amount": "0.00",
+      "payment_status": "PENDING",
+      "payment_record_status": "PENDING",
+      "items_subtotal": "50000.00",
+      "orderId": 26
+    },
+    "failedChecks": [
+      {
+        "actual": "{\"Message\":\"Confirm Fail\",\"RspCode\":\"04\"}",
+        "expected": "00",
+        "case": "CART-percent-100",
+        "status": "Fail",
+        "check": "exact amount accepted after URL issued"
+      },
+      {
+        "actual": "{\"orderId\":26,\"success\":false,\"orderCode\":\"GJH-7A069CC9\",\"message\":\"Thanh toán thất bại hoặc dữ liệu không hợp lệ\",\"confirmed\":false,\"responseCode\":\"00\"}",
+        "expected": "confirmed=true, DB=PAID",
+        "case": "CART-percent-100",
+        "status": "Fail",
+        "check": "exact callback completes online order"
+      }
+    ],
+    "frequency": "2/2 independent runs for this case",
+    "bug": "QLPT-341",
+    "httpRecords": [
+      293,
+      294,
+      295,
+      296,
+      297,
+      298,
+      299,
+      300
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+services:
+  sonarqube:
+    image: sonarqube@sha256:9026624a61cd25542a402a9e7213dd7dbb39724ac9597e331e6b85362558c079
+    ports:
+      - '127.0.0.1:9000:9000'
+    volumes:
+      - sonar-data:/opt/sonarqube/data
+      - sonar-extensions:/opt/sonarqube/extensions
+      - sonar-logs:/opt/sonarqube/logs
+volumes:
+  sonar-data:
+  sonar-extensions:
+  sonar-logs:

@@ -1,0 +1,19 @@
+Before fee-policy fix: outside-HCM addresses with GHN IDs used the carrier quote.
+Expected 30000 VND; actual stubbed GHN quote 19000 VND.
+Selected original failure log lines:
+
+  FAIL Checkout to payment to order tracking - real backend, simulated providers: COD: outside HCM costs 30,000 VND and order can be tracked
+Backend shipping quote
+19000 !== 30000
+  FAIL Checkout to payment to order tracking - real backend, simulated providers: VNPAY: outside HCM costs 30,000 VND and order can be tracked
+Backend shipping quote
+19000 !== 30000
+  FAIL Checkout to payment to order tracking - real backend, simulated providers: MOMO: outside HCM costs 30,000 VND and order can be tracked
+Backend shipping quote
+19000 !== 30000
+  FAIL Checkout to payment to order tracking - real backend, simulated providers: BANK_TRANSFER: outside HCM costs 30,000 VND and order can be tracked
+Backend shipping quote
+19000 !== 30000
+  FAIL Checkout to payment to order tracking - real backend, simulated providers: VNPay declined callback keeps order unpaid and displays failure
+Backend shipping quote
+19000 !== 30000

@@ -1,0 +1,6 @@
+Pre-fix run of VnpayServiceImplTest and WebhookControllerMockMvcIntegrationTest.
+New regression assertions were run against original implementation to reproduce failures.
+This was an earlier test subset, not the final full test run.
+
+[ERROR] Tests run: 21, Failures: 9, Errors: 1, Skipped: 0
+[INFO] BUILD FAILURE

@@ -1,0 +1,315 @@
+[
+  {
+    "name": "GhnServiceTest",
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "0.217",
+    "timestamp": null,
+    "cases": [
+      {
+        "name": "returnsFeeFromSuccessfulGhnResponse",
+        "seconds": "0.204",
+        "result": "PASS"
+      },
+      {
+        "name": "fallsBackWhenResponseIsMalformed",
+        "seconds": "0.007",
+        "result": "PASS"
+      },
+      {
+        "name": "fallsBackToThirtyThousandWhenGhnFails",
+        "seconds": "0.004",
+        "result": "PASS"
+      }
+    ]
+  },
+  {
+    "name": "OrderControllerMockMvcIntegrationTest",
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "0.789",
+    "timestamp": null,
+    "cases": [
+      {
+        "name": "placeOrderForwardsAuthenticatedCustomer",
+        "seconds": "0.046",
+        "result": "PASS"
+      },
+      {
+        "name": "anonymousCannotReadOrders",
+        "seconds": "0.009",
+        "result": "PASS"
+      },
+      {
+        "name": "foreignOrderMapsToNotFound",
+        "seconds": "0.018",
+        "result": "PASS"
+      },
+      {
+        "name": "emptyCartIsRejectedBeforeServiceCall",
+        "seconds": "0.017",
+        "result": "PASS"
+      },
+      {
+        "name": "staffCannotUseCustomerOrders",
+        "seconds": "0.012",
+        "result": "PASS"
+      },
+      {
+        "name": "customerGetsOwnOrder",
+        "seconds": "0.01",
+        "result": "PASS"
+      }
+    ]
+  },
+  {
+    "name": "OrderServiceImplTest",
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "0.715",
+    "timestamp": null,
+    "cases": [
+      {
+        "name": "missingOrForeignOrderCannotBeRead",
+        "seconds": "0.541",
+        "result": "PASS"
+      },
+      {
+        "name": "confirmingCodDeliveryMarksPaymentSuccessful",
+        "seconds": "0.009",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsUnselectedCartItemsWithoutWrites",
+        "seconds": "0.006",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsInvalidPaymentMethodWithoutWrites",
+        "seconds": "0.015",
+        "result": "PASS"
+      },
+      {
+        "name": "cannotCancelShippingOrder",
+        "seconds": "0.004",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsAnotherCustomersAddressWithoutWrites",
+        "seconds": "0.004",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsInsufficientStockWithoutWrites",
+        "seconds": "0.003",
+        "result": "PASS"
+      },
+      {
+        "name": "checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[1]",
+        "seconds": "0.017",
+        "result": "PASS"
+      },
+      {
+        "name": "checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[2]",
+        "seconds": "0.004",
+        "result": "PASS"
+      },
+      {
+        "name": "checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[3]",
+        "seconds": "0.004",
+        "result": "PASS"
+      },
+      {
+        "name": "checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[4]",
+        "seconds": "0.003",
+        "result": "PASS"
+      },
+      {
+        "name": "cannotConfirmPendingOrder",
+        "seconds": "0.003",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsInactiveVariantWithoutWrites",
+        "seconds": "0.004",
+        "result": "PASS"
+      },
+      {
+        "name": "cancellingPaidOrderRestocksAndRequestsRefund",
+        "seconds": "0.005",
+        "result": "PASS"
+      }
+    ]
+  },
+  {
+    "name": "PaymentControllerMockMvcIntegrationTest",
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "0.763",
+    "timestamp": null,
+    "cases": [
+      {
+        "name": "ipnMapsServiceResult",
+        "seconds": "0.019",
+        "result": "PASS"
+      },
+      {
+        "name": "createsUrlForAuthenticatedOrderOwner",
+        "seconds": "0.014",
+        "result": "PASS"
+      },
+      {
+        "name": "anonymousCannotCreateUrl",
+        "seconds": "0.011",
+        "result": "PASS"
+      },
+      {
+        "name": "returnEndpointMapsVerificationResult",
+        "seconds": "0.012",
+        "result": "PASS"
+      }
+    ]
+  },
+  {
+    "name": "SePayWebhookServiceImplTest",
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "0.013",
+    "timestamp": null,
+    "cases": [
+      {
+        "name": "ignoresContentWithoutOrderCode",
+        "seconds": "0.001",
+        "result": "PASS"
+      },
+      {
+        "name": "ignoresOutgoingTransfer",
+        "seconds": "0.001",
+        "result": "PASS"
+      },
+      {
+        "name": "ignoresUnsupportedPaymentMethod",
+        "seconds": "0.003",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsUnderpayment",
+        "seconds": "0.002",
+        "result": "PASS"
+      },
+      {
+        "name": "marksBankTransferPaidAndIsIdempotent",
+        "seconds": "0.003",
+        "result": "PASS"
+      }
+    ]
+  },
+  {
+    "name": "ShippingControllerMockMvcIntegrationTest",
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "0.568",
+    "timestamp": null,
+    "cases": [
+      {
+        "name": "missingProvinceIdIsBadRequest",
+        "seconds": "0.01",
+        "result": "PASS"
+      },
+      {
+        "name": "returnsDistrictsForProvince",
+        "seconds": "0.013",
+        "result": "PASS"
+      }
+    ]
+  },
+  {
+    "name": "VnpayServiceImplTest",
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "0.038",
+    "timestamp": null,
+    "cases": [
+      {
+        "name": "createsSignedUrlForOwnedVnpayOrder",
+        "seconds": "0.012",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsNonVnpayPayment",
+        "seconds": "0.002",
+        "result": "PASS"
+      },
+      {
+        "name": "signedIpnRejectsWrongAmount",
+        "seconds": "0.004",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsPaidOrder",
+        "seconds": "0.003",
+        "result": "PASS"
+      },
+      {
+        "name": "forgedIpnCannotTouchRepositories",
+        "seconds": "0.002",
+        "result": "PASS"
+      },
+      {
+        "name": "signedSuccessIpnIsIdempotent",
+        "seconds": "0.004",
+        "result": "PASS"
+      },
+      {
+        "name": "declinedIpnDoesNotMarkOrderPaid",
+        "seconds": "0.003",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsOrderOwnedByAnotherCustomer",
+        "seconds": "0.003",
+        "result": "PASS"
+      }
+    ]
+  },
+  {
+    "name": "WebhookControllerMockMvcIntegrationTest",
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "0.475",
+    "timestamp": null,
+    "cases": [
+      {
+        "name": "acceptsValidApiKey",
+        "seconds": "0.016",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsMissingApiKey",
+        "seconds": "0.009",
+        "result": "PASS"
+      },
+      {
+        "name": "rejectsWrongApiKeyBeforeProcessingPayment",
+        "seconds": "0.009",
+        "result": "PASS"
+      }
+    ]
+  }
+]

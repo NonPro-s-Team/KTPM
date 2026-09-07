@@ -1,0 +1,591 @@
+{
+  "exportedAt": "2026-08-31T11:50:26.9497847+07:00",
+  "serverVersion": "26.8.0.126808",
+  "projectKey": "green-juice-hub-checkout",
+  "analysis": [
+    {
+      "key": "1a802fd5-5392-4e49-a83c-9cb42e4773c5",
+      "date": "2026-08-31T11:49:58+07:00",
+      "revision": "58e80a6731b0719956de89e9edbc0f051c5fb375"
+    }
+  ],
+  "profiles": [
+    {
+      "key": "7bcafb44-c1aa-4f93-9cd5-0cc9e30a4e0b",
+      "name": "Sonar way",
+      "language": "azureresourcemanager",
+      "activeRuleCount": 37,
+      "rulesUpdatedAt": "2026-08-31T11:33:40+07:00"
+    },
+    {
+      "key": "da7716c9-003a-4dbd-8efe-1cbd7270920c",
+      "name": "Sonar way",
+      "language": "cloudformation",
+      "activeRuleCount": 26,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    },
+    {
+      "key": "972be5c2-293d-4a23-a30d-9d98d6197456",
+      "name": "Sonar way",
+      "language": "cs",
+      "activeRuleCount": 326,
+      "rulesUpdatedAt": "2026-08-31T11:33:40+07:00"
+    },
+    {
+      "key": "5d08379a-0be0-4d57-ba2d-4f5cc2b27aa0",
+      "name": "Sonar way",
+      "language": "css",
+      "activeRuleCount": 40,
+      "rulesUpdatedAt": "2026-08-31T11:33:38+07:00"
+    },
+    {
+      "key": "617dabd9-d329-4041-9295-22b526ce8018",
+      "name": "Sonar way",
+      "language": "docker",
+      "activeRuleCount": 25,
+      "rulesUpdatedAt": "2026-08-31T11:33:38+07:00"
+    },
+    {
+      "key": "101b6a8b-3708-4d1f-900f-3cf035d86c40",
+      "name": "Sonar way",
+      "language": "flex",
+      "activeRuleCount": 47,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    },
+    {
+      "key": "bacbe9a9-72d1-4ab2-a846-2d1dc90f9031",
+      "name": "Sonar way",
+      "language": "go",
+      "activeRuleCount": 22,
+      "rulesUpdatedAt": "2026-08-31T11:33:40+07:00"
+    },
+    {
+      "key": "e2f8f936-a813-4dd5-860b-78ab5d6c6f7e",
+      "name": "Sonar way",
+      "language": "ipynb",
+      "activeRuleCount": 385,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    },
+    {
+      "key": "98a6b150-6af1-4da3-b7eb-57d8c0fb98c2",
+      "name": "Sonar way",
+      "language": "java",
+      "activeRuleCount": 571,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    },
+    {
+      "key": "a8f39826-0ecf-44d4-8bda-60a4004af6f0",
+      "name": "Sonar way",
+      "language": "js",
+      "activeRuleCount": 415,
+      "rulesUpdatedAt": "2026-08-31T11:33:38+07:00"
+    },
+    {
+      "key": "a01bbca3-b577-4b4b-a277-b6abb6f073a1",
+      "name": "Sonar way",
+      "language": "json",
+      "activeRuleCount": 0,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    },
+    {
+      "key": "39dab59f-8027-48e1-b4ce-946dcba59c30",
+      "name": "Sonar way",
+      "language": "jsp",
+      "activeRuleCount": 0,
+      "rulesUpdatedAt": "2026-08-31T11:33:38+07:00"
+    },
+    {
+      "key": "9a11cf8e-6a25-4fc1-89b2-2069d46eb251",
+      "name": "Sonar way",
+      "language": "kotlin",
+      "activeRuleCount": 129,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    },
+    {
+      "key": "7f88dac1-c02e-4cf2-bbb5-1c52af568dbd",
+      "name": "Sonar way",
+      "language": "kubernetes",
+      "activeRuleCount": 23,
+      "rulesUpdatedAt": "2026-08-31T11:33:38+07:00"
+    },
+    {
+      "key": "10c3d6d1-0b5d-478b-8452-2f4b791b1baf",
+      "name": "Sonar way",
+      "language": "php",
+      "activeRuleCount": 176,
+      "rulesUpdatedAt": "2026-08-31T11:33:40+07:00"
+    },
+    {
+      "key": "9a4fb725-8614-4215-8ae5-e5b45fd17076",
+      "name": "Sonar way",
+      "language": "py",
+      "activeRuleCount": 389,
+      "rulesUpdatedAt": "2026-08-31T11:33:38+07:00"
+    },
+    {
+      "key": "e740474c-560f-4754-a529-c5136fd72893",
+      "name": "Sonar way",
+      "language": "ruby",
+      "activeRuleCount": 29,
+      "rulesUpdatedAt": "2026-08-31T11:33:40+07:00"
+    },
+    {
+      "key": "b7e0c044-9c51-4499-9cdc-c639930e60df",
+      "name": "Sonar way",
+      "language": "rust",
+      "activeRuleCount": 78,
+      "rulesUpdatedAt": "2026-08-31T11:33:38+07:00"
+    },
+    {
+      "key": "3cd70c28-e139-461e-b20b-cd46a44fa8ed",
+      "name": "Sonar way",
+      "language": "scala",
+      "activeRuleCount": 30,
+      "rulesUpdatedAt": "2026-08-31T11:33:38+07:00"
+    },
+    {
+      "key": "deab5d87-f0ab-46e3-9763-f61596955846",
+      "name": "Sonar way",
+      "language": "secrets",
+      "activeRuleCount": 30,
+      "rulesUpdatedAt": "2026-08-31T11:33:40+07:00"
+    },
+    {
+      "key": "08e3a583-ce56-4a91-898f-1a2596590c97",
+      "name": "Sonar way",
+      "language": "terraform",
+      "activeRuleCount": 51,
+      "rulesUpdatedAt": "2026-08-31T11:33:40+07:00"
+    },
+    {
+      "key": "083618ea-f6a4-499f-b0fe-020d8e5b2014",
+      "name": "Sonar way",
+      "language": "text",
+      "activeRuleCount": 3,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    },
+    {
+      "key": "e414ab73-df91-46eb-a36f-52bda84420d1",
+      "name": "Sonar way",
+      "language": "ts",
+      "activeRuleCount": 428,
+      "rulesUpdatedAt": "2026-08-31T11:33:40+07:00"
+    },
+    {
+      "key": "190f5e20-6648-4bd1-9e52-c51fed52a439",
+      "name": "Sonar way",
+      "language": "vbnet",
+      "activeRuleCount": 141,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    },
+    {
+      "key": "1aec531a-f6c5-4cba-8697-5a07ef19da81",
+      "name": "Sonar way",
+      "language": "web",
+      "activeRuleCount": 61,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    },
+    {
+      "key": "e7292ee4-0f87-4d9a-ad6d-99c2104c470f",
+      "name": "Sonar way",
+      "language": "xml",
+      "activeRuleCount": 24,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    },
+    {
+      "key": "05a39ee9-1435-4ea0-b6e4-08843605921e",
+      "name": "Sonar way",
+      "language": "yaml",
+      "activeRuleCount": 0,
+      "rulesUpdatedAt": "2026-08-31T11:33:39+07:00"
+    }
+  ],
+  "measures": [
+    {
+      "metric": "blocker_violations",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "coverage",
+      "value": "49.8",
+      "bestValue": false
+    },
+    {
+      "metric": "bugs",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "ncloc",
+      "value": "1471"
+    },
+    {
+      "metric": "vulnerabilities",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "security_hotspots",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "critical_violations",
+      "value": "0",
+      "bestValue": true
+    }
+  ],
+  "qualityGate": {
+    "status": "OK",
+    "conditions": [
+      {
+        "status": "OK",
+        "metricKey": "new_coverage",
+        "comparator": "LT",
+        "errorThreshold": "80",
+        "actualValue": "83.1"
+      },
+      {
+        "status": "OK",
+        "metricKey": "new_duplicated_lines_density",
+        "comparator": "GT",
+        "errorThreshold": "3",
+        "actualValue": "0.0"
+      },
+      {
+        "status": "OK",
+        "metricKey": "new_violations",
+        "comparator": "GT",
+        "errorThreshold": "0",
+        "actualValue": "0"
+      }
+    ],
+    "ignoredConditions": false,
+    "period": {
+      "mode": "PREVIOUS_VERSION",
+      "date": "2026-08-31T11:36:48+07:00"
+    },
+    "caycStatus": "compliant"
+  },
+  "issueCount": 20,
+  "issues": [
+    {
+      "key": "506a3023-9f14-4683-9130-faf577f21de0",
+      "rule": "java:S5778",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/service/order/OrderServiceImplTest.java",
+      "line": 100,
+      "message": "Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "be476899-de62-4941-8743-8e910b7eafca",
+      "rule": "java:S5778",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/service/order/OrderServiceImplTest.java",
+      "line": 107,
+      "message": "Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "97b4eef5-7745-4c2c-b377-31d5067d1b8b",
+      "rule": "java:S5778",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/service/order/OrderServiceImplTest.java",
+      "line": 115,
+      "message": "Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "e8aff231-8280-4a0b-a982-648af5f5b82d",
+      "rule": "java:S8924",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/service/sepay/SePayWebhookServiceImplTest.java",
+      "line": 96,
+      "message": "Use a static import for \"times\".",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "862f0db1-1145-4d78-8e09-636e32950fe3",
+      "rule": "java:S1130",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/controller/ControllerMockMvcTestSecurityConfiguration.java",
+      "line": 15,
+      "message": "Remove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "8027a89c-1d8d-4e14-83bc-a7618e865149",
+      "rule": "java:S5778",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/service/cart/CartServiceImplTest.java",
+      "line": 130,
+      "message": "Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "77395717-8d2a-47ee-aca0-2ec7b3019d07",
+      "rule": "java:S5778",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/service/cart/CartServiceImplTest.java",
+      "line": 142,
+      "message": "Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "03b25ef9-5a9e-4067-9953-493a87673a82",
+      "rule": "java:S5778",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/service/cart/CartServiceImplTest.java",
+      "line": 183,
+      "message": "Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "4dec4d07-39e0-4f1c-89c1-a1eb3a84edde",
+      "rule": "java:S5778",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/service/promotion/PromotionServiceImplTest.java",
+      "line": 118,
+      "message": "Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "31c3ecab-1bed-49d8-9630-770e430861f0",
+      "rule": "java:S5778",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/service/promotion/PromotionServiceImplTest.java",
+      "line": 131,
+      "message": "Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "a41076bc-b644-4e0c-9e96-a4dd8d72988a",
+      "rule": "java:S1128",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/controller/AdminControllersUnitTest.java",
+      "line": 9,
+      "message": "Remove this unused import 'com.greenjuicehub.backend.dto.contact.response.ContactResponse'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "8057946a-10a1-41da-be1f-495f421068e0",
+      "rule": "java:S8924",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/controller/AdminControllersUnitTest.java",
+      "line": 108,
+      "message": "Use a static import for \"mock\".",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "9761f5c6-aa0e-44e5-a2cc-e32efd23c68c",
+      "rule": "java:S5778",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/controller/AdminControllersUnitTest.java",
+      "line": 183,
+      "message": "Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "4ea34225-739a-41f8-9202-c10118f3acf0",
+      "rule": "java:S1130",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/test/java/com/greenjuicehub/backend/controller/AdminDashboardMockMvcIntegrationTest.java",
+      "line": 86,
+      "message": "Remove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "43c73e40-df1a-4e6b-b413-4b85c1691663",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/main/java/com/greenjuicehub/backend/service/order/impl/OrderServiceImpl.java",
+      "line": 111,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "2265a306-5328-4850-bb60-4d69af3997b4",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/main/java/com/greenjuicehub/backend/service/order/impl/OrderServiceImpl.java",
+      "line": 253,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "602c2778-d807-45ce-ab94-f314c66286eb",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/main/java/com/greenjuicehub/backend/service/order/impl/OrderServiceImpl.java",
+      "line": 529,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "8e318531-b270-4b7e-9537-66dc161b9fb3",
+      "rule": "java:S1066",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/main/java/com/greenjuicehub/backend/service/order/impl/OrderServiceImpl.java",
+      "line": 545,
+      "message": "Merge this if statement with the enclosing one.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "b7b467c4-7d65-4c84-b427-81d6c36db8e0",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/main/java/com/greenjuicehub/backend/service/order/impl/OrderServiceImpl.java",
+      "line": 658,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "1d816525-1364-4675-b3b5-92194d95095c",
+      "rule": "java:S107",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "component": "green-juice-hub-checkout:src/main/java/com/greenjuicehub/backend/service/shipping/GhnService.java",
+      "line": 139,
+      "message": "Method has 8 parameters, which is greater than 7 authorized.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    }
+  ],
+  "hotspots": []
+}

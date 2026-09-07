@@ -1,0 +1,617 @@
+[
+  {
+    "suite": "com.greenjuicehub.backend.BackendApplicationTests",
+    "name": "contextLoads",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "policyControllerReturnsToggledPolicy",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "bannerControllerReturnsServiceData",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "tagControllerReportsMissingTag",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "dashboardControllerForwardsChartRange",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "dashboardControllerReturnsSummary",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "tagControllerRejectsDuplicateName",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "userControllerConvertsUserPage",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "tagControllerNormalizesNameBeforeSaving",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "promotionControllerConvertsUsageHistoryPage",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "contactControllerConvertsPageAndForwardsFilters",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "productControllerReturnsNoContentAfterDelete",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "reviewControllerForwardsReplyContent",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "productControllerForwardsAllSearchParameters",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "tagControllerTogglesExistingTag",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminControllersUnitTest",
+    "name": "orderControllerCreatesEmptyRefundRequestWhenBodyIsMissing",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest",
+    "name": "adminTagRejectsStaff",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest",
+    "name": "adminTagRejectsAnonymousUser",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest",
+    "name": "adminTagRejectsCustomer",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest",
+    "name": "adminTagReturnsConflictForDuplicateName",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest",
+    "name": "dashboardSerializesSummaryReturnedByService",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest",
+    "name": "dashboardRejectsCustomer",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest",
+    "name": "dashboardAllowsStaffAndUsesDefaultChartRange",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest",
+    "name": "adminCanReachRepresentativeEndpointOfEveryAdminController",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.AdminDashboardMockMvcIntegrationTest",
+    "name": "adminTagReturnsTagsForAdmin",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.CartControllerMockMvcIntegrationTest",
+    "name": "addItemForwardsAuthenticatedUserAndBody",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.CartControllerMockMvcIntegrationTest",
+    "name": "customerGetsOwnCartUsingNumericPrincipal",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.CartControllerMockMvcIntegrationTest",
+    "name": "addItemValidatesRequestBeforeCallingService",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.CartControllerMockMvcIntegrationTest",
+    "name": "clearCartReturnsNoContent",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.CartControllerMockMvcIntegrationTest",
+    "name": "anonymousUserCannotAccessCart",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.CartControllerMockMvcIntegrationTest",
+    "name": "staffCannotAccessCustomerCart",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.OrderControllerMockMvcIntegrationTest",
+    "name": "placeOrderForwardsAuthenticatedCustomer",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.OrderControllerMockMvcIntegrationTest",
+    "name": "anonymousCannotReadOrders",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.OrderControllerMockMvcIntegrationTest",
+    "name": "foreignOrderMapsToNotFound",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.OrderControllerMockMvcIntegrationTest",
+    "name": "emptyCartIsRejectedBeforeServiceCall",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.OrderControllerMockMvcIntegrationTest",
+    "name": "staffCannotUseCustomerOrders",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.OrderControllerMockMvcIntegrationTest",
+    "name": "customerGetsOwnOrder",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.PaymentControllerMockMvcIntegrationTest",
+    "name": "ipnMapsServiceResult",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.PaymentControllerMockMvcIntegrationTest",
+    "name": "missingOrderIdIsBadRequest",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.PaymentControllerMockMvcIntegrationTest",
+    "name": "createsUrlForAuthenticatedOrderOwner",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.PaymentControllerMockMvcIntegrationTest",
+    "name": "anonymousCannotCreateUrl",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.PaymentControllerMockMvcIntegrationTest",
+    "name": "returnEndpointMapsVerificationResult",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.ProductControllerMockMvcIntegrationTest",
+    "name": "getProductsBindsFiltersAndSerializesPageForAnonymousUser",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.ProductControllerMockMvcIntegrationTest",
+    "name": "getProductBySlugMapsAppExceptionToNotFound",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.ProductControllerMockMvcIntegrationTest",
+    "name": "getProductBySlugReturnsServiceDetail",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.PromotionControllerMockMvcIntegrationTest",
+    "name": "anonymousUserCannotRequestPromotions",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.PromotionControllerMockMvcIntegrationTest",
+    "name": "customerGetsAvailablePromotionsForSelectedCartItems",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.PromotionControllerMockMvcIntegrationTest",
+    "name": "staffCannotRequestCustomerPromotions",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.PromotionControllerMockMvcIntegrationTest",
+    "name": "customerGetsAvailablePromotionsForBuyNow",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.ShippingControllerMockMvcIntegrationTest",
+    "name": "missingProvinceIdIsBadRequest",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.ShippingControllerMockMvcIntegrationTest",
+    "name": "returnsDistrictsForProvince",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.ShippingFeeControllerMockMvcIntegrationTest",
+    "name": "missingAddressIsBadRequest",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.ShippingFeeControllerMockMvcIntegrationTest",
+    "name": "foreignAddressIsRejectedEvenBeforeLegacyFeeFallback",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.ShippingFeeControllerMockMvcIntegrationTest",
+    "name": "negativeQuantityIsRejectedBeforeReadingAddress",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.ShippingFeeControllerMockMvcIntegrationTest",
+    "name": "ownLegacyAddressRetainsFallbackFee",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.WebhookControllerMockMvcIntegrationTest",
+    "name": "missingAmountIsBadRequest",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.WebhookControllerMockMvcIntegrationTest",
+    "name": "acceptsValidApiKey",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.WebhookControllerMockMvcIntegrationTest",
+    "name": "rejectsMissingApiKey",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.WebhookControllerMockMvcIntegrationTest",
+    "name": "apiKeyIsCaseSensitive",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.WebhookControllerMockMvcIntegrationTest",
+    "name": "missingServerKeyFailsClosed",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.controller.WebhookControllerMockMvcIntegrationTest",
+    "name": "rejectsWrongApiKeyBeforeProcessingPayment",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.cart.CartServiceImplTest",
+    "name": "addItemCreatesNewCartItem",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.cart.CartServiceImplTest",
+    "name": "removeItemChecksOwnershipThenDeletesItem",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.cart.CartServiceImplTest",
+    "name": "addItemIncrementsExistingItem",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.cart.CartServiceImplTest",
+    "name": "getCartRejectsUnknownUserWhenCartDoesNotExist",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.cart.CartServiceImplTest",
+    "name": "updateItemRejectsItemOutsideUsersCart",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.cart.CartServiceImplTest",
+    "name": "addItemRejectsQuantityAboveStock",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.cart.CartServiceImplTest",
+    "name": "clearCartDeletesOnlyItemsOfUsersCart",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.cart.CartServiceImplTest",
+    "name": "getCartCreatesCartForFirstAccessAndMapsItems",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.cart.CartServiceImplTest",
+    "name": "addItemShouldRejectVariantBelongingToAnotherProduct",
+    "status": "SKIPPED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "missingOrForeignOrderCannotBeRead",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "confirmingCodDeliveryMarksPaymentSuccessful",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "rejectsUnselectedCartItemsWithoutWrites",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "rejectsInvalidPaymentMethodWithoutWrites",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "cannotCancelShippingOrder",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "rejectsAnotherCustomersAddressWithoutWrites",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "rejectsInsufficientStockWithoutWrites",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[1]",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[2]",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[3]",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "checkoutPersistsTotalsPaymentAndStock(PaymentMethod)[4]",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "cannotConfirmPendingOrder",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "rejectsInactiveVariantWithoutWrites",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.order.OrderServiceImplTest",
+    "name": "cancellingPaidOrderRestocksAndRequestsRefund",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "createsSignedUrlForOwnedVnpayOrder",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "rejectsNonVnpayPayment",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "signedCallbackCannotPayCodOrder",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "malformedSignedAmountIsRejectedWithoutException",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "forgedReturnDoesNotExposeOrderIdOrQueryDatabase",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "signedIpnRejectsWrongAmount",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "rejectsPaidOrder",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "cancelledOrderCannotBecomePaid",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "wrongMerchantCannotTouchDatabaseEvenWithValidHash",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "forgedIpnCannotTouchRepositories",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "paidReplayStillRejectsWrongAmount",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "signedSuccessIpnIsIdempotent",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "inconsistentTransactionStatusCannotMarkPaid",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "browserReturnCannotMarkOrderPaid",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "tamperedAmountCannotPassSignatureValidation",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "declinedIpnDoesNotMarkOrderPaid",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "browserReturnRejectsWrongAmount",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.payment.VnpayServiceImplTest",
+    "name": "rejectsOrderOwnedByAnotherCustomer",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.product.ProductServiceImplTest",
+    "name": "getProductsUsesSpecificationAndRequestedPageForDefaultSort",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.product.ProductServiceImplTest",
+    "name": "getProductsUsesDedicatedQueryForAscendingPrice",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.product.ProductServiceImplTest",
+    "name": "getDealCategoriesMapsNativeQueryRows",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.product.ProductServiceImplTest",
+    "name": "getProductBySlugLoadsDetailAndRelatedProducts",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.product.ProductServiceImplTest",
+    "name": "getProductBySlugRejectsUnknownProduct",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.product.ProductServiceImplTest",
+    "name": "priceSortShouldHonorCategoryFilter",
+    "status": "SKIPPED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.promotion.PromotionServiceImplTest",
+    "name": "getAvailablePromosExplainsMinimumOrderAndUsageLimit",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.promotion.PromotionServiceImplTest",
+    "name": "getAvailablePromosUsesOnlyCartItemsOwnedByUser",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.promotion.PromotionServiceImplTest",
+    "name": "buyNowShouldRejectMissingQuantityWithBadRequest",
+    "status": "SKIPPED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.promotion.PromotionServiceImplTest",
+    "name": "getAvailablePromosRejectsUnknownBuyNowVariant",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.promotion.PromotionServiceImplTest",
+    "name": "getAvailablePromosCalculatesBuyNowSubtotalAndSortsEligibleByDiscount",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.sepay.SePayWebhookServiceImplTest",
+    "name": "cancelledOrderCannotBeMarkedPaidByWebhook",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.sepay.SePayWebhookServiceImplTest",
+    "name": "ignoresContentWithoutOrderCode",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.sepay.SePayWebhookServiceImplTest",
+    "name": "ignoresOutgoingTransfer",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.sepay.SePayWebhookServiceImplTest",
+    "name": "ignoresUnsupportedPaymentMethod",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.sepay.SePayWebhookServiceImplTest",
+    "name": "malformedAmountIsIgnoredBeforeDatabaseAccess",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.sepay.SePayWebhookServiceImplTest",
+    "name": "rejectsUnderpayment",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.sepay.SePayWebhookServiceImplTest",
+    "name": "marksBankTransferPaidAndIsIdempotent",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.shipping.GhnServiceTest",
+    "name": "returnsFeeFromSuccessfulGhnResponse",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.shipping.GhnServiceTest",
+    "name": "fallsBackWhenResponseIsMalformed",
+    "status": "PASSED"
+  },
+  {
+    "suite": "com.greenjuicehub.backend.service.shipping.GhnServiceTest",
+    "name": "fallsBackToThirtyThousandWhenGhnFails",
+    "status": "PASSED"
+  }
+]
