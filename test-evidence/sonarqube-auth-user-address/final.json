@@ -1,0 +1,1598 @@
+{
+  "exportedAt": "2026-09-08T12:34:46.5445984+07:00",
+  "serverVersion": "26.8.0.126808",
+  "projectKey": "green-juice-hub-auth-user-address",
+  "analysis": [
+    {
+      "key": "f3c2a059-39a2-47d2-9c92-36c2e2f17adf",
+      "date": "2026-09-08T12:33:09+07:00",
+      "revision": "30f048051d1cc0423f8fa5ae0e93e393a8932634"
+    }
+  ],
+  "profiles": [
+    {
+      "key": "b041f8b9-caf8-4f3e-a0f9-3ce065805907",
+      "name": "Sonar way",
+      "language": "azureresourcemanager",
+      "activeRuleCount": 37,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "c4e865ed-e38c-48ca-891b-a295cfa6b434",
+      "name": "Sonar way",
+      "language": "cloudformation",
+      "activeRuleCount": 26,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "9a5d286b-d0c4-4831-88fa-d62583771a43",
+      "name": "Sonar way",
+      "language": "cs",
+      "activeRuleCount": 326,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "5eaf733b-7c71-4e27-9708-d2daf2513faf",
+      "name": "Sonar way",
+      "language": "css",
+      "activeRuleCount": 40,
+      "rulesUpdatedAt": "2026-09-07T13:56:54+07:00"
+    },
+    {
+      "key": "e9a11134-351a-4d18-9fd2-31223000e8e5",
+      "name": "Sonar way",
+      "language": "docker",
+      "activeRuleCount": 25,
+      "rulesUpdatedAt": "2026-09-07T13:56:55+07:00"
+    },
+    {
+      "key": "39120317-1c26-4334-b334-804940e1ef47",
+      "name": "Sonar way",
+      "language": "flex",
+      "activeRuleCount": 47,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "d243b857-1863-432b-a2da-9d8c387bdd4e",
+      "name": "Sonar way",
+      "language": "go",
+      "activeRuleCount": 22,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "41900b87-72da-4a4a-beaf-bb7985f4a47a",
+      "name": "Sonar way",
+      "language": "ipynb",
+      "activeRuleCount": 385,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "0974c434-de27-49dc-9e14-91b46cc4912e",
+      "name": "Sonar way",
+      "language": "java",
+      "activeRuleCount": 571,
+      "rulesUpdatedAt": "2026-09-07T13:56:55+07:00"
+    },
+    {
+      "key": "0a3e0c27-df34-47dc-82a5-0b010c118780",
+      "name": "Sonar way",
+      "language": "js",
+      "activeRuleCount": 415,
+      "rulesUpdatedAt": "2026-09-07T13:56:55+07:00"
+    },
+    {
+      "key": "111ca600-99cb-46bb-a9f1-1078489f531e",
+      "name": "Sonar way",
+      "language": "json",
+      "activeRuleCount": 0,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "8acc5afb-3c8d-4659-96ef-d1fbf9194d61",
+      "name": "Sonar way",
+      "language": "jsp",
+      "activeRuleCount": 0,
+      "rulesUpdatedAt": "2026-09-07T13:56:54+07:00"
+    },
+    {
+      "key": "7a75fb97-2d1b-415f-ae85-c21f8a027f2c",
+      "name": "Sonar way",
+      "language": "kotlin",
+      "activeRuleCount": 129,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "88ea5f92-3af0-49c4-b506-18a5ab6afbdd",
+      "name": "Sonar way",
+      "language": "kubernetes",
+      "activeRuleCount": 23,
+      "rulesUpdatedAt": "2026-09-07T13:56:54+07:00"
+    },
+    {
+      "key": "40b4987a-b7b2-4266-9073-1ec835b0c669",
+      "name": "Sonar way",
+      "language": "php",
+      "activeRuleCount": 176,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "9ee0a698-4cb9-4269-bfff-1abb1e750032",
+      "name": "Sonar way",
+      "language": "py",
+      "activeRuleCount": 389,
+      "rulesUpdatedAt": "2026-09-07T13:56:55+07:00"
+    },
+    {
+      "key": "cb0bd458-e9da-464b-ab86-c228f2c1217b",
+      "name": "Sonar way",
+      "language": "ruby",
+      "activeRuleCount": 29,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "1230c443-73fb-4090-9af9-e4ab511b5ce9",
+      "name": "Sonar way",
+      "language": "rust",
+      "activeRuleCount": 78,
+      "rulesUpdatedAt": "2026-09-07T13:56:55+07:00"
+    },
+    {
+      "key": "67a716ee-a05f-4b78-95b3-97a916e734e5",
+      "name": "Sonar way",
+      "language": "scala",
+      "activeRuleCount": 30,
+      "rulesUpdatedAt": "2026-09-07T13:56:54+07:00"
+    },
+    {
+      "key": "8303d41b-537d-420a-adac-c7f50278fa26",
+      "name": "Sonar way",
+      "language": "secrets",
+      "activeRuleCount": 30,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "8b26c29c-f825-43af-a09c-1d96cf1fb2bb",
+      "name": "Sonar way",
+      "language": "terraform",
+      "activeRuleCount": 51,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "25cb53fa-8fb2-4530-bc0e-a9defca5e6b8",
+      "name": "Sonar way",
+      "language": "text",
+      "activeRuleCount": 3,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "9bcc29e6-a545-4ed1-b8f7-d999d3dc7f9a",
+      "name": "Sonar way",
+      "language": "ts",
+      "activeRuleCount": 428,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "7d6155a7-fc31-4117-bd79-a4c0411c1989",
+      "name": "Sonar way",
+      "language": "vbnet",
+      "activeRuleCount": 141,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "8f8ada81-26cc-488b-b739-ee9facf17af6",
+      "name": "Sonar way",
+      "language": "web",
+      "activeRuleCount": 61,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "8b7a3714-fcf2-448a-b5ad-82c4a6a936c9",
+      "name": "Sonar way",
+      "language": "xml",
+      "activeRuleCount": 24,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    },
+    {
+      "key": "b99bcd76-b198-4165-a244-9984ec03714a",
+      "name": "Sonar way",
+      "language": "yaml",
+      "activeRuleCount": 0,
+      "rulesUpdatedAt": "2026-09-07T13:56:56+07:00"
+    }
+  ],
+  "measures": [
+    {
+      "metric": "blocker_violations",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "coverage",
+      "value": "31.2",
+      "bestValue": false
+    },
+    {
+      "metric": "bugs",
+      "value": "4",
+      "bestValue": false
+    },
+    {
+      "metric": "ncloc",
+      "value": "5718"
+    },
+    {
+      "metric": "vulnerabilities",
+      "value": "1",
+      "bestValue": false
+    },
+    {
+      "metric": "security_hotspots",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "critical_violations",
+      "value": "0",
+      "bestValue": true
+    }
+  ],
+  "qualityGate": {
+    "status": "ERROR",
+    "conditions": [
+      {
+        "status": "ERROR",
+        "metricKey": "new_coverage",
+        "comparator": "LT",
+        "errorThreshold": "80",
+        "actualValue": "38.3"
+      },
+      {
+        "status": "OK",
+        "metricKey": "new_duplicated_lines_density",
+        "comparator": "GT",
+        "errorThreshold": "3",
+        "actualValue": "0.76923"
+      },
+      {
+        "status": "OK",
+        "metricKey": "new_violations",
+        "comparator": "GT",
+        "errorThreshold": "0",
+        "actualValue": "0"
+      }
+    ],
+    "ignoredConditions": false,
+    "period": {
+      "mode": "PREVIOUS_VERSION",
+      "date": "2026-09-08T11:51:19+07:00",
+      "parameter": "baseline"
+    },
+    "caycStatus": "compliant"
+  },
+  "issueCount": 69,
+  "issues": [
+    {
+      "key": "34644412-8eae-4782-8853-8417a4936aad",
+      "rule": "java:S1128",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/config/AppConfig.java",
+      "line": 6,
+      "message": "Remove this unused import 'org.springframework.http.converter.json.MappingJackson2HttpMessageConverter'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "3db36071-4f5d-4735-9c70-f4b97c7975b3",
+      "rule": "java:S1128",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/config/AppConfig.java",
+      "line": 9,
+      "message": "Remove this unused import 'java.util.List'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "9fe010da-6503-46bf-bd65-6d5fda6c4236",
+      "rule": "java:S5122",
+      "severity": "MAJOR",
+      "type": "VULNERABILITY",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/config/CorsConfig.java",
+      "line": 18,
+      "message": "Make sure that enabling CORS is safe here.",
+      "impacts": [
+        {
+          "softwareQuality": "SECURITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "dbd8debc-b867-43df-8279-d990ad89e681",
+      "rule": "java:S1130",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/config/SecurityConfig.java",
+      "line": 28,
+      "message": "Remove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "dfc58976-3e75-4df4-86fb-dab69aaa2c94",
+      "rule": "java:S112",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/config/SecurityConfig.java",
+      "line": 28,
+      "message": "Replace generic exceptions with specific library exceptions or a custom exception.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "e6ec7da0-9bac-4cee-818e-0920923b9f37",
+      "rule": "java:S6353",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/dto/address/request/CreateAddressRequest.java",
+      "line": 17,
+      "message": "Use concise character class syntax '\\\\d' instead of '[0-9]'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "3e306038-5541-480d-896f-245dd2b2a983",
+      "rule": "java:S6353",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/dto/address/request/UpdateAddressRequest.java",
+      "line": 17,
+      "message": "Use concise character class syntax '\\\\d' instead of '[0-9]'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "4a4c6048-cc95-48e3-9078-58e7219e12db",
+      "rule": "java:S6353",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/dto/auth/request/CheckAccountRequest.java",
+      "line": 13,
+      "message": "Use concise character class syntax '\\\\d' instead of '[0-9]'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "f8902864-687c-48b7-84fc-973fd278ab9c",
+      "rule": "java:S6353",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/dto/auth/request/SendOtpRequest.java",
+      "line": 12,
+      "message": "Use concise character class syntax '\\\\d' instead of '[0-9]'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "7d9dbdaf-a326-4279-b63c-bf68e80bcc31",
+      "rule": "java:S1128",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/service/auth/impl/GoogleTokenVerifier.java",
+      "line": 8,
+      "message": "Remove this unused import 'lombok.RequiredArgsConstructor'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "6f4f06ad-59b4-4d38-90d0-5fa6dd1bf34d",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/entity/OtpVerification.java",
+      "line": 39,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "303ea55f-0659-4f85-a7e9-1336bf299f27",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/entity/SocialAccount.java",
+      "line": 37,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "9ad2275c-883c-4744-8bd8-6570a62e9673",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/entity/User.java",
+      "line": 57,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "e6c39936-0740-4721-9988-01a6c9baa60a",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/entity/User.java",
+      "line": 58,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "c5a0c7f1-ee8e-4c89-8c59-b3e9d3062911",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/entity/User.java",
+      "line": 63,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "7ef849c8-570c-4484-92b8-5d8dc38a8ee6",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/exception/GlobalExceptionHandler.java",
+      "line": 62,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "6a9d50b8-3143-436e-b62d-a063d35917db",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/mapper/AuthMapper.java",
+      "line": 85,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "4ea40bd5-10d2-4390-b0eb-0296b3098e1a",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/service/auth/impl/AuthServiceImpl.java",
+      "line": 63,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "b008d386-dfe1-4671-968f-d21eeb6de397",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/service/auth/impl/AuthServiceImpl.java",
+      "line": 72,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "8c30a780-90f0-4fd8-8713-b8e59d85454d",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/service/auth/impl/AuthServiceImpl.java",
+      "line": 89,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "e63b2c2a-b5da-46a5-abe5-33589039981e",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/service/auth/impl/AuthServiceImpl.java",
+      "line": 119,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "2e2fbfd0-5d69-4845-b9f0-e2cedf343b26",
+      "rule": "java:S8688",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/service/auth/impl/AuthServiceImpl.java",
+      "line": 147,
+      "message": "Explicitly specify the time zone by passing a ZoneId or a Clock to the .now() method.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "INFO"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "d11b4c7e-af4d-4866-b221-529014610ed0",
+      "rule": "java:S2143",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/utils/JwtUtil.java",
+      "line": null,
+      "message": "Use the \"java.time\" API for date and time.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "c5c7a47e-91b8-4cfd-9469-1b8214d9b3ff",
+      "rule": "java:S2147",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/utils/JwtUtil.java",
+      "line": 73,
+      "message": "Combine this catch with the one at line 71, which has the same body. (sonar.java.source not set. Assuming 7 or greater.)",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "9924778d-7aa9-4c26-bbb5-4ca3c7d2320a",
+      "rule": "javascript:S7776",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/App.jsx",
+      "line": 65,
+      "message": "`AUTH_PATHS` should be a `Set`, and use `AUTH_PATHS.has()` to check existence or non-existence.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "679593a9-9c08-4aa0-b8e2-30e2948fde89",
+      "rule": "javascript:S1854",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/App.jsx",
+      "line": 78,
+      "message": "Remove this useless assignment to variable \"isAuthPage\".",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "931f87ec-660c-4620-9516-54cf8a3f8a4c",
+      "rule": "javascript:S1481",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/App.jsx",
+      "line": 78,
+      "message": "Remove the declaration of the unused 'isAuthPage' variable.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "09fa6475-f80f-4194-8943-d41447abf19b",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/LocationSelect.jsx",
+      "line": 440,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "3c58d475-15a0-4930-af55-52e286c1a7a5",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/LocationSelect.jsx",
+      "line": 440,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "52b95ae3-dca8-40c8-bfa8-6ee5c37b2244",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/LocationSelect.jsx",
+      "line": 470,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "f7ff5e2a-93a2-49e4-a017-55719dd65cbf",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 169,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "09030226-1d39-4499-98cd-6f42abd2ecb5",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 322,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c07acaf6-6488-4961-abd3-5bc0544ab1fb",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 397,
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "694c3463-9cc1-4a11-acea-6c9d6a08a57f",
+      "rule": "javascript:S6353",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 492,
+      "message": "Use concise character class syntax '\\d' instead of '[0-9]'.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "1b32dc7a-daa2-411e-862b-62275f02b341",
+      "rule": "javascript:S1854",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 537,
+      "message": "Remove this useless assignment to variable \"res\".",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "dc377ccb-37b7-4e24-8fc1-4a871bc8d208",
+      "rule": "javascript:S1481",
+      "severity": "MINOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 537,
+      "message": "Remove the declaration of the unused 'res' variable.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "26f15273-12f4-4c74-a94e-cd925750bfd2",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 555,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "2f161473-2380-4a7f-9d04-d6e52b43340d",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 600,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "f0ae3b58-0f42-4eb8-abce-e9724c452383",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 600,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "f271f25a-5680-465b-aab1-3c743e424304",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 711,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "16977f28-a34d-4c54-acc7-2d63b301140a",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 721,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "9c77a7f1-d3c5-4105-89eb-af1ad8c84341",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 744,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "b040e877-ad8d-4529-9758-6605c998f4ae",
+      "rule": "javascript:S6848",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 795,
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "efd682ee-9c65-4c01-8fe2-2140d3734299",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 795,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "77f1a966-db0c-4e62-8938-803f40f7d001",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 826,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "43e850d9-be36-48c6-a2bc-b6d3f00b8ce5",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/components/user/ProfileModal.jsx",
+      "line": 846,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "a185e589-3bf5-400c-a965-989b6b8df54b",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/ForgotPasswordPage.jsx",
+      "line": 39,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "9b640177-fd14-4f67-8d9a-f9959d944784",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/ForgotPasswordPage.jsx",
+      "line": 74,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "4c203f51-698e-42bc-90b7-91df2e95c1d7",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/LoginOptionPage.jsx",
+      "line": 52,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "8e31dc53-8db7-4c37-a3a9-57ec99bebfaf",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/LoginPage.jsx",
+      "line": 167,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "24d6b858-0b6e-4b41-bbbc-71f483d8d56b",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/LoginPage.jsx",
+      "line": 202,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "f94aab20-6837-4e6f-8f43-7b19fe69fba6",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/LoginPasswordPage.jsx",
+      "line": 251,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "68366cde-de53-471d-aeb6-d549205f2044",
+      "rule": "javascript:S6853",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/LoginPasswordPage.jsx",
+      "line": 281,
+      "message": "A form label must be associated with a control.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "3ff56a4c-a988-4c60-8d37-3b67ee8d64e9",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/LoginPasswordPage.jsx",
+      "line": 353,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "157a9066-81cb-4e93-a1e6-b3ab58ac0121",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/ResetPasswordPage.jsx",
+      "line": 74,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "c0a4a63c-f913-4ce8-be9d-fb5ce170e9ea",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/SetPasswordPage.jsx",
+      "line": 84,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "520d2bf8-7015-4200-a265-c48f46f973a0",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/SetPasswordPage.jsx",
+      "line": 103,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "f43baff3-f6d7-4959-a0b9-a58ede324cbf",
+      "rule": "javascript:S6479",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/VerifyOtpPage.jsx",
+      "line": 109,
+      "message": "Do not use Array index in keys",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "922416ad-68f3-43f3-9e05-d3434a6407d6",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/auth/VerifyOtpPage.jsx",
+      "line": 128,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "d9a2c2ed-21fc-4fc0-96f0-5e523ef5d92d",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/settings/SettingsPage.jsx",
+      "line": 73,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "bf2aef9e-5210-4e81-9f55-da7950d59260",
+      "rule": "javascript:S1082",
+      "severity": "MINOR",
+      "type": "BUG",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/settings/SettingsPage.jsx",
+      "line": 135,
+      "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ]
+    },
+    {
+      "key": "7f5a1587-e002-4415-ac6d-ab770dd42aba",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/settings/SettingsPage.jsx",
+      "line": 183,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "5b166076-f802-4711-8006-1ba902f223e7",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/settings/SettingsPage.jsx",
+      "line": 245,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "4c5d2990-9167-4c6c-bf21-dcd931fd8577",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/settings/SettingsPage.jsx",
+      "line": 257,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "key": "70a91802-9496-4103-b846-e0afa2ab35c8",
+      "rule": "javascript:S7761",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/settings/SettingsPage.jsx",
+      "line": 309,
+      "message": "Prefer `.dataset` over `setAttribute(…)`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    {
+      "key": "68191844-5eee-40d9-bd77-74eadcb483d0",
+      "rule": "javascript:S7761",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/settings/SettingsPage.jsx",
+      "line": 311,
+      "message": "Prefer `.dataset` over `setAttribute(…)`.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    {
+      "key": "e56a7312-927d-4d03-8384-fd5907f4a025",
+      "rule": "javascript:S1135",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/settings/SettingsPage.jsx",
+      "line": 329,
+      "message": "Complete the task associated to this \"TODO\" comment.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "a236ff07-db9e-4497-a88d-e2b49f5be426",
+      "rule": "javascript:S1135",
+      "severity": "INFO",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/settings/SettingsPage.jsx",
+      "line": 344,
+      "message": "Complete the task associated to this \"TODO\" comment.",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "INFO"
+        }
+      ]
+    },
+    {
+      "key": "19e93b61-b80d-4af4-b942-65032e984f86",
+      "rule": "javascript:S9011",
+      "severity": "MAJOR",
+      "type": "CODE_SMELL",
+      "status": "OPEN",
+      "resolution": null,
+      "issueStatus": "OPEN",
+      "component": "green-juice-hub-auth-user-address:frontend/src/pages/settings/SettingsPage.jsx",
+      "line": 355,
+      "message": "Add an explicit \"type\" attribute to this button.",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ]
+    }
+  ],
+  "acceptedIssues": [
+    {
+      "key": "46d81c97-aa40-415c-9630-181b79832871",
+      "rule": "java:S4502",
+      "severity": "CRITICAL",
+      "type": "VULNERABILITY",
+      "status": "RESOLVED",
+      "resolution": "WONTFIX",
+      "issueStatus": "ACCEPTED",
+      "component": "green-juice-hub-auth-user-address:backend/src/main/java/com/greenjuicehub/backend/config/SecurityConfig.java",
+      "line": 32,
+      "message": "Make sure disabling Spring Security's CSRF protection is safe here.",
+      "impacts": [
+        {
+          "softwareQuality": "SECURITY",
+          "severity": "HIGH"
+        }
+      ]
+    }
+  ],
+  "hotspots": []
+}

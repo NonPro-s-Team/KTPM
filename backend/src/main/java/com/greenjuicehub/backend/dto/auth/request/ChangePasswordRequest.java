@@ -1,16 +1,19 @@
 package com.greenjuicehub.backend.dto.auth.request;
 
+import com.greenjuicehub.backend.validation.BcryptPassword;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class ChangePasswordRequest {
 
     @NotBlank(message = "Vui lòng nhập mật khẩu cũ")
+    @BcryptPassword
     private String oldPassword;
 
     @NotBlank(message = "Vui lòng nhập mật khẩu mới")
-    @Size(min = 8, message = "Mật khẩu tối thiểu 8 ký tự")
+    @BcryptPassword(minCharacters = 8)
     private String newPassword;
 }

@@ -212,7 +212,7 @@ function App() {
       fetchMe()
       fetchCart()
     }
-  }, []) // ← Chỉ chạy 1 lần khi app mount, bỏ useEffect thứ 2
+  }, [fetchCart, fetchMe, isLoggedIn])
 
   return <AppRoutes />
 }

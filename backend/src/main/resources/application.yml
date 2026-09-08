@@ -2,6 +2,13 @@ spring:
   application:
     name: green-juice-hub
 
+  config:
+    # Spring Boot does not load dotenv files automatically. Support both
+    # `cd backend; ./mvnw spring-boot:run` and running the backend from repo root.
+    import:
+      - "optional:file:.env[.properties]"
+      - "optional:file:backend/.env[.properties]"
+
   task:
     scheduling:
       enabled: true
@@ -103,7 +110,8 @@ vnpay:
   ipn-url: ${VNPAY_IPN_URL:https://green-juice-hub-production.up.railway.app/api/payment/vnpay/ipn}
 
 gemini:
-  api-key: ${GEMINI_API_KEY}
+  # Recommendation is optional in local development.
+  api-key: ${GEMINI_API_KEY:}
   model: ${GEMINI_MODEL:gemini-2.5-flash}
   base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com/v1beta}
   timeout-ms: ${GEMINI_TIMEOUT_MS:15000}

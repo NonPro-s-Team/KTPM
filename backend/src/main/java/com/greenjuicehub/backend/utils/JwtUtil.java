@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -16,11 +18,12 @@ public class JwtUtil {
     private final JwtProperties jwtProperties;
 
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
+        return Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateAccessToken(Long userId, String role) {
         return Jwts.builder()
+                .id(UUID.randomUUID().toString())
                 .subject(userId.toString())           // ← setSubject() → subject()
                 .claim("role", role)
                 .claim("type", "access")
@@ -33,6 +36,7 @@ public class JwtUtil {
 
     public String generateRefreshToken(Long userId) {
         return Jwts.builder()
+                .id(UUID.randomUUID().toString())
                 .subject(userId.toString())
                 .claim("type", "refresh")
                 .issuedAt(new Date())
@@ -43,7 +47,8 @@ public class JwtUtil {
     }
     public long getRemainingSeconds(String token) {
         Date expiration = getClaims(token).getExpiration();
-        long remaining = (expiration.getTime() - System.currentTimeMillis()) / 1000;
+        long remainingMillis = expiration.getTime() - System.currentTimeMillis();
+        long remaining = (remainingMillis + 999) / 1000;
         return Math.max(remaining, 0);
     }
 
@@ -67,18 +72,6 @@ public class JwtUtil {
             return false; // hết hạn → false, filter sẽ trả 401
         } catch (JwtException | IllegalArgumentException e) {
             return false; // token giả/lỗi → false
-        }
-    }
-
-    // Thêm method mới để check riêng expired
-    public boolean isTokenExpired(String token) {
-        try {
-            getClaims(token);
-            return false;
-        } catch (ExpiredJwtException e) {
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
         }
     }
 

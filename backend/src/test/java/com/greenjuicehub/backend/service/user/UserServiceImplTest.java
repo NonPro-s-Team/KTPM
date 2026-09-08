@@ -7,6 +7,7 @@ import com.greenjuicehub.backend.entity.User;
 import com.greenjuicehub.backend.exception.AppException;
 import com.greenjuicehub.backend.mapper.UserMapper;
 import com.greenjuicehub.backend.repository.UserRepository;
+import com.greenjuicehub.backend.service.auth.PasswordAttemptService;
 import com.greenjuicehub.backend.service.user.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,7 @@ class UserServiceImplTest {
 
     @Mock private UserRepository userRepository;
     @Mock private PasswordEncoder passwordEncoder;
+    @Mock private PasswordAttemptService passwordAttemptService;
     @Mock private UserMapper userMapper;
     @InjectMocks private UserServiceImpl userService;
 
@@ -106,15 +108,18 @@ class UserServiceImplTest {
     }
 
     @Test
-    void changePasswordWhenCurrentPasswordIsWrongThrowsBadRequest() {
+    void changePasswordWhenCurrentPasswordIsWrongRecordsAttemptAndThrowsUnauthorized() {
         User user = User.builder().id(1L).hasPassword(true).passwordHash("oldHash").build();
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("wrong", "oldHash")).thenReturn(false);
+        when(passwordAttemptService.recordFailed("change:1"))
+                .thenReturn(new PasswordAttemptService.AttemptResult(1, false, false));
 
         AppException error = assertThrows(AppException.class,
                 () -> userService.changePassword(1L, passwordRequest("wrong", "newPassword", "newPassword")));
 
-        assertEquals(HttpStatus.BAD_REQUEST, error.getStatus());
+        assertEquals(HttpStatus.UNAUTHORIZED, error.getStatus());
+        verify(passwordAttemptService).recordFailed("change:1");
         verify(userRepository, never()).save(any());
     }
 
@@ -130,6 +135,37 @@ class UserServiceImplTest {
         assertEquals("newHash", user.getPasswordHash());
         assertTrue(user.getHasPassword());
         verify(userRepository).save(user);
+    }
+
+    @Test
+    void changePasswordWhenAttemptKeyIsLockedStopsBeforeHashCheck() {
+        User user = User.builder().id(1L).hasPassword(true).passwordHash("oldHash").build();
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(passwordAttemptService.isLocked("change:1")).thenReturn(true);
+
+        AppException error = assertThrows(AppException.class,
+                () -> userService.changePassword(1L,
+                        passwordRequest("oldPassword", "newPassword", "newPassword")));
+
+        assertEquals(HttpStatus.TOO_MANY_REQUESTS, error.getStatus());
+        verifyNoInteractions(passwordEncoder);
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void changePasswordRejectsReusingTheCurrentPassword() {
+        User user = User.builder().id(1L).hasPassword(true).passwordHash("oldHash").build();
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("oldPassword", "oldHash")).thenReturn(true);
+
+        AppException error = assertThrows(AppException.class,
+                () -> userService.changePassword(1L,
+                        passwordRequest("oldPassword", "oldPassword", "oldPassword")));
+
+        assertEquals(HttpStatus.BAD_REQUEST, error.getStatus());
+        verify(passwordAttemptService).clearAttempts("change:1");
+        verify(passwordEncoder, never()).encode(anyString());
+        verify(userRepository, never()).save(any());
     }
 
     @Test

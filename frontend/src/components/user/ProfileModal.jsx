@@ -4,6 +4,7 @@ import useAuthStore from '@/store/authStore'
 import { useDrawerTransition } from '@/hooks/useDrawerTransition'
 import LocationSelect from './LocationSelect'
 import useProfileModalStore from '@/store/useProfileModalStore'
+import { passwordLengthError } from '@/utils/passwordPolicy'
 
 
 // ── Icons (inline SVG để không cần thêm thư viện) ──────────────────────────
@@ -230,7 +231,14 @@ function ProfileTab({ user, onUserUpdate }) {
         const errs = {}
         if (hasPassword && !pw.currentPassword) errs.currentPassword = 'Nhập mật khẩu hiện tại'
         if (!pw.newPassword) errs.newPassword = 'Nhập mật khẩu mới'
-        else if (pw.newPassword.length < 6) errs.newPassword = 'Tối thiểu 6 ký tự'
+        else {
+            const lengthError = passwordLengthError(pw.newPassword)
+            if (lengthError) errs.newPassword = lengthError
+        }
+        if (pw.currentPassword) {
+            const currentLengthError = passwordLengthError(pw.currentPassword, { requireMinimum: false })
+            if (currentLengthError) errs.currentPassword = currentLengthError
+        }
         if (!pw.confirmPassword) errs.confirmPassword = 'Nhập lại mật khẩu mới'
         else if (pw.newPassword !== pw.confirmPassword) errs.confirmPassword = 'Mật khẩu không khớp'
         return errs
@@ -411,7 +419,7 @@ function ProfileTab({ user, onUserUpdate }) {
                             <PasswordInput
                                 value={pw.newPassword}
                                 onChange={(e) => setPw({ ...pw, newPassword: e.target.value })}
-                                placeholder="Tối thiểu 6 ký tự"
+                                placeholder="Tối thiểu 8 ký tự"
                             />
                         </Field>
 

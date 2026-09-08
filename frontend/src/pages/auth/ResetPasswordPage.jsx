@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import authApi from '../../api/authApi'
 import useAuthStore from '../../store/authStore'
 import AuthShell from './AuthShell'
+import { passwordLengthError } from '../../utils/passwordPolicy'
 
 
 export default function ResetPasswordPage() {
@@ -18,18 +19,19 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     if (!tempToken) navigate('/forgot-password')
-  }, [tempToken])
+  }, [navigate, tempToken])
   
   const handleSubmit = async () => {
-  if (password.length < 8) return setError('Mật khẩu tối thiểu 8 ký tự')
+  const lengthError = passwordLengthError(password)
+  if (lengthError) return setError(lengthError)
   if (password !== confirm) return setError('Mật khẩu xác nhận không khớp')
   setLoading(true)
   setError('')
   try {
     const res = await authApi.resetPassword(tempToken, password)
     const { accessToken, refreshToken, role } = res.data
-    setAuth(accessToken, refreshToken, role)
-    navigate(role === 'CUSTOMER' ? '/' : '/admin')
+    await setAuth(accessToken, refreshToken, role)
+    navigate(role === 'CUSTOMER' ? '/' : '/admin', { replace: true })
   } catch (err) {
     setError(err.response?.data?.message || 'Có lỗi xảy ra')
   } finally {
