@@ -14,14 +14,29 @@ public class TokenBlacklistService {
     private static final String PREFIX = "blacklist:";
 
     public void blacklist(String token, long ttlSeconds) {
-        redis.opsForValue().set(PREFIX + token, "1", Duration.ofSeconds(ttlSeconds));
+        if (ttlSeconds > 0) {
+            redis.opsForValue().set(keyFor(token), "1", Duration.ofSeconds(ttlSeconds));
+        }
+    }
+
+    /**
+     * Atomically claims a token for one-time use and keeps the claim until the
+     * token expires. This closes the check-then-set race during refresh-token
+     * rotation.
+     */
+    public boolean blacklistIfAbsent(String token, long ttlSeconds) {
+        if (ttlSeconds <= 0) {
+            return false;
+        }
+        return Boolean.TRUE.equals(redis.opsForValue().setIfAbsent(
+                keyFor(token), "1", Duration.ofSeconds(ttlSeconds)));
     }
 
     public boolean isBlacklisted(String token) {
-    try {
-        return Boolean.TRUE.equals(redis.hasKey(PREFIX + token));
-    } catch (Exception e) {
-        return false; // ← Redis lỗi thì cho qua, đừng crash
+        return Boolean.TRUE.equals(redis.hasKey(keyFor(token)));
     }
-}
+
+    private String keyFor(String token) {
+        return PREFIX + TokenFingerprint.sha256(token);
+    }
 }

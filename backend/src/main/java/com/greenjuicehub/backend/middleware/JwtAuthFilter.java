@@ -46,12 +46,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
 
         // Không có token → cho đi tiếp (endpoint public tự xử lý)
-        if (header == null || !header.startsWith("Bearer ")) {
+        if (header == null || header.length() < 7
+                || !header.regionMatches(true, 0, "Bearer ", 0, 7)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = header.substring(7);
+        String token = header.substring(7).trim();
+        if (token.isEmpty() || token.chars().anyMatch(Character::isWhitespace)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
         //  FIX 1: Bọc toàn bộ trong try-catch phòng token malformed
         try {

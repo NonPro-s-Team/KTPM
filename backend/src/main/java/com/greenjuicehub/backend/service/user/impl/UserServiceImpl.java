@@ -7,6 +7,7 @@ import com.greenjuicehub.backend.entity.User;
 import com.greenjuicehub.backend.exception.AppException;
 import com.greenjuicehub.backend.mapper.UserMapper;
 import com.greenjuicehub.backend.repository.UserRepository;
+import com.greenjuicehub.backend.service.auth.PasswordAttemptService;
 import com.greenjuicehub.backend.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordAttemptService passwordAttemptService;
     private final UserMapper userMapper;
 
 
@@ -77,9 +79,25 @@ public class UserServiceImpl implements IUserService {
 
         // Nếu user đã có password → yêu cầu nhập đúng mật khẩu cũ
         if (Boolean.TRUE.equals(user.getHasPassword())) {
-            if (user.getPasswordHash() == null ||
-                    !passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
-                throw new AppException(HttpStatus.BAD_REQUEST, "Mật khẩu hiện tại không đúng");
+            String attemptKey = "change:" + userId;
+            if (passwordAttemptService.isLocked(attemptKey)) {
+                throw new AppException(HttpStatus.TOO_MANY_REQUESTS,
+                        "Thao tác đổi mật khẩu tạm khóa, vui lòng thử lại sau");
+            }
+            if (request.getCurrentPassword() == null || request.getCurrentPassword().isBlank()
+                    || user.getPasswordHash() == null
+                    || !passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
+                PasswordAttemptService.AttemptResult result = passwordAttemptService.recordFailed(attemptKey);
+                if (result.isLocked()) {
+                    throw new AppException(HttpStatus.TOO_MANY_REQUESTS,
+                            "Thao tác đổi mật khẩu tạm khóa, vui lòng thử lại sau");
+                }
+                throw new AppException(HttpStatus.UNAUTHORIZED, "Mật khẩu hiện tại không đúng");
+            }
+            passwordAttemptService.clearAttempts(attemptKey);
+            if (passwordEncoder.matches(request.getNewPassword(), user.getPasswordHash())) {
+                throw new AppException(HttpStatus.BAD_REQUEST,
+                        "Mật khẩu mới không được trùng mật khẩu hiện tại");
             }
         }
 

@@ -18,8 +18,8 @@ export default function LoginPage() {
     try {
       const res = await authApi.loginWithGoogle(credentialResponse.credential)
       const { accessToken, refreshToken, role } = res.data
-      setAuth(accessToken, refreshToken, role)
-      navigate(role === 'CUSTOMER' ? '/' : '/admin')
+      await setAuth(accessToken, refreshToken, role)
+      navigate(role === 'CUSTOMER' ? '/' : '/admin', { replace: true })
     } catch (err) {
       setError(err.response?.data?.message || 'Đăng nhập Google thất bại')
     }

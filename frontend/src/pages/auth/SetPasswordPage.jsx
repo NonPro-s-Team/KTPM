@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import authApi from '../../api/authApi'
 import useAuthStore from '../../store/authStore'
 import AuthShell from './AuthShell'
+import { passwordLengthError } from '../../utils/passwordPolicy'
 
 export default function SetPasswordPage() {
   const navigate = useNavigate()
@@ -20,15 +21,16 @@ export default function SetPasswordPage() {
   }, [tempToken, navigate])
 
   const handleSubmit = async () => {
-  if (password.length < 8) return setError('Mật khẩu tối thiểu 8 ký tự')
+  const lengthError = passwordLengthError(password)
+  if (lengthError) return setError(lengthError)
   if (password !== confirm) return setError('Mật khẩu xác nhận không khớp')
   setLoading(true)
   setError('')
   try {
     const res = await authApi.setPassword(tempToken, password)
     const { accessToken, refreshToken, role } = res.data
-    setAuth(accessToken, refreshToken, role)
-    navigate(role === 'CUSTOMER' ? '/' : '/admin')
+    await setAuth(accessToken, refreshToken, role)
+    navigate(role === 'CUSTOMER' ? '/' : '/admin', { replace: true })
   } catch (err) {
     setError(err.response?.data?.message || 'Có lỗi xảy ra')
   } finally {
@@ -40,8 +42,8 @@ const handleSkip = async () => {
   try {
     const res = await authApi.loginWithOtp(tempToken)
     const { accessToken, refreshToken, role } = res.data
-    setAuth(accessToken, refreshToken, role)
-    navigate(role === 'CUSTOMER' ? '/' : '/admin')
+    await setAuth(accessToken, refreshToken, role)
+    navigate(role === 'CUSTOMER' ? '/' : '/admin', { replace: true })
   } catch (err) {
     setError(err.response?.data?.message || 'Có lỗi xảy ra')
   }

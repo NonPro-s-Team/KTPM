@@ -16,12 +16,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
+
+    private static final SecureRandom OTP_RANDOM = new SecureRandom();
+    private static final String ACCOUNT_NOT_FOUND_MESSAGE = "Tài khoản không tồn tại";
 
     private final UserRepository userRepository;
     private final OtpVerificationRepository otpRepository;
@@ -77,7 +80,7 @@ public class AuthServiceImpl implements IAuthService {
         otpRepository.invalidateAllByPhoneAndType(phone, otpType);
 
         // Tạo OTP mới
-        String otpCode = String.format("%06d", new Random().nextInt(999999));
+        String otpCode = String.format("%06d", OTP_RANDOM.nextInt(1_000_000));
         OtpVerification otp = OtpVerification.builder()
                 .phone(phone)
                 .otpCode(otpCode)
@@ -87,8 +90,6 @@ public class AuthServiceImpl implements IAuthService {
                 .build();
         otpRepository.save(otp);
 
-        System.out.println("📱 OTP cho " + phone + ": " + otpCode);
-
         boolean isNewUser = !userRepository.existsByPhone(phone);
         boolean hasPassword = false;
         if (!isNewUser) {
@@ -96,7 +97,7 @@ public class AuthServiceImpl implements IAuthService {
                     .map(User::getHasPassword).orElse(false);
         }
 
-        return authMapper.toSendOtpResponse(phone, isNewUser, hasPassword, otpCode);
+        return authMapper.toSendOtpResponse(phone, isNewUser, hasPassword);
     }
 
     // ==================== XÁC NHẬN OTP ====================
@@ -129,10 +130,13 @@ public class AuthServiceImpl implements IAuthService {
                     "OTP không đúng, còn " + remaining + " lần thử");
         }
 
+        if (otp.getId() == null || otpRepository.consumeIfUnused(otp.getId()) != 1) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "OTP không hợp lệ hoặc đã được sử dụng");
+        }
+
         // Đúng → clear attempts
         otpLockService.clearAttempts(phone);
         otp.setIsUsed(true);
-        otpRepository.save(otp);
 
         boolean isNewUser = !userRepository.existsByPhone(phone);
         if (isNewUser) {
@@ -146,7 +150,15 @@ public class AuthServiceImpl implements IAuthService {
         }
 
         User user = userRepository.findByPhone(phone).orElseThrow();
-        String tempToken = tempTokenService.generate(user.getId());
+        ITempTokenService.Purpose purpose;
+        if (type == OtpVerification.OtpType.RESET_PASSWORD) {
+            purpose = ITempTokenService.Purpose.RESET_PASSWORD;
+        } else if (type == OtpVerification.OtpType.REGISTER || isNewUser) {
+            purpose = ITempTokenService.Purpose.SET_PASSWORD;
+        } else {
+            purpose = ITempTokenService.Purpose.LOGIN;
+        }
+        String tempToken = tempTokenService.generate(user.getId(), purpose);
 
         return authMapper.toVerifyOtpResponse(isNewUser, user.getHasPassword(), tempToken);
     }
@@ -158,16 +170,18 @@ public class AuthServiceImpl implements IAuthService {
         User user = userRepository.findByPhone(request.getIdentifier())
                 .or(() -> userRepository.findByEmail(request.getIdentifier()))
                 .or(() -> userRepository.findByUsername(request.getIdentifier()))
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Tài khoản không tồn tại"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, ACCOUNT_NOT_FOUND_MESSAGE));
 
-        // Kiểm tra lock
-        if (passwordAttemptService.isLocked(request.getIdentifier())) {
+        String attemptKey = user.getId().toString();
+
+        // Kiểm tra lock theo account, không theo alias người dùng nhập.
+        if (passwordAttemptService.isLocked(attemptKey)) {
             throw new AppException(HttpStatus.TOO_MANY_REQUESTS,
                     "Tài khoản tạm khóa do nhập sai quá nhiều lần, thử lại sau 15 phút");
         }
 
         // Verify captcha nếu đã sai >= 5 lần
-        if (passwordAttemptService.requiresCaptcha(request.getIdentifier())) {
+        if (passwordAttemptService.requiresCaptcha(attemptKey)) {
             captchaVerifier.verify(request.getCaptchaToken());
         }
 
@@ -177,7 +191,7 @@ public class AuthServiceImpl implements IAuthService {
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
             PasswordAttemptService.AttemptResult result =
-                    passwordAttemptService.recordFailed(request.getIdentifier());
+                    passwordAttemptService.recordFailed(attemptKey);
             if (result.isLocked()) {
                 throw new AppException(HttpStatus.TOO_MANY_REQUESTS,
                         "Sai mật khẩu quá 10 lần, tài khoản bị khóa 15 phút");
@@ -201,7 +215,7 @@ public class AuthServiceImpl implements IAuthService {
         }
 
         // Đúng → clear attempts
-        passwordAttemptService.clearAttempts(request.getIdentifier());
+        passwordAttemptService.clearAttempts(attemptKey);
         return buildAuthResponse(user);
     }
 
@@ -209,20 +223,23 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     @Transactional
     public AuthResponse setPassword(SetPasswordRequest request) {
-        Long userId = tempTokenService.validate(request.getTempToken());
+        Long userId = tempTokenService.consume(
+                request.getTempToken(), ITempTokenService.Purpose.SET_PASSWORD);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Tài khoản không tồn tại"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, ACCOUNT_NOT_FOUND_MESSAGE));
 
         if (user.getHasPassword()) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Tài khoản đã có mật khẩu, dùng đổi mật khẩu");
+        }
+        if (!user.getIsActive()) {
+            throw new AppException(HttpStatus.FORBIDDEN, "Tài khoản đã bị khoá");
         }
 
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         user.setHasPassword(true);
         userRepository.save(user);
 
-        tempTokenService.invalidate(request.getTempToken()); // dùng 1 lần
         return buildAuthResponse(user);
     }
 
@@ -235,6 +252,11 @@ public class AuthServiceImpl implements IAuthService {
         String googleId = payload.getSubject();
         String email    = payload.getEmail();
         String name     = (String) payload.get("name");
+
+        if (googleId == null || googleId.isBlank() || email == null || email.isBlank()
+                || !Boolean.TRUE.equals(payload.getEmailVerified())) {
+            throw new AppException(HttpStatus.UNAUTHORIZED, "Google token thiếu email đã xác minh");
+        }
 
         // 1. Tìm theo googleId trong social_accounts
         User user = socialAccountRepository.findByProviderAndProviderId(SocialAccount.Provider.GOOGLE, googleId)
@@ -269,6 +291,9 @@ public class AuthServiceImpl implements IAuthService {
         if (!jwtUtil.isTokenValid(refreshToken)) {
             throw new AppException(HttpStatus.UNAUTHORIZED, "Refresh token không hợp lệ");
         }
+        if (tokenBlacklistService.isBlacklisted(refreshToken)) {
+            throw new AppException(HttpStatus.UNAUTHORIZED, "Refresh token đã bị thu hồi");
+        }
         if (!"refresh".equals(jwtUtil.extractType(refreshToken))) {
             throw new AppException(HttpStatus.UNAUTHORIZED, "Token không đúng loại");
         }
@@ -276,30 +301,46 @@ public class AuthServiceImpl implements IAuthService {
         Long userId = jwtUtil.extractUserId(refreshToken);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User không tồn tại"));
+        if (!user.getIsActive()) {
+            throw new AppException(HttpStatus.FORBIDDEN, "Tài khoản đã bị khoá");
+        }
 
+        // Atomically consume the presented refresh token. A separate
+        // isBlacklisted()/set pair would allow concurrent replay requests.
+        if (!tokenBlacklistService.blacklistIfAbsent(
+                refreshToken, jwtUtil.getRemainingSeconds(refreshToken))) {
+            throw new AppException(HttpStatus.UNAUTHORIZED, "Refresh token đã bị thu hồi");
+        }
         return buildAuthResponse(user);
     }
 
     // ==================== HELPER ====================
     private AuthResponse buildAuthResponse(User user) {
-        String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getRole().name());
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
+
+        return buildAuthResponse(user, refreshToken);
+    }
+
+    private AuthResponse buildAuthResponse(User user, String refreshToken) {
+        String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getRole().name());
 
         return authMapper.toAuthResponse(user, accessToken, refreshToken);
     }
 
     @Override
     public AuthResponse loginWithTempToken(String tempToken) {
-        Long userId = tempTokenService.validate(tempToken);
+        Long userId = tempTokenService.consume(
+                tempToken,
+                ITempTokenService.Purpose.LOGIN,
+                ITempTokenService.Purpose.SET_PASSWORD);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Tài khoản không tồn tại"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, ACCOUNT_NOT_FOUND_MESSAGE));
 
         if (!user.getIsActive()) {
             throw new AppException(HttpStatus.FORBIDDEN, "Tài khoản đã bị khoá");
         }
 
-        tempTokenService.invalidate(tempToken); // dùng 1 lần
         return buildAuthResponse(user);
     }
 
@@ -307,14 +348,25 @@ public class AuthServiceImpl implements IAuthService {
     @Transactional
     public void changePassword(ChangePasswordRequest request, Long currentUserId) {
         User user = userRepository.findById(currentUserId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Tài khoản không tồn tại"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, ACCOUNT_NOT_FOUND_MESSAGE));
 
         if (!user.getHasPassword()) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Tài khoản chưa có mật khẩu");
         }
+        String attemptKey = "change:" + currentUserId;
+        if (passwordAttemptService.isLocked(attemptKey)) {
+            throw new AppException(HttpStatus.TOO_MANY_REQUESTS,
+                    "Thao tác đổi mật khẩu tạm khóa, vui lòng thử lại sau");
+        }
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPasswordHash())) {
+            PasswordAttemptService.AttemptResult result = passwordAttemptService.recordFailed(attemptKey);
+            if (result.isLocked()) {
+                throw new AppException(HttpStatus.TOO_MANY_REQUESTS,
+                        "Thao tác đổi mật khẩu tạm khóa, vui lòng thử lại sau");
+            }
             throw new AppException(HttpStatus.UNAUTHORIZED, "Mật khẩu cũ không đúng");
         }
+        passwordAttemptService.clearAttempts(attemptKey);
         if (passwordEncoder.matches(request.getNewPassword(), user.getPasswordHash())) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Mật khẩu mới không được trùng mật khẩu cũ");
         }
@@ -326,10 +378,14 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     @Transactional
     public AuthResponse resetPassword(ResetPasswordRequest request) {
-        Long userId = tempTokenService.validate(request.getTempToken());
+        Long userId = tempTokenService.consume(
+                request.getTempToken(), ITempTokenService.Purpose.RESET_PASSWORD);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Tài khoản không tồn tại"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, ACCOUNT_NOT_FOUND_MESSAGE));
+        if (!user.getIsActive()) {
+            throw new AppException(HttpStatus.FORBIDDEN, "Tài khoản đã bị khoá");
+        }
 
         if (user.getHasPassword() &&
                 passwordEncoder.matches(request.getNewPassword(), user.getPasswordHash())) {
@@ -340,15 +396,26 @@ public class AuthServiceImpl implements IAuthService {
         user.setHasPassword(true);
         userRepository.save(user);
 
-        tempTokenService.invalidate(request.getTempToken());
         return buildAuthResponse(user);
     }
     @Override
-    public void logout(String accessToken) {
-        if (!jwtUtil.isTokenValid(accessToken)) {
-            throw new AppException(HttpStatus.UNAUTHORIZED, "Token không hợp lệ");
+    public void logout(String accessToken, String refreshToken) {
+        if (!jwtUtil.isTokenValid(refreshToken)
+                || !"refresh".equals(jwtUtil.extractType(refreshToken))) {
+            throw new AppException(HttpStatus.UNAUTHORIZED, "Refresh token không hợp lệ");
         }
-        long ttl = jwtUtil.getRemainingSeconds(accessToken);
-        tokenBlacklistService.blacklist(accessToken, ttl);
+
+        Long userId = jwtUtil.extractUserId(refreshToken);
+        if (accessToken != null && jwtUtil.isTokenValid(accessToken)) {
+            if (!"access".equals(jwtUtil.extractType(accessToken))
+                    || !userId.equals(jwtUtil.extractUserId(accessToken))) {
+                throw new AppException(HttpStatus.UNAUTHORIZED, "Token đăng xuất không hợp lệ");
+            }
+            tokenBlacklistService.blacklist(
+                    accessToken, jwtUtil.getRemainingSeconds(accessToken));
+        }
+
+        tokenBlacklistService.blacklist(
+                refreshToken, jwtUtil.getRemainingSeconds(refreshToken));
     }
 }

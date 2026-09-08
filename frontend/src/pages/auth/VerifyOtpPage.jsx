@@ -52,20 +52,20 @@ export default function VerifyOtpPage() {
     const isNew = isNewUser ?? newUser
 
     if (type === 'RESET_PASSWORD') {
-      navigate('/reset-password', { state: { tempToken } })
+      navigate('/reset-password', { state: { tempToken }, replace: true })
       return
     }
 
     if (isNew) {
-      navigate('/set-password', { state: { tempToken, isNewUser: true } })
+      navigate('/set-password', { state: { tempToken, isNewUser: true }, replace: true })
       return
     }
 
     // Có tài khoản, không có mật khẩu → login luôn
     const loginRes = await authApi.loginWithOtp(tempToken)
     const { accessToken, refreshToken, role } = loginRes.data
-    setAuth(accessToken, refreshToken, role)
-    navigate(role === 'CUSTOMER' ? '/' : '/admin')
+    await setAuth(accessToken, refreshToken, role)
+    navigate(role === 'CUSTOMER' ? '/' : '/admin', { replace: true })
   } catch (err) {
     setError(err.response?.data?.message || 'OTP không đúng')
   } finally {

@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
 import authApi from '../../api/authApi'
 import useAuthStore from '../../store/authStore'
+import { passwordLengthError } from '../../utils/passwordPolicy'
 
 const heroImage =
   'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?auto=format&fit=crop&w=1400&q=85'
@@ -96,6 +97,8 @@ export default function LoginPasswordPage() {
   const handleLogin = async () => {
     if (!identifier) return setError('Vui lòng nhập số điện thoại hoặc email')
     if (!password) return setError('Vui lòng nhập mật khẩu')
+    const lengthError = passwordLengthError(password, { requireMinimum: false })
+    if (lengthError) return setError(lengthError)
     if (requiresCaptcha && !captchaToken) return setError('Vui lòng xác minh captcha')
 
     setLoading(true)
@@ -103,8 +106,8 @@ export default function LoginPasswordPage() {
     try {
       const res = await authApi.login(identifier, password, captchaToken || undefined)
       const { accessToken, refreshToken, role } = res.data
-      setAuth(accessToken, refreshToken, role)
-      navigate(role === 'CUSTOMER' ? '/' : '/admin')
+      await setAuth(accessToken, refreshToken, role)
+      navigate(role === 'CUSTOMER' ? '/' : '/admin', { replace: true })
     } catch (err) {
       const msg = err.response?.data?.message || 'Có lỗi xảy ra'
       setError(msg)
@@ -121,8 +124,8 @@ export default function LoginPasswordPage() {
     try {
       const res = await authApi.loginWithGoogle(credentialResponse.credential)
       const { accessToken, refreshToken, role } = res.data
-      setAuth(accessToken, refreshToken, role)
-      navigate(role === 'CUSTOMER' ? '/' : '/admin')
+      await setAuth(accessToken, refreshToken, role)
+      navigate(role === 'CUSTOMER' ? '/' : '/admin', { replace: true })
     } catch (err) {
       setError(err.response?.data?.message || 'Đăng nhập Google thất bại')
     }

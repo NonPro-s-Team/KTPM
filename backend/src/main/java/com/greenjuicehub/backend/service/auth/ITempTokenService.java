@@ -1,7 +1,13 @@
 package com.greenjuicehub.backend.service.auth;
 
 public interface ITempTokenService {
-    String generate(Long userId);
-    Long validate(String token); // trả userId hoặc throw
-    void invalidate(String token);
+    enum Purpose {
+        LOGIN,
+        SET_PASSWORD,
+        RESET_PASSWORD
+    }
+
+    String generate(Long userId, Purpose purpose);
+
+    Long consume(String token, Purpose... expectedPurposes);
 }

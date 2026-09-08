@@ -286,17 +286,131 @@ const DELIVERY_PROVINCES = [
     // 'Long An',
 ]
 
+const normalizeLocation = (text) =>
+    text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+
+function HighlightedOptionName({ name, query }) {
+    const searchTerm = query.trim()
+    if (!searchTerm) return name
+
+    const index = normalizeLocation(name).indexOf(normalizeLocation(searchTerm))
+    if (index < 0) return name
+
+    return (
+        <>
+            {name.slice(0, index)}
+            <mark style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)', borderRadius: '2px' }}>
+                {name.slice(index, index + searchTerm.length)}
+            </mark>
+            {name.slice(index + searchTerm.length)}
+        </>
+    )
+}
+
+function ComboboxOption({ option, selected, query, onSelect }) {
+    const setHoverBackground = (event, background) => {
+        if (!selected) event.currentTarget.style.background = background
+    }
+
+    return (
+        <button
+            type="button"
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={(event) => { event.stopPropagation(); onSelect(option) }}
+            className="w-full border-0 px-3 py-2 text-left text-sm cursor-pointer transition-colors"
+            style={{
+                background: selected ? 'var(--color-primary-subtle)' : 'transparent',
+                color: selected ? 'var(--color-primary)' : 'var(--color-text-primary)',
+                fontWeight: selected ? 600 : 400,
+            }}
+            onMouseEnter={(event) => setHoverBackground(event, 'var(--color-bg-muted)')}
+            onMouseLeave={(event) => setHoverBackground(event, 'transparent')}
+        >
+            <HighlightedOptionName name={option.name} query={query} />
+        </button>
+    )
+}
+
+function ComboboxMenu({ options, query, value, onSelect }) {
+    const menuStyle = {
+        background: 'var(--color-bg-elevated)',
+        border: '1.5px solid var(--color-border-subtle)',
+        boxShadow: 'var(--shadow-lg)',
+        maxHeight: '220px',
+        overflowY: 'auto',
+    }
+
+    return (
+        <div className="absolute left-0 right-0 top-full mt-1 rounded-[var(--radius-md)] z-50" style={menuStyle}>
+            {options.length === 0 ? (
+                <div className="px-3 py-4 text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
+                    {query ? `Không tìm thấy "${query}"` : 'Không có dữ liệu'}
+                </div>
+            ) : options.map((option) => (
+                <ComboboxOption
+                    key={option.code}
+                    option={option}
+                    selected={value === option.code}
+                    query={query}
+                    onSelect={onSelect}
+                />
+            ))}
+        </div>
+    )
+}
+
+function ComboboxIcon({ loading, open }) {
+    if (loading) {
+        return (
+            <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" strokeOpacity="0.25" /><path d="M12 2a10 10 0 0110 10" />
+            </svg>
+        )
+    }
+
+    return (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <polyline points="6 9 12 15 18 9" transform={open ? 'rotate(180 12 12)' : undefined} />
+        </svg>
+    )
+}
+
+function ComboboxValue({ open, inputRef, query, setQuery, close, label, loading, selected, placeholder }) {
+    if (open) {
+        return (
+            <input
+                ref={inputRef}
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={(event) => { if (event.key === 'Escape') close() }}
+                onClick={(event) => event.stopPropagation()}
+                placeholder={`Tìm ${label?.toLowerCase() || ''}...`}
+                className="flex-1 outline-none bg-transparent text-sm min-w-0"
+                style={{ color: 'var(--color-text-primary)' }}
+            />
+        )
+    }
+
+    const text = loading ? 'Đang tải...' : (selected?.name ?? placeholder)
+    return (
+        <span className="truncate flex-1" style={{ color: selected ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>
+            {text}
+        </span>
+    )
+}
+
 // ── Combobox ───────────────────────────────────────────────────────
 function Combobox({ label, value, options, onChange, loading, disabled, error, placeholder }) {
     const [open, setOpen] = useState(false)
     const [query, setQuery] = useState('')
     const inputRef = useRef(null)
-    const listRef = useRef(null)
     const ref = useRef(null)
 
+    const close = () => { setOpen(false); setQuery('') }
+
     useEffect(() => {
-        const handler = (e) => {
-            if (!ref.current?.contains(e.target)) { setOpen(false); setQuery('') }
+        const handler = (event) => {
+            if (!ref.current?.contains(event.target)) close()
         }
         document.addEventListener('mousedown', handler)
         return () => document.removeEventListener('mousedown', handler)
@@ -304,115 +418,45 @@ function Combobox({ label, value, options, onChange, loading, disabled, error, p
 
     useEffect(() => { if (open) inputRef.current?.focus() }, [open])
 
-    const selected = options.find((o) => o.code === value)
-
-    const normalize = (str) =>
-        str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-
-    const filtered = query.trim()
-        ? options.filter((o) => normalize(o.name).includes(normalize(query)))
+    const selected = options.find((option) => option.code === value)
+    const searchTerm = normalizeLocation(query.trim())
+    const filtered = searchTerm
+        ? options.filter((option) => normalizeLocation(option.name).includes(searchTerm))
         : options
 
-    const handleOpen = () => { if (disabled || loading) return; setOpen(true); setQuery('') }
-    const handleSelect = (opt) => { onChange(opt); setOpen(false); setQuery('') }
-    const handleKeyDown = (e) => { if (e.key === 'Escape') { setOpen(false); setQuery('') } }
+    const handleOpen = () => {
+        if (disabled || loading) return
+        setOpen(true)
+        setQuery('')
+    }
+    const handleSelect = (option) => { onChange(option); close() }
+    const closedBorderColor = error ? '#ef4444' : 'var(--color-border-subtle)'
+    const borderColor = open ? 'var(--color-primary)' : closedBorderColor
 
     return (
         <div ref={ref} className="flex flex-col gap-1">
-            {label && (
-                <label className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
-                    {label}
-                </label>
-            )}
+            {label && <label className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>{label}</label>}
             <div className="relative">
                 <div
                     className="w-full px-3 py-2 rounded-[var(--radius-md)] text-sm flex items-center justify-between transition-all"
                     style={{
                         background: 'var(--color-bg-muted)',
-                        border: `1.5px solid ${open ? 'var(--color-primary)' : error ? '#ef4444' : 'var(--color-border-subtle)'}`,
+                        border: `1.5px solid ${borderColor}`,
                         boxShadow: open ? 'var(--shadow-glow)' : 'none',
                         cursor: disabled || loading ? 'not-allowed' : 'pointer',
                         opacity: disabled ? 0.5 : 1,
                     }}
                     onClick={handleOpen}
                 >
-                    {open ? (
-                        <input
-                            ref={inputRef}
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            onClick={(e) => e.stopPropagation()}
-                            placeholder={`Tìm ${label?.toLowerCase() || ''}...`}
-                            className="flex-1 outline-none bg-transparent text-sm min-w-0"
-                            style={{ color: 'var(--color-text-primary)' }}
-                        />
-                    ) : (
-                        <span className="truncate flex-1"
-                            style={{ color: selected ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>
-                            {loading ? 'Đang tải...' : selected ? selected.name : placeholder}
-                        </span>
-                    )}
-                    <span className="flex-shrink-0 ml-2 transition-transform"
-                        style={{ color: 'var(--color-text-muted)', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                        {loading
-                            ? <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <circle cx="12" cy="12" r="10" strokeOpacity="0.25" /><path d="M12 2a10 10 0 0110 10" />
-                            </svg>
-                            : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                                <polyline points="6 9 12 15 18 9" />
-                            </svg>
-                        }
+                    <ComboboxValue
+                        open={open} inputRef={inputRef} query={query} setQuery={setQuery}
+                        close={close} label={label} loading={loading} selected={selected} placeholder={placeholder}
+                    />
+                    <span className="flex-shrink-0 ml-2" style={{ color: 'var(--color-text-muted)' }}>
+                        <ComboboxIcon loading={loading} open={open} />
                     </span>
                 </div>
-
-                {open && (
-                    <div ref={listRef} className="absolute left-0 right-0 top-full mt-1 rounded-[var(--radius-md)] z-50"
-                        style={{
-                            background: 'var(--color-bg-elevated)',
-                            border: '1.5px solid var(--color-border-subtle)',
-                            boxShadow: 'var(--shadow-lg)',
-                            maxHeight: '220px',
-                            overflowY: 'auto',
-                        }}>
-                        {filtered.length === 0 ? (
-                            <div className="px-3 py-4 text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
-                                {query ? `Không tìm thấy "${query}"` : 'Không có dữ liệu'}
-                            </div>
-                        ) : (
-                            filtered.map((opt) => {
-                                const isSelected = value === opt.code
-                                const highlight = (name) => {
-                                    if (!query.trim()) return name
-                                    const idx = normalize(name).indexOf(normalize(query))
-                                    if (idx === -1) return name
-                                    return (<>
-                                        {name.slice(0, idx)}
-                                        <mark style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)', borderRadius: '2px' }}>
-                                            {name.slice(idx, idx + query.length)}
-                                        </mark>
-                                        {name.slice(idx + query.length)}
-                                    </>)
-                                }
-                                return (
-                                    <div key={opt.code}
-                                        onMouseDown={(e) => { e.preventDefault(); handleSelect(opt) }}
-                                        className="px-3 py-2 text-sm cursor-pointer transition-colors"
-                                        style={{
-                                            background: isSelected ? 'var(--color-primary-subtle)' : 'transparent',
-                                            color: isSelected ? 'var(--color-primary)' : 'var(--color-text-primary)',
-                                            fontWeight: isSelected ? 600 : 400,
-                                        }}
-                                        onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.background = 'var(--color-bg-muted)' }}
-                                        onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.background = 'transparent' }}
-                                    >
-                                        {highlight(opt.name)}
-                                    </div>
-                                )
-                            })
-                        )}
-                    </div>
-                )}
+                {open && <ComboboxMenu options={filtered} query={query} value={value} onSelect={handleSelect} />}
             </div>
             {error && <p className="text-xs" style={{ color: '#ef4444' }}>{error}</p>}
         </div>
@@ -504,11 +548,11 @@ export default function LocationSelect({ value = {}, onChange, errors = {} }) {
                     setLoadingDist(true)
                     api.get(`/shipping/districts?provinceId=${defaultProv.code}`)
                         .then((r) => setDistricts(r.data.map((d) => ({ code: d.DistrictID, name: d.DistrictName }))))
-                        .catch(console.error)
+                        .catch(() => setDistricts([]))
                         .finally(() => setLoadingDist(false))
                 }
             })
-            .catch(console.error)
+            .catch(() => setProvinces([]))
             .finally(() => setLoadingProv(false))
     }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -519,31 +563,53 @@ export default function LocationSelect({ value = {}, onChange, errors = {} }) {
         const prov = provinces.find((p) => p.name === value.province)
         if (!prov || selProv?.code === prov.code) return
 
-        setSelProv(prov)
-        setLoadingDist(true)
-        api.get(`/shipping/districts?provinceId=${prov.code}`)
-            .then((res) => {
-                const dists = res.data.map((d) => ({ code: d.DistrictID, name: d.DistrictName }))
+        let cancelled = false
+        const restoreSelection = async () => {
+            // Defer state synchronization until after the current render commits.
+            await Promise.resolve()
+            if (cancelled) return
+
+            setSelProv(prov)
+            setLoadingDist(true)
+            try {
+                const districtResponse = await api.get(`/shipping/districts?provinceId=${prov.code}`)
+                if (cancelled) return
+
+                const dists = districtResponse.data.map((district) => ({
+                    code: district.DistrictID,
+                    name: district.DistrictName,
+                }))
                 setDistricts(dists)
-                if (value.district) {
-                    const dist = dists.find((d) => d.name === value.district)
-                    if (dist) {
-                        setSelDist(dist)
-                        setLoadingWard(true)
-                        api.get(`/shipping/wards?districtId=${dist.code}`)
-                            .then((res2) => {
-                                const ws = res2.data.map((w) => ({ code: w.WardCode, name: w.WardName }))
-                                setWards(ws)
-                                if (value.ward) {
-                                    const ward = ws.find((w) => w.name === value.ward)
-                                    if (ward) setSelWard(ward)
-                                }
-                            })
-                            .finally(() => setLoadingWard(false))
-                    }
+
+                const dist = dists.find((district) => district.name === value.district)
+                if (!dist) return
+
+                setSelDist(dist)
+                setLoadingWard(true)
+                try {
+                    const wardResponse = await api.get(`/shipping/wards?districtId=${dist.code}`)
+                    if (cancelled) return
+
+                    const availableWards = wardResponse.data.map((ward) => ({
+                        code: ward.WardCode,
+                        name: ward.WardName,
+                    }))
+                    setWards(availableWards)
+                    setSelWard(availableWards.find((ward) => ward.name === value.ward) ?? null)
+                } catch {
+                    if (!cancelled) setWards([])
+                } finally {
+                    if (!cancelled) setLoadingWard(false)
                 }
-            })
-            .finally(() => setLoadingDist(false))
+            } catch {
+                if (!cancelled) setDistricts([])
+            } finally {
+                if (!cancelled) setLoadingDist(false)
+            }
+        }
+
+        restoreSelection()
+        return () => { cancelled = true }
     }, [provinces])  // eslint-disable-line react-hooks/exhaustive-deps
 
     // ── Handlers ──────────────────────────────────────────────────
@@ -558,7 +624,7 @@ export default function LocationSelect({ value = {}, onChange, errors = {} }) {
         setLoadingDist(true)
         api.get(`/shipping/districts?provinceId=${prov.code}`)
             .then((res) => setDistricts(res.data.map((d) => ({ code: d.DistrictID, name: d.DistrictName }))))
-            .catch(console.error)
+            .catch(() => setDistricts([]))
             .finally(() => setLoadingDist(false))
     }
 
@@ -577,7 +643,7 @@ export default function LocationSelect({ value = {}, onChange, errors = {} }) {
         setLoadingWard(true)
         api.get(`/shipping/wards?districtId=${dist.code}`)
             .then((res) => setWards(res.data.map((w) => ({ code: w.WardCode, name: w.WardName }))))
-            .catch(console.error)
+            .catch(() => setWards([]))
             .finally(() => setLoadingWard(false))
     }
 
