@@ -25,14 +25,11 @@ const authApi = {
   loginWithGoogle: (idToken) =>
     api.post('/auth/google', { idToken }),
 
-  refresh: () =>
-    api.post('/auth/refresh', null, { skipAccessToken: true }),
-  
   checkAccount: (phone) =>
-  api.post('/auth/check-account', { phone }),
+    api.post('/auth/check-account', { phone }),
 
-  logout: () =>
-    api.post('/auth/logout'),
+  logout: (refreshToken) =>
+    api.post('/auth/logout', { refreshToken }),
 }
 
 export default authApi

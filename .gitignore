@@ -54,3 +54,6 @@ node_modules/
 # Postman local reports may contain short-lived access/refresh tokens
 postman/results/*
 !postman/results/.gitkeep
+
+# Local SonarQube scanner work directory
+quality/sonarqube-auth/.scannerwork/

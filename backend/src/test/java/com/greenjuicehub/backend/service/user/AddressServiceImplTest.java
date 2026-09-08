@@ -157,6 +157,18 @@ class AddressServiceImplTest {
     }
 
     @Test
+    void updateAddressOwnedByAnotherUserIsRejectedBeforeAnyWrite() {
+        when(addressRepository.findByIdAndUserId(9L, 7L)).thenReturn(Optional.empty());
+
+        AppException error = assertThrows(AppException.class,
+                () -> addressService.updateAddress(7L, 9L, updateRequest(true)));
+
+        assertEquals(HttpStatus.NOT_FOUND, error.getStatus());
+        verify(addressRepository, never()).clearDefaultByUserId(any());
+        verify(addressRepository, never()).save(any());
+    }
+
+    @Test
     void deleteNonDefaultAddressDoesNotPromoteAnotherAddress() {
         Address address = Address.builder().id(9L).isDefault(false).build();
         when(addressRepository.findByIdAndUserId(9L, 7L)).thenReturn(Optional.of(address));
@@ -178,6 +190,18 @@ class AddressServiceImplTest {
 
         assertTrue(remaining.getIsDefault());
         verify(addressRepository).save(remaining);
+    }
+
+    @Test
+    void deleteAddressOwnedByAnotherUserIsRejectedBeforeAnyWrite() {
+        when(addressRepository.findByIdAndUserId(9L, 7L)).thenReturn(Optional.empty());
+
+        AppException error = assertThrows(AppException.class,
+                () -> addressService.deleteAddress(7L, 9L));
+
+        assertEquals(HttpStatus.NOT_FOUND, error.getStatus());
+        verify(addressRepository, never()).delete(any());
+        verify(addressRepository, never()).findAllByUserIdOrdered(any());
     }
 
     @Test
@@ -203,6 +227,18 @@ class AddressServiceImplTest {
         assertTrue(address.getIsDefault());
         verify(addressRepository).clearDefaultByUserId(7L);
         verify(addressRepository).save(address);
+    }
+
+    @Test
+    void setDefaultOnAddressOwnedByAnotherUserIsRejectedBeforeAnyWrite() {
+        when(addressRepository.findByIdAndUserId(9L, 7L)).thenReturn(Optional.empty());
+
+        AppException error = assertThrows(AppException.class,
+                () -> addressService.setDefault(7L, 9L));
+
+        assertEquals(HttpStatus.NOT_FOUND, error.getStatus());
+        verify(addressRepository, never()).clearDefaultByUserId(any());
+        verify(addressRepository, never()).save(any());
     }
 
     private CreateAddressRequest createRequest(boolean isDefault) {

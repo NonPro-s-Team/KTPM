@@ -29,4 +29,8 @@ public interface OtpVerificationRepository extends JpaRepository<OtpVerification
     void invalidateAllByPhoneAndType(
             @Param("phone") String phone,
             @Param("type") OtpVerification.OtpType type);
+
+    @Modifying
+    @Query("UPDATE OtpVerification o SET o.isUsed = true WHERE o.id = :id AND o.isUsed = false")
+    int consumeIfUnused(@Param("id") Long id);
 }

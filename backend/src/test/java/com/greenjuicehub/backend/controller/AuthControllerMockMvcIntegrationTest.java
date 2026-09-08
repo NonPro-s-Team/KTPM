@@ -9,6 +9,8 @@ import com.greenjuicehub.backend.service.auth.IAuthService;
 import com.greenjuicehub.backend.service.auth.TokenBlacklistService;
 import com.greenjuicehub.backend.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -87,14 +89,15 @@ class AuthControllerMockMvcIntegrationTest {
     @Test
     void sendOtpIsPublicAndReturnsServiceResponse() throws Exception {
         when(authService.sendOtp(any(SendOtpRequest.class)))
-                .thenReturn(OtpResponse.builder().success(true).otpCode("123456").build());
+                .thenReturn(OtpResponse.builder().success(true).message("Đã gửi OTP").build());
 
         mockMvc.perform(post("/api/auth/send-otp")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"phone\":\"0901234567\",\"type\":\"LOGIN\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.otpCode").value("123456"));
+                .andExpect(jsonPath("$.message").value("Đã gửi OTP"))
+                .andExpect(jsonPath("$.otpCode").doesNotExist());
 
         verify(authService).sendOtp(argThat(request ->
                 "0901234567".equals(request.getPhone()) && "LOGIN".equals(request.getType())));
@@ -148,13 +151,64 @@ class AuthControllerMockMvcIntegrationTest {
     }
 
     @Test
-    void logoutExtractsBearerToken() throws Exception {
+    void refreshWithoutAuthorizationHeaderReturnsUnauthorized() throws Exception {
+        mockMvc.perform(post("/api/auth/refresh"))
+                .andExpect(status().isUnauthorized());
+
+        verifyNoInteractions(authService);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Basic refresh-token", "Bearer", "Bearer two tokens"})
+    void refreshWithMalformedAuthorizationHeaderReturnsUnauthorized(String authorization) throws Exception {
+        mockMvc.perform(post("/api/auth/refresh")
+                        .header("Authorization", authorization))
+                .andExpect(status().isUnauthorized());
+
+        verifyNoInteractions(authService);
+    }
+
+    @Test
+    void logoutForwardsAccessHeaderAndRefreshTokenBody() throws Exception {
         allowBearerTokenThroughMvcFilter("access-token");
         mockMvc.perform(post("/api/auth/logout")
-                        .header("Authorization", "Bearer access-token"))
+                        .header("Authorization", "Bearer access-token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"refreshToken\":\"refresh-token\"}"))
                 .andExpect(status().isOk());
 
-        verify(authService).logout("access-token");
+        verify(authService).logout("access-token", "refresh-token");
+    }
+
+    @Test
+    void logoutWithoutAccessHeaderStillForwardsRefreshTokenBody() throws Exception {
+        mockMvc.perform(post("/api/auth/logout")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"refreshToken\":\"refresh-token\"}"))
+                .andExpect(status().isOk());
+
+        verify(authService).logout(null, "refresh-token");
+    }
+
+    @Test
+    void logoutWithoutRefreshTokenBodyIsRejectedBeforeServiceCall() throws Exception {
+        mockMvc.perform(post("/api/auth/logout")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(authService);
+    }
+
+    @Test
+    void logoutWithMalformedAccessHeaderReturnsUnauthorized() throws Exception {
+        mockMvc.perform(post("/api/auth/logout")
+                        .header("Authorization", "Basic access-token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"refreshToken\":\"refresh-token\"}"))
+                .andExpect(status().isUnauthorized());
+
+        verifyNoInteractions(authService);
     }
 
     private void allowBearerTokenThroughMvcFilter(String token) {

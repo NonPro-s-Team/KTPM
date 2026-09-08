@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Green Juice Hub Admin browser tests" time="8.460" tests="2" failures="0">
+  <testsuite name="Root Suite" timestamp="2026-09-05T17:11:53" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="QLPT-279 - Admin journey and tag authorization" timestamp="2026-09-05T17:11:53" tests="2" file="D:\Workspace\university\KTPM\KTPM\e2e\tests\admin_journey_test.js" time="8.457" failures="0">
+    <testcase name="QLPT-279 - Admin journey and tag authorization: ADMIN đăng nhập và mở Dashboard, Sản phẩm, Đơn hàng, Người dùng" time="6.364" classname="ADMIN đăng nhập và mở Dashboard, Sản phẩm, Đơn hàng, Người dùng">
+    </testcase>
+    <testcase name="QLPT-279 - Admin journey and tag authorization: CUSTOMER gọi API quản lý tag phải nhận 403" time="0.120" classname="CUSTOMER gọi API quản lý tag phải nhận 403">
+    </testcase>
+  </testsuite>
+</testsuites>
