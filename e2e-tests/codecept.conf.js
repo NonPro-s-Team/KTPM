@@ -5,6 +5,9 @@ export const config = {
   tests: './tests/*_test.js',
   output: './output',
   helpers: {
+    Session: {
+      require: './helpers/Session.js'
+    },
     Playwright: {
       browser: 'chromium',
       url: 'http://localhost:5173',
