@@ -13,7 +13,6 @@ import com.greenjuicehub.backend.repository.ProductVariantRepository;
 import com.greenjuicehub.backend.repository.PromotionRepository;
 import com.greenjuicehub.backend.repository.PromotionUsageRepository;
 import com.greenjuicehub.backend.service.promotion.impl.PromotionServiceImpl;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -121,13 +120,8 @@ class PromotionServiceImplTest {
                 .hasMessage("Sản phẩm không tồn tại");
     }
 
-    @Disabled("BUG: buy-now thiếu quantity gây NullPointerException thay vì lỗi nghiệp vụ 400")
     @Test
     void buyNowShouldRejectMissingQuantityWithBadRequest() {
-        ProductVariant variant = ProductVariant.builder().id(5L)
-                .salePrice(new BigDecimal("50000")).build();
-        when(productVariantRepository.findById(5L)).thenReturn(Optional.of(variant));
-
         assertThatThrownBy(() -> promotionService.getAvailablePromos(
                 9L, new GetAvailablePromosRequest(null, 5L, null)))
                 .isInstanceOf(AppException.class)

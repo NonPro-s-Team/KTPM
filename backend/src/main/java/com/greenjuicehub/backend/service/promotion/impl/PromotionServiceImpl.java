@@ -75,6 +75,7 @@ public class PromotionServiceImpl implements IPromotionService {
     private BigDecimal resolveSubtotal(Long userId, GetAvailablePromosRequest request) {
         // BuyNow: dùng variantId + quantity
         if (request.getVariantId() != null) {
+            validateBuyNowQuantity(request.getQuantity());
             ProductVariant variant = productVariantRepository.findById(request.getVariantId())
                     .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Sản phẩm không tồn tại"));
             BigDecimal price = variant.getSalePrice() != null
@@ -98,6 +99,12 @@ public class PromotionServiceImpl implements IPromotionService {
         }
 
         return BigDecimal.ZERO;
+    }
+
+    private void validateBuyNowQuantity(Integer quantity) {
+        if (quantity == null || quantity < 1) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Số lượng tối thiểu là 1");
+        }
     }
 
     private String resolveIneligibleReason(Promotion p, Long userId, BigDecimal subtotal) {
