@@ -409,6 +409,9 @@ public class OrderServiceImpl implements IOrderService {
 
         if (request.getVariantId() != null) {
             // ── BuyNow: tính từ variant ──────────────────────────────────────
+            if (request.getQuantity() == null || request.getQuantity() < 1) {
+                throw new AppException(HttpStatus.BAD_REQUEST, "Số lượng tối thiểu là 1");
+            }
             ProductVariant variant = productVariantRepository.findById(request.getVariantId())
                     .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Sản phẩm không tồn tại"));
             BigDecimal price = variant.getSalePrice() != null
