@@ -1,7 +1,9 @@
 package com.greenjuicehub.backend.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,12 +45,31 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorBody(400, message));
     }
 
-    // 2. (Khuyên dùng) Xử lý lỗi truyền sai kiểu dữ liệu (vd: truyền productId="abc" thay vì số)
+    // 2. (Khuyên dùng) Xử lý lỗi truyền sai kiểu dữ liệu qua @RequestParam/@PathVariable
+    //    (vd: productId="abc" trên query string, không áp dụng cho JSON body)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, Object>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         String message = String.format("Tham số '%s' nhận giá trị không hợp lệ", ex.getName());
         return ResponseEntity.badRequest().body(errorBody(400, message));
     }
+
+    // 3. Xử lý lỗi parse JSON body: sai kiểu dữ liệu (vd: rating="abc" hoặc 3.5 vào field Byte),
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, Object>> handleMessageNotReadable(HttpMessageNotReadableException ex) {
+        String message = "Dữ liệu gửi lên không hợp lệ";
+
+        // Cố gắng bóc tách tên field cụ thể nếu nguyên nhân là do sai kiểu dữ liệu
+        // (Jackson InvalidFormatException), để trả message rõ ràng hơn cho FE/tester.
+        Throwable cause = ex.getCause();
+        if (cause instanceof InvalidFormatException ife && !ife.getPath().isEmpty()) {
+            String fieldName = ife.getPath().get(ife.getPath().size() - 1).getFieldName();
+            message = String.format("Trường '%s' nhận giá trị không hợp lệ", fieldName);
+        }
+
+        log.warn("HttpMessageNotReadableException: {}", ex.getMessage());
+        return ResponseEntity.badRequest().body(errorBody(400, message));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneral(Exception ex) {
         log.error("Unhandled exception: {}", ex.getMessage(), ex);  // ← thêm dòng này
