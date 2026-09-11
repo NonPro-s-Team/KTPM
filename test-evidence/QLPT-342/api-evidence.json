@@ -1,0 +1,32 @@
+[
+  {
+    "method": "POST",
+    "uri": "/api/cart/items",
+    "request": {
+      "productId": 13,
+      "variantId": 37,
+      "quantity": 1.5
+    },
+    "status": 400,
+    "response": {
+      "message": "Dữ liệu JSON không hợp lệ. Các trường số nguyên (ví dụ quantity) không được nhận số thập phân.",
+      "status": 400,
+      "timestamp": "2026-09-11T22:07:35.227076200"
+    },
+    "serviceVerification": "verifyNoInteractions(cartService) passed"
+  },
+  {
+    "method": "PUT",
+    "uri": "/api/cart/items/7",
+    "request": {
+      "quantity": 1.5
+    },
+    "status": 400,
+    "response": {
+      "message": "Dữ liệu JSON không hợp lệ. Các trường số nguyên (ví dụ quantity) không được nhận số thập phân.",
+      "status": 400,
+      "timestamp": "2026-09-11T22:07:35.318533800"
+    },
+    "serviceVerification": "verifyNoInteractions(cartService) passed"
+  }
+]
