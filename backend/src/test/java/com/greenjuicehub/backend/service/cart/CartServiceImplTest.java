@@ -79,7 +79,9 @@ class CartServiceImplTest {
     @Test
     void addItemIncrementsExistingItem() {
         Cart cart = Cart.builder().id(10L).build();
-        ProductVariant variant = ProductVariant.builder().id(20L).isActive(true).stockQty(6).build();
+        Product product = Product.builder().id(40L).build();
+        ProductVariant variant = ProductVariant.builder().id(20L).
+                product(product).isActive(true).stockQty(6).build();
         CartItem existing = CartItem.builder().id(30L).quantity(2).variant(variant).build();
         AddToCartRequest request = new AddToCartRequest(40L, 20L, 3);
         CartResponse expected = CartResponse.builder().cartId(10L).build();
@@ -123,7 +125,9 @@ class CartServiceImplTest {
     @Test
     void addItemRejectsQuantityAboveStock() {
         Cart cart = Cart.builder().id(10L).build();
-        ProductVariant variant = ProductVariant.builder().id(20L).isActive(true).stockQty(2).build();
+        Product product = Product.builder().id(40L).build();
+        ProductVariant variant = ProductVariant.builder().id(20L).product(product)
+                .isActive(true).stockQty(2).build();
         when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));
         when(variantRepository.findById(20L)).thenReturn(Optional.of(variant));
 
