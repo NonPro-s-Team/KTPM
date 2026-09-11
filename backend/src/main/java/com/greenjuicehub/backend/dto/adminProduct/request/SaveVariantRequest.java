@@ -1,6 +1,7 @@
 package com.greenjuicehub.backend.dto.adminProduct.request;
 
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -32,4 +33,11 @@ public class SaveVariantRequest {
 
     private Integer sortOrder = 0;
     private Boolean isActive = true;
+
+    @AssertTrue(message = "Giá sale phải nhỏ hơn hoặc bằng giá gốc")
+    public boolean isSalePriceValid() {
+        return originalPrice == null
+                || salePrice == null
+                || salePrice.compareTo(originalPrice) <= 0;
+    }
 }
