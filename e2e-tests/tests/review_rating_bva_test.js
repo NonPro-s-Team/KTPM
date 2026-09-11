@@ -24,10 +24,9 @@ const ORDER_ID_RATING_6 = process.env.TEST_ORDER_ID_RATING_6;
 // để app nhận diện đã đăng nhập (không cần login lại qua UI mỗi lần)
 // ===================================================================
 async function loginWithToken(I) {
-  I.amOnPage('/'); // vào trang bất kỳ trước để có origin hợp lệ cho localStorage
-  I.executeScript((token) => {
-    localStorage.setItem('accessToken', token);
-  }, ACCESS_TOKEN);
+  await I.amOnPage('/');
+  await I.seedCustomerSession();
+  await I.refreshPage();
 }
 
 // ===================================================================
