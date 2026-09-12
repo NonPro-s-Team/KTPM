@@ -3,3 +3,12 @@
 .\mvnw.cmd test "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"
 
 start target/site/jacoco/index.html
+
+
+- chạy test
+.\mvnw.cmd clean verify "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"
+- xuất jacoco
+.\mvnw.cmd jacoco:report
+
+-lệnh gộp
+.\mvnw.cmd clean test jacoco:report "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"

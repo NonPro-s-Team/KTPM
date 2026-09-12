@@ -72,11 +72,15 @@ class ReviewControllerMockMvcIntegrationTest {
                         && request.getRating() == (byte) 5));
     }
 
-    // BVA cho field rating (miền hợp lệ [1,5]): biên dưới 0(invalid)/1(valid)/2(valid)
-    // và biên trên 4(valid)/5(valid)/6(invalid) — theo đúng bộ giá trị BVA đã thiết kế
-    // ở QLPT-274, áp dụng ở đúng tầng validation thật sự chạy (Controller/DTO).
+    // ════════════════════════════════════════════════════════════════════════
+    // BVA — Boundary Value Analysis cho field rating (@Min(1) @Max(5))
+    // Ánh xạ: TC-BVA-01..07 (rating = 0,1,2,3,4,5,6)
+    // Tầng chạy thật: Bean Validation trên CreateReviewRequest, trước khi
+    // request chạm tới service — nên đây là đúng tầng để test BVA/EP của rating.
+    // ════════════════════════════════════════════════════════════════════════
 
-    @ParameterizedTest(name = "rating={0} bị từ chối với message \"{1}\"")
+    // TC-BVA-01 (min-1) và TC-BVA-07 (max+1): 2 giá trị ngoài biên hợp lệ
+    @ParameterizedTest(name = "TC-BVA: rating={0} bị từ chối với message \"{1}\"")
     @CsvSource({
             "0, rating: Rating tối thiểu là 1 sao",
             "6, rating: Rating tối đa là 5 sao"
@@ -93,8 +97,9 @@ class ReviewControllerMockMvcIntegrationTest {
         verify(reviewService, never()).createReview(any(), any());
     }
 
-    @ParameterizedTest(name = "rating={0} hợp lệ, đi tới service")
-    @ValueSource(ints = {1, 2, 4, 5})
+    // TC-BVA-02..06 (min, min+1, nom, max-1, max): toàn bộ 5 giá trị hợp lệ trong [1,5]
+    @ParameterizedTest(name = "TC-BVA: rating={0} hợp lệ, đi tới service")
+    @ValueSource(ints = {1, 2, 3, 4, 5})
     void createReviewAcceptsRatingWithinBoundary(int rating) throws Exception {
         when(reviewService.createReview(eq(42L), any())).thenReturn(
                 ReviewResponse.builder().id(1L).productId(10L).rating((byte) rating).build());
@@ -103,9 +108,104 @@ class ReviewControllerMockMvcIntegrationTest {
                         .with(customer(42L))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"productId\":10,\"orderId\":1,\"rating\":" + rating + "}"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rating").value(rating));
 
         verify(reviewService).createReview(eq(42L), argThat(request -> request.getRating() == (byte) rating));
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // EP — Equivalence Partitioning cho field rating
+    // Ánh xạ: TC-EP-01 (quá nhỏ), TC-EP-02 (quá lớn), TC-EP-03 (null),
+    //         TC-EP-04 (sai kiểu - string), TC-EP-05 (sai kiểu - decimal)
+    // TC-EP-01/02 dùng lớp tương đương khác biên hẳn (-1 vs 0, 100 vs 6)
+    // để chắc chắn service không "vô tình" chấp nhận nhờ ép kiểu/tràn số.
+    // ════════════════════════════════════════════════════════════════════════
+
+    @Test
+    void createReviewRejectsRatingFarBelowBoundary_TC_EP_01() throws Exception {
+        mockMvc.perform(post("/api/reviews")
+                        .with(customer(42L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"productId\":10,\"orderId\":1,\"rating\":-1}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("rating: Rating tối thiểu là 1 sao"));
+
+        verify(reviewService, never()).createReview(any(), any());
+    }
+
+    @Test
+    void createReviewRejectsRatingFarAboveBoundary_TC_EP_02() throws Exception {
+        mockMvc.perform(post("/api/reviews")
+                        .with(customer(42L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"productId\":10,\"orderId\":1,\"rating\":100}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("rating: Rating tối đa là 5 sao"));
+
+        verify(reviewService, never()).createReview(any(), any());
+    }
+
+    // TC-EP-03: rating = null (field có gửi lên nhưng giá trị null) → @NotNull chặn
+    @Test
+    void createReviewRejectsNullRating_TC_EP_03() throws Exception {
+        mockMvc.perform(post("/api/reviews")
+                        .with(customer(42L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"productId\":10,\"orderId\":1,\"rating\":null}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("rating: Vui lòng chọn số sao"));
+
+        verify(reviewService, never()).createReview(any(), any());
+    }
+
+    // TC-EP-03b: không gửi field rating luôn (thiếu hẳn key trong JSON) — cùng lớp tương đương "null"
+    @Test
+    void createReviewRejectsMissingRatingField_TC_EP_03b() throws Exception {
+        mockMvc.perform(post("/api/reviews")
+                        .with(customer(42L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"productId\":10,\"orderId\":1}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("rating: Vui lòng chọn số sao"));
+
+        verify(reviewService, never()).createReview(any(), any());
+    }
+
+    // TC-EP-04: rating sai kiểu (string "abc") → lỗi deserialize JSON, KHÔNG chạm tới Bean Validation,
+    // nên message không phải "Rating tối thiểu/tối đa" mà là lỗi parse do GlobalExceptionHandler xử lý.
+    // TODO: xác nhận message thật trả về từ GlobalExceptionHandler cho HttpMessageNotReadableException,
+    // rồi thêm dòng .andExpect(jsonPath("$.message").value("...")) bên dưới.
+    @Test
+    void createReviewRejectsNonNumericRating_TC_EP_04() throws Exception {
+        mockMvc.perform(post("/api/reviews")
+                        .with(customer(42L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"productId\":10,\"orderId\":1,\"rating\":\"abc\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
+
+        verify(reviewService, never()).createReview(any(), any());
+    }
+
+    // TC-EP-05: rating = 3.5 (decimal) → theo notes gốc: application đã cấu hình
+    // accept-float-as-int: false, nên Jackson từ chối luôn, không làm tròn ngầm.
+    // TODO: xác nhận message thật ("Dữ liệu JSON không hợp lệ. Các trường số nguyên
+    // (ví dụ quantity) không được nhận số thập phân.") rồi bổ sung assertion tương ứng.
+    @Test
+    void createReviewRejectsDecimalRating_TC_EP_05() throws Exception {
+        mockMvc.perform(post("/api/reviews")
+                        .with(customer(42L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"productId\":10,\"orderId\":1,\"rating\":3.5}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
+
+        verify(reviewService, never()).createReview(any(), any());
     }
 
     @Test

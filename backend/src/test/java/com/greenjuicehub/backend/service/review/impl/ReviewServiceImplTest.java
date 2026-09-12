@@ -49,8 +49,26 @@ class ReviewServiceImplTest {
 
     @InjectMocks private ReviewServiceImpl reviewService;
 
-    // ── createReview ─────────────────────────────────────────────────────────
+    // ════════════════════════════════════════════════════════════════════════
+    // createReview — Ánh xạ EP business-rule (TC-EP-06..10) sang các test dưới đây.
+    // Các rule này chạy ở tầng Service (sau khi request đã qua Bean Validation
+    // ở Controller), nên đây là đúng tầng để verify — không lặp lại ở
+    // ReviewControllerMockMvcIntegrationTest.
+    //
+    //   TC-EP-08 (happy path, thoả mọi điều kiện)          -> createReviewSavesReviewAndRefreshesProductRatingOnSuccess()
+    //   TC-EP-09 (orderId không tồn tại/không thuộc user)  -> createReviewRejectsWhenOrderNotFoundForUser()
+    //   TC-EP-06 (order chưa DELIVERED)                    -> createReviewRejectsWhenOrderNotDelivered()
+    //   TC-EP-07 (đã review đơn này rồi)                   -> createReviewRejectsWhenAlreadyReviewedForOrder()
+    //   TC-EP-10 (sản phẩm không có trong đơn)              -> createReviewRejectsWhenProductNotInOrder()
+    //
+    // createReviewRejectsWhenUserNotFound() / createReviewRejectsWhenProductNotFound()
+    // là 2 case phụ ngoài bảng BVA/EP gốc, phủ thêm nhánh lỗi hợp lệ khác của
+    // cùng luồng nghiệp vụ (dữ liệu không nhất quán ở tầng DB) — giữ lại vì vẫn
+    // có giá trị regression, không cần xoá.
+    // ════════════════════════════════════════════════════════════════════════
 
+    // TC-EP-08: Happy path — rating hợp lệ, order DELIVERED, sản phẩm có trong đơn,
+    // chưa từng review đơn này -> tạo review thành công + refresh avgRating sản phẩm
     @Test
     void createReviewSavesReviewAndRefreshesProductRatingOnSuccess() {
         CreateReviewRequest request = new CreateReviewRequest();
@@ -107,6 +125,9 @@ class ReviewServiceImplTest {
         assertThat(review.getReply()).isNull();
         assertThat(review.getRepliedAt()).isNull();
     }
+
+    // TC-EP-09: orderId không tồn tại hoặc không thuộc về user đang đăng nhập
+    // -> findByIdAndUserId trả rỗng -> AppException "Không tìm thấy đơn hàng"
     @Test
     void createReviewRejectsWhenOrderNotFoundForUser() {
         CreateReviewRequest request = new CreateReviewRequest();
@@ -123,6 +144,7 @@ class ReviewServiceImplTest {
         verify(reviewRepository, never()).save(any());
     }
 
+    // TC-EP-06: orderId hợp lệ nhưng status = SHIPPING (chưa DELIVERED)
     @Test
     void createReviewRejectsWhenOrderNotDelivered() {
         CreateReviewRequest request = new CreateReviewRequest();
@@ -140,6 +162,7 @@ class ReviewServiceImplTest {
         verify(reviewRepository, never()).save(any());
     }
 
+    // TC-EP-07: orderId + productId đã từng được review trong đơn này
     @Test
     void createReviewRejectsWhenAlreadyReviewedForOrder() {
         CreateReviewRequest request = new CreateReviewRequest();
@@ -158,6 +181,7 @@ class ReviewServiceImplTest {
         verify(reviewRepository, never()).save(any());
     }
 
+    // TC-EP-10: productId hợp lệ nhưng không nằm trong danh sách sản phẩm của đơn hàng được chọn
     @Test
     void createReviewRejectsWhenProductNotInOrder() {
         CreateReviewRequest request = new CreateReviewRequest();
@@ -180,6 +204,7 @@ class ReviewServiceImplTest {
         verify(reviewRepository, never()).save(any());
     }
 
+    // Case phụ (ngoài bảng BVA/EP gốc): user hợp lệ ở JWT nhưng không còn tồn tại trong DB
     @Test
     void createReviewRejectsWhenUserNotFound() {
         CreateReviewRequest request = new CreateReviewRequest();
@@ -203,6 +228,7 @@ class ReviewServiceImplTest {
         verify(reviewRepository, never()).save(any());
     }
 
+    // Case phụ (ngoài bảng BVA/EP gốc): productId hợp lệ trong đơn nhưng bản ghi Product đã bị xoá
     @Test
     void createReviewRejectsWhenProductNotFound() {
         CreateReviewRequest request = new CreateReviewRequest();
