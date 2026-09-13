@@ -38,15 +38,19 @@ public class ProductServiceImpl implements IProductService {
         Specification<Product> spec = buildSpec(request);
         String sortBy = request.getSortBy();
 
-        if ("price_asc".equals(sortBy) || "price_desc".equals(sortBy) || "discount_desc".equals(sortBy)) {
+        if ("price_asc".equals(sortBy) || "price_desc".equals(sortBy)) {
             Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
-            Page<Product> page = switch (sortBy) {
-                case "price_asc"     -> productRepository.findAllOrderByMinPriceAsc(pageable);
-                case "price_desc"    -> productRepository.findAllOrderByMinPriceDesc(pageable);
-                case "discount_desc" -> productRepository.findAllOrderByMaxDiscountDesc(request.getCategoryId(), pageable);
-                default -> throw new IllegalStateException("unreachable");
-            };
-            return page.map(this::toSummary);
+            Sort.Direction direction = "price_asc".equals(sortBy)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC;
+            return productRepository.findAllWithPriceSort(spec, pageable, direction)
+                    .map(this::toSummary);
+        }
+
+        if ("discount_desc".equals(sortBy)) {
+            Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+            return productRepository.findAllOrderByMaxDiscountDesc(request.getCategoryId(), pageable)
+                    .map(this::toSummary);
         }
 
         Sort sort = buildSort(sortBy);
