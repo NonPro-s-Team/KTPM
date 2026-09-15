@@ -37,8 +37,7 @@ public class AdminBannerController {
     public ResponseEntity<BannerResponse> createBanner(
             @Valid @RequestBody SaveBannerRequest request
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(bannerService.createBanner(request));
+        return ResponseEntity.ok(bannerService.createBanner(request));
     }
 
     /**
