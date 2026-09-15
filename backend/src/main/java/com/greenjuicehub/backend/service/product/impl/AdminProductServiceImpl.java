@@ -458,12 +458,16 @@ public class AdminProductServiceImpl implements IAdminProductService {
     }
 
     private BigDecimal calcDiscount(BigDecimal original, BigDecimal sale) {
-        if (original == null || sale == null || original.compareTo(BigDecimal.ZERO) == 0)
+        if (original == null || sale == null)
+            return BigDecimal.ZERO;
+        if (sale.compareTo(original) > 0) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Giá sale phải nhỏ hơn hoặc bằng giá gốc");
+        }
+        if (original.compareTo(BigDecimal.ZERO) == 0)
             return BigDecimal.ZERO;
         return original.subtract(sale)
                 .multiply(BigDecimal.valueOf(100))
-                .divide(original, 2, RoundingMode.HALF_UP)
-                .max(BigDecimal.ZERO);
+                .divide(original, 2, RoundingMode.HALF_UP);
     }
 
     private String generateUniqueSlug(String name, Long excludeId) {

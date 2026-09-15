@@ -8,6 +8,7 @@
     "dev:railway": "vite --mode railway",
     "build": "vite build",
     "lint": "eslint .",
+    "test": "node --test src/utils/pricing.test.js",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { adminProductApi } from "@/api/adminProductApi";
 import { uploadImage } from "@/api/cloudinaryApi";
 import RichTextEditor from "@/components/common/RichTextEditor";
+import { calculateDiscountPercent } from "@/utils/pricing";
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 const icons = {
@@ -18,7 +19,6 @@ const icons = {
   image: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15l-5-5L5 21" /></svg>,
 };
 
-const TAGS = ["bestseller", "organic", "new", "sugar-free"];
 const inputCls = "w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-green-500 focus:outline-none";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -240,11 +240,6 @@ function ImageDropZone({ images, onFiles, onSetPrimary, onDelete, uploading }) {
 
 // ── Variant Row ───────────────────────────────────────────────────────────────
 function VariantRow({ variant, index, flavors, sizes, onChange, onDelete }) {
-  const calcDiscount = (orig, sale) => {
-    if (!orig || !sale || +orig === 0) return "0";
-    return Math.max(0, ((+orig - +sale) / +orig) * 100).toFixed(1);
-  };
-
   return (
     <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
       <div className="mb-3 flex items-center justify-between">
@@ -275,11 +270,11 @@ function VariantRow({ variant, index, flavors, sizes, onChange, onDelete }) {
         </FormField>
 
         <FormField label="Giá gốc (đ)" required>
-          <input type="number" min="0" value={variant.originalPrice || ""} onChange={(e) => onChange(index, "originalPrice", e.target.value)} className={inputCls} placeholder="0" />
+          <input type="number" min="0" value={variant.originalPrice ?? ""} onChange={(e) => onChange(index, "originalPrice", e.target.value)} className={inputCls} placeholder="0" />
         </FormField>
 
         <FormField label="Giá sale (đ)" required>
-          <input type="number" min="0" value={variant.salePrice || ""} onChange={(e) => onChange(index, "salePrice", e.target.value)} className={inputCls} placeholder="0" />
+          <input type="number" min="0" value={variant.salePrice ?? ""} onChange={(e) => onChange(index, "salePrice", e.target.value)} className={inputCls} placeholder="0" />
         </FormField>
 
         <FormField label="Tồn kho" required>
@@ -296,7 +291,7 @@ function VariantRow({ variant, index, flavors, sizes, onChange, onDelete }) {
 
         <FormField label="Giảm giá">
           <div className="flex h-9 items-center rounded-lg border border-gray-100 bg-white px-3 text-sm font-medium text-green-600">
-            -{calcDiscount(variant.originalPrice, variant.salePrice)}%
+            -{calculateDiscountPercent(variant.originalPrice, variant.salePrice)}%
           </div>
         </FormField>
       </div>
