@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long>,
-        JpaSpecificationExecutor<Product> {
+        JpaSpecificationExecutor<Product>, ProductRepositoryCustom {
 
     // ── Public-side ──────────────────────────────────────────────────────────
 
@@ -25,52 +25,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>,
             Long id,
             Pageable pageable
     );
-
-    @Query(value = """
-    SELECT p.* FROM products p
-    JOIN (
-        SELECT product_id, MIN(sale_price) AS min_price
-        FROM product_variants
-        WHERE is_active = true
-        GROUP BY product_id
-    ) v ON v.product_id = p.id
-    WHERE p.is_active = true
-      AND p.is_deleted = false
-    ORDER BY v.min_price ASC
-    """,
-            countQuery = """
-    SELECT COUNT(*) FROM products p
-    JOIN (
-        SELECT product_id FROM product_variants WHERE is_active = true GROUP BY product_id
-    ) v ON v.product_id = p.id
-    WHERE p.is_active = true
-      AND p.is_deleted = false
-    """,
-            nativeQuery = true)
-    Page<Product> findAllOrderByMinPriceAsc(Pageable pageable);
-
-    @Query(value = """
-    SELECT p.* FROM products p
-    JOIN (
-        SELECT product_id, MIN(sale_price) AS min_price
-        FROM product_variants
-        WHERE is_active = true
-        GROUP BY product_id
-    ) v ON v.product_id = p.id
-    WHERE p.is_active = true
-      AND p.is_deleted = false
-    ORDER BY v.min_price DESC
-    """,
-            countQuery = """
-    SELECT COUNT(*) FROM products p
-    JOIN (
-        SELECT product_id FROM product_variants WHERE is_active = true GROUP BY product_id
-    ) v ON v.product_id = p.id
-    WHERE p.is_active = true
-      AND p.is_deleted = false
-    """,
-            nativeQuery = true)
-    Page<Product> findAllOrderByMinPriceDesc(Pageable pageable);
 
     @Query(value = """
     SELECT p.* FROM products p
