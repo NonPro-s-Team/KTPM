@@ -80,3 +80,18 @@ Chỉ điền `Bug ID` sau khi:
 5. Ảnh Excel cho thấy TC ID, lớp tương đương, Expected, Actual và Status đã điền.
 
 Không chụp token, mật khẩu hoặc nội dung file `.env`.
+
+## Kết quả thực thi ngày 15/09/2026
+
+- Môi trường: API local `http://localhost:8081`, MySQL và Redis local.
+- Phạm vi chạy: 5 request Setup và toàn bộ 37 testcase EP.
+- Kết quả: 42 request hoàn tất, 237/237 assertions PASS, 0 FAIL, 0 error.
+- QLPT-350 Cart quantity: 10/10 testcase PASS.
+- QLPT-351 Promotion value/minimum: 13/13 testcase PASS.
+- QLPT-352 Promotion usage limits: 14/14 testcase PASS.
+- HTTP thực tế của cả 37 testcase khớp với cột `Expected HTTP Status`.
+- Không có Actual khác Expected sau lần chạy này, vì vậy không ghi nhận bug mới cho QLPT-353.
+
+File Excel đã được cập nhật ba cột `Actual HTTP Status`, `Actual Result` và
+`Status` theo đúng TC ID của lần chạy trên. Các cột thiết kế, Expected Result và
+Bug ID không bị thay đổi.
