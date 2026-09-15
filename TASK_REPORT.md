@@ -61,21 +61,24 @@ Không thay thế trạng thái Jira và không có thao tác commit, push hoặ
 
 ## QLPT-347 - Equivalence Partitioning Product/Cart/Promotion
 
-- **Yêu cầu:** dùng EP để chia lớp hợp lệ/không hợp lệ cho quantity Cart, giá trị và
-  đơn tối thiểu Promotion, giới hạn tổng lượt/per-user; thiết kế, chạy và tổng hợp.
-- **Đã làm:** tạo 37 testcase đại diện cho các lớp, 5 request Setup, collection
+- **Yêu cầu:** dùng EP để chia lớp hợp lệ/không hợp lệ cho tồn kho và bộ lọc giá
+  Product, quantity Cart, giá trị/đơn tối thiểu và giới hạn lượt Promotion; thiết
+  kế, chạy và tổng hợp.
+- **Đã làm:** tạo 46 testcase đại diện cho các lớp, 5 request Setup, collection
   Postman và workbook. Đã đối chiếu DTO/service, không tự đoán constraint.
 - **Luồng:** chọn một đại diện cho mỗi lớp; chuẩn bị fixture local; chạy Setup;
-  thực thi QLPT-350/351/352; đối chiếu HTTP, dữ liệu và trạng thái; tổng hợp QLPT-353.
+  thực thi Product EP và QLPT-350/351/352; đối chiếu HTTP, dữ liệu và trạng thái;
+  tổng hợp QLPT-353.
 - **File/module chính:**
   `postman/EP/Nhan/QLPT-347/QLPT-347.postman_collection.json`,
   `QLPT-347-EP-Test-Cases.xlsx` và `README.md`.
 - **Công cụ:** Postman, Spring Boot API, MySQL, Redis, Excel.
-- **Kiểm tra:** 42 request gồm 5 Setup + 37 testcase; 237/237 assertions PASS;
-  HTTP thực tế khớp Expected cho 37/37 ca.
-- **Kết quả:** QLPT-350 10/10 PASS; QLPT-351 13/13 PASS; QLPT-352 14/14 PASS;
-  không phát hiện bug mới. Excel và README đã được cập nhật trong worktree riêng
-  của nhánh `QLPT-347`; thay đổi chưa commit và chưa push.
+- **Kiểm tra:** 51 request chính gồm 5 Setup + 46 testcase; 260/260 assertions
+  PASS; HTTP thực tế khớp Expected cho 46/46 ca. Tổng request HTTP do Newman hiển
+  thị có thể lớn hơn vì script dùng `pm.sendRequest` để chuẩn bị/đối chiếu fixture.
+- **Kết quả:** Product 9/9 PASS; QLPT-350 10/10 PASS; QLPT-351 13/13 PASS;
+  QLPT-352 14/14 PASS; không phát hiện bug mới. Excel, collection và README đã
+  được cập nhật trên nhánh `QLPT-347`.
 
 ## QLPT-367 - White-box coverage cho bộ BVA + EP
 
@@ -90,7 +93,7 @@ Không thay thế trạng thái Jira và không có thao tác commit, push hoặ
   `PromotionController`, `AdminPromotionServiceImpl`, `PromotionServiceImpl` và
   luồng áp mã trong `OrderController`/`OrderServiceImpl`.
 - **Công cụ:** JaCoCo 0.8.13, Maven, Postman, Spring Boot, MySQL, Redis.
-- **Kiểm tra:** BVA 451/451 assertions PASS; EP 237/237 assertions PASS; report
+- **Kiểm tra:** BVA 451/451 assertions PASS; EP 260/260 assertions PASS; report
   `backend/target/site/jacoco/index.html` sinh thành công.
 - **Kết quả:** không cần sửa production code. Coverage của các module mục tiêu:
 
@@ -110,6 +113,11 @@ request Setup: một ca Product đại diện thêm 35 line và 13 branch trong
 `AdminPromotionServiceImpl`. Không thể lấy `100 / coverage của một ca` để suy ra
 số testcase tối thiểu. Muốn 100% phải thiết kế thêm ca cho từng line, từng nhánh và
 từng method chưa được gọi, kể cả các chức năng ngoài phạm vi BVA/EP của task.
+
+Chín testcase Product EP bổ sung các lớp tương đương cần báo cáo nhưng không làm
+tăng coverage code mục tiêu so với lần đo trước, vì bộ BVA đã đi qua cùng các
+line/branch của luồng đọc tồn kho và lọc giá. Đây là chồng lặp coverage hợp lệ giữa
+hai kỹ thuật thiết kế test, không phải testcase thừa hay lỗi đo.
 
 ### Coverage đo riêng của một testcase đại diện
 
@@ -155,14 +163,15 @@ nhánh và chạy lại đến khi cả line, branch và method đều đạt m�
 ## Checklist hoàn thành QLPT-347
 
 - [x] Đối chiếu Jira với DTO/service/schema thực tế.
+- [x] Thiết kế 9 ca Product stock/price filters.
 - [x] Thiết kế 10 ca Cart, 13 ca Promotion value/minimum và 14 ca usage limit.
 - [x] Collection có Setup, assertions và cleanup/chốt an toàn.
-- [x] Chạy đủ 37 testcase trên database local.
-- [x] 237/237 assertions PASS, 0 FAIL, 0 error.
+- [x] Chạy đủ 46 testcase trên database local.
+- [x] 260/260 assertions PASS, 0 FAIL, 0 error.
 - [x] Cập nhật Actual HTTP Status, Actual Result và Status trong Excel.
 - [x] Tổng hợp QLPT-353; không có Actual khác Expected nên không log bug mới.
-- [ ] Người dùng xem lại file Excel/README.
-- [ ] Sau khi được duyệt: commit/push nhánh `QLPT-347` và cập nhật Jira/subtask.
+- [x] Người dùng duyệt bổ sung Product EP.
+- [ ] Commit/push nhánh `QLPT-347` và cập nhật Jira/subtask.
 
 ## Ảnh minh chứng cần chụp cho QLPT-347
 
@@ -172,16 +181,19 @@ nhánh và chạy lại đến khi cả line, branch và method đều đạt m�
 3. **API:** mở Postman request Setup hoặc trình duyệt tới
    `/api/products?page=0&size=1`, chụp HTTP 200.
 4. **Tổng bộ EP:** Postman > collection QLPT-347 > Run collection > chọn
-   `QLPT-282 LOCAL` > `Iterations=1`; chụp màn hình cuối thấy 237 Passed, 0 Failed,
+   `QLPT-282 LOCAL` > `Iterations=1`; chụp màn hình cuối thấy 260 Passed, 0 Failed,
    0 Errors và tên collection/environment.
-5. **QLPT-350:** chụp một ca hợp lệ `CART-EP-ADD-VALID` và một ca không hợp lệ như
+5. **Product EP:** chụp `PROD-EP-MIN-INCLUDE` và `PROD-EP-MIN-MALFORMED`; ảnh phải
+   thấy TC ID, HTTP status và Test Results.
+6. **QLPT-350:** chụp một ca hợp lệ `CART-EP-ADD-VALID` và một ca không hợp lệ như
    `CART-EP-ADD-DECIMAL`; ảnh phải thấy TC ID, HTTP và Test Results.
-6. **QLPT-351:** chụp `PROMO-EP-PCT-VALID` và `PROMO-EP-PCT-OVER-MAX`.
-7. **QLPT-352:** chụp một ca còn lượt và một ca tại/hết giới hạn, ví dụ
+7. **QLPT-351:** chụp `PROMO-EP-PCT-VALID` và `PROMO-EP-PCT-OVER-MAX`.
+8. **QLPT-352:** chụp một ca còn lượt và một ca tại/hết giới hạn, ví dụ
    `PROMO-EP-GLOBAL-BELOW-LIMIT` và `PROMO-EP-GLOBAL-AT-LIMIT`.
-8. **Excel:** mở sheet Summary, chụp Tổng testcase 37, PASS 37, FAIL 0,
-   NOT RUN 0; sau đó chụp vùng cột Expected/Actual/Status của Cart EP và Promotion EP.
-9. **Jira:** mở QLPT-347 và từng subtask 350-353, đính ảnh đúng phạm vi rồi chụp
+9. **Excel:** mở sheet Summary, chụp Tổng testcase 46, PASS 46, FAIL 0,
+   NOT RUN 0; sau đó chụp vùng Expected/Actual/Status của Product EP, Cart EP và
+   Promotion EP.
+10. **Jira:** mở QLPT-347 và từng subtask 350-353, đính ảnh đúng phạm vi rồi chụp
    màn hình có issue key, trạng thái và attachment/comment. Chỉ chuyển trạng thái
    sau khi đã duyệt kết quả.
 
@@ -191,13 +203,13 @@ FE không phải minh chứng bắt buộc cho QLPT-347 vì đây là kiểm th�
 
 - [x] Backend chạy với JaCoCo agent.
 - [x] Chạy BVA: 451/451 assertions PASS.
-- [x] Chạy EP: 237/237 assertions PASS.
+- [x] Chạy EP: 260/260 assertions PASS, gồm Product EP 9/9 testcase.
 - [x] Sinh `jacoco-qlpt367.exec` và HTML report.
 - [x] Tổng hợp coverage Product, Cart, Promotion và Order promotion flow.
 - [x] Đo riêng ba testcase đại diện để giải thích coverage theo testcase.
 - [x] Không sửa production code ngoài phạm vi.
 - [ ] Người dùng chụp và duyệt ảnh coverage.
-- [ ] Sau khi được duyệt: commit/push tài liệu cần thiết và cập nhật QLPT-367.
+- [ ] Commit/push tài liệu cần thiết và cập nhật QLPT-367.
 
 ## Ảnh minh chứng cần chụp cho QLPT-367
 
@@ -205,7 +217,7 @@ FE không phải minh chứng bắt buộc cho QLPT-347 vì đây là kiểm th�
    dòng `Tomcat started on port 8081`; không chụp nội dung `.env`.
 2. **BVA:** chạy QLPT-282 trong Postman, chụp Collection Runner thấy 451 Passed,
    0 Failed, 0 Errors.
-3. **EP:** chạy QLPT-347, chụp Collection Runner thấy 237 Passed, 0 Failed,
+3. **EP:** chạy QLPT-347, chụp Collection Runner thấy 260 Passed, 0 Failed,
    0 Errors.
 4. **Product coverage:** mở
    `backend/target/site/jacoco/com.greenjuicehub.backend.service.product.impl/ProductServiceImpl.html`;

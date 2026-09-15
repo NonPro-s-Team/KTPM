@@ -182,13 +182,13 @@ tử với request cùng filter nhưng không có `sort`; sort không được l
 Chạy collection
 `postman/EP/Nhan/QLPT-347/QLPT-347.postman_collection.json` bằng Postman Collection
 Runner, chọn environment `QLPT-282 LOCAL`, `Iterations=1`, đúng thứ tự Setup,
-QLPT-350, QLPT-351, QLPT-352.
+Product EP, QLPT-350, QLPT-351, QLPT-352.
 
 Lệnh Newman tương đương:
 
 ```powershell
 Set-Location 'D:\Workspace\university\KTPM\KTPM'
-newman run .\postman\EP\Nhan\QLPT-347\QLPT-347.postman_collection.json `
+npx.cmd --yes newman@6.2.1 run .\postman\EP\Nhan\QLPT-347\QLPT-347.postman_collection.json `
   -e .\postman\BVA\Nhan\QLPT-282\QLPT-282.postman_environment.json `
   --reporters cli,json `
   --reporter-json-export .\backend\target\qlpt347-newman.json `
@@ -197,8 +197,9 @@ newman run .\postman\EP\Nhan\QLPT-347\QLPT-347.postman_collection.json `
   --ignore-redirects
 ```
 
-Kết quả đúng của lần kiểm tra hiện tại: 5 Setup + 37 testcase EP, 237/237
-assertions PASS.
+Kết quả đúng của lần kiểm tra hiện tại: 5 Setup + 46 testcase EP, gồm 9 Product,
+10 Cart và 27 Promotion; 260/260 assertions PASS. Newman có thể đếm tổng request
+HTTP lớn hơn 51 vì script dùng `pm.sendRequest` để chuẩn bị và đối chiếu fixture.
 
 ## 10. QLPT-367 - White-box coverage cho BVA + EP
 
