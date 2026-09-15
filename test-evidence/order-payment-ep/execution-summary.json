@@ -1,0 +1,25 @@
+{
+  "task": "QLPT-355",
+  "commit": "5a772713c6d051653b1361ddef7a0e40a830e784",
+  "environment": {
+    "isolation": "ephemeral in-memory DB; existing MySQL untouched",
+    "schema": "qlpt355_bva_08835b4c6c0b",
+    "database": "H2 MySQL mode; JPA generated schema, NOT MySQL",
+    "externalServices": "GHN and token blacklist mocked; local signed VNPay/SePay callbacks",
+    "startedAt": "2026-09-13T01:33:00.385099300Z",
+    "limitation": "H2 deliberately selected for isolation; MySQL not attempted in this run"
+  },
+  "cases": 44,
+  "counts": {
+    "Pass": 35,
+    "Fail": 6,
+    "Blocked": 3
+  },
+  "httpRequests": 213,
+  "assertions": 661,
+  "assertionCounts": {
+    "Pass": 651,
+    "Fail": 10
+  },
+  "runner": "One JUnit method orchestrates 41 executed scenarios + 3 blocked scopes. Maven BUILD FAILURE intentionally reflects failed product assertions."
+}
