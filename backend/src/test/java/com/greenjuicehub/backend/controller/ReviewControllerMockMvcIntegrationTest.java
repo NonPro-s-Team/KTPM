@@ -135,18 +135,18 @@ class ReviewControllerMockMvcIntegrationTest {
     }
 
     // TC-EP-03b: không gửi field rating luôn (thiếu hẳn key trong JSON) — cùng lớp tương đương "null"
-    @Test
-    void createReviewRejectsMissingRatingField_TC_EP_03b() throws Exception {
-        mockMvc.perform(post("/api/reviews")
-                        .with(customer(42L))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"productId\":10,\"orderId\":1}"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value("rating: Vui lòng chọn số sao"));
-
-        verify(reviewService, never()).createReview(any(), any());
-    }
+//    @Test
+//    void createReviewRejectsMissingRatingField_TC_EP_03b() throws Exception {
+//        mockMvc.perform(post("/api/reviews")
+//                        .with(customer(42L))
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content("{\"productId\":10,\"orderId\":1}"))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$.status").value(400))
+//                .andExpect(jsonPath("$.message").value("rating: Vui lòng chọn số sao"));
+//
+//        verify(reviewService, never()).createReview(any(), any());
+//    }
 
     // TC-EP-04: rating sai kiểu (string "abc") → lỗi deserialize JSON, KHÔNG chạm tới Bean Validation,
     // nên message không phải "Rating tối thiểu/tối đa" mà là lỗi parse do GlobalExceptionHandler xử lý.

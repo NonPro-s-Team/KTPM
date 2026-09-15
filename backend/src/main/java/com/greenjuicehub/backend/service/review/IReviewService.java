@@ -12,10 +12,5 @@ public interface IReviewService {
     boolean hasReviewed(Long userId, Long orderId, Long productId);
     ProductRatingResponse getProductRating(Long productId);
 
-    // Admin / Staff
-    Page<ReviewResponse> getAllReviews(Boolean isApproved, Integer rating, Pageable pageable);
-    Page<ReviewResponse> getPendingReviews(Pageable pageable);
-    ReviewResponse toggleApprove(Long reviewId);   // bật/tắt thay vì approve/reject riêng
-    ReviewResponse rejectReview(Long reviewId);    // xoá hẳn
-    ReviewResponse replyReview(Long reviewId, String reply); // phản hồi
+
 }

@@ -20,6 +20,7 @@ import com.greenjuicehub.backend.service.order.IAdminOrderService;
 import com.greenjuicehub.backend.service.policy.IAdminPolicyService;
 import com.greenjuicehub.backend.service.product.IAdminProductService;
 import com.greenjuicehub.backend.service.promotion.IAdminPromotionService;
+import com.greenjuicehub.backend.service.review.IAdminReviewService;
 import com.greenjuicehub.backend.service.review.IReviewService;
 import com.greenjuicehub.backend.service.user.IAdminUserService;
 import org.junit.jupiter.api.Test;
@@ -53,7 +54,7 @@ class AdminControllersUnitTest {
     @Mock private IAdminPolicyService policyService;
     @Mock private IAdminProductService productService;
     @Mock private IAdminPromotionService promotionService;
-    @Mock private IReviewService reviewService;
+    @Mock private IAdminReviewService reviewService;
     @Mock private TagDefinitionRepository tagRepository;
     @Mock private IAdminUserService userService;
     @Mock private IDashboardService dashboardService;

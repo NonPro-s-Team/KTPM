@@ -2,7 +2,8 @@ package com.greenjuicehub.backend.controller;
 
 import com.greenjuicehub.backend.dto.PageResponse;
 import com.greenjuicehub.backend.dto.review.response.ReviewResponse;
-import com.greenjuicehub.backend.service.review.IReviewService;
+import com.greenjuicehub.backend.service.review.IAdminReviewService;
+import com.greenjuicehub.backend.service.review.IAdminReviewService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
 public class AdminReviewController {
 
-    private final IReviewService reviewService;
+    private final IAdminReviewService reviewService;
 
     /** GET /api/admin/reviews?isApproved=&rating=&page=&size= */
     @GetMapping

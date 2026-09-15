@@ -102,68 +102,7 @@ public class ReviewServiceImpl implements IReviewService {
         );
     }
 
-    // ── Admin / Staff ─────────────────────────────────────────────────────────
 
-    @Override
-    @Transactional(readOnly = true)
-    public Page<ReviewResponse> getAllReviews(Boolean isApproved, Integer rating, Pageable pageable) {
-        return reviewRepository
-                .findAllForAdmin(isApproved, rating, pageable)
-                .map(reviewMapper::toResponse);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<ReviewResponse> getPendingReviews(Pageable pageable) {
-        return reviewRepository
-                .findByIsApprovedFalseOrderByCreatedAtDesc(pageable)
-                .map(reviewMapper::toResponse);
-    }
-
-    /** Toggle bật/tắt hiển thị review, cập nhật lại rating sản phẩm */
-    @Override
-    @Transactional
-    public ReviewResponse toggleApprove(Long reviewId) {
-        Review review = findOrThrow(reviewId);
-        review.setIsApproved(!review.getIsApproved());
-        review = reviewRepository.save(review);
-        updateProductRating(review.getProduct().getId());
-        return reviewMapper.toResponse(review);
-    }
-
-    /** Xoá hẳn khỏi DB */
-    @Override
-    @Transactional
-    public ReviewResponse rejectReview(Long reviewId) {
-        Review review = findOrThrow(reviewId);
-        boolean wasApproved = Boolean.TRUE.equals(review.getIsApproved());
-        Long productId = review.getProduct().getId();
-
-        ReviewResponse response = reviewMapper.toResponse(review);
-        reviewRepository.delete(review);
-
-        if (wasApproved) updateProductRating(productId);
-        return response;
-    }
-
-    /** Phản hồi từ Admin/Staff — hiển thị là "Quản trị viên" phía user */
-    @Override
-    @Transactional
-    public ReviewResponse replyReview(Long reviewId, String reply) {
-        Review review = findOrThrow(reviewId);
-
-        if (reply == null || reply.isBlank()) {
-            // Xoá reply nếu gửi rỗng
-            review.setReply(null);
-            review.setRepliedAt(null);
-        } else {
-            review.setReply(reply.trim());
-            review.setRepliedAt(LocalDateTime.now());
-        }
-
-        review = reviewRepository.save(review);
-        return reviewMapper.toResponse(review);
-    }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
