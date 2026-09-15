@@ -1,14 +1,18 @@
-.\mvnw.cmd clean test "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"
 
-.\mvnw.cmd test "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"
-
-start target/site/jacoco/index.html
-
-
-- chạy test
+- Chạy cho review
 .\mvnw.cmd clean verify "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"
 - xuất jacoco
 .\mvnw.cmd jacoco:report
 
 -lệnh gộp
 .\mvnw.cmd clean test jacoco:report "-Dtest=ReviewServiceImplTest,ReviewControllerMockMvcIntegrationTest"
+
+Chạy cho Contact
+.\mvnw.cmd clean test "-Dtest=ContactControllerMockMvcIntegrationTest, ContactServiceImplTest"
+.\mvnw.cmd jacoco:report
+start target/site/jacoco/index.html
+
+Chạy cho Policy
+.\mvnw.cmd clean test "-Dtest=PolicyControllerMockMvcIntegrationTest, PolicyServiceImplTest"
+.\mvnw.cmd jacoco:report
+start target/site/jacoco/index.html

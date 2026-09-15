@@ -184,4 +184,29 @@ class ReviewControllerMockMvcIntegrationTest {
         return authentication(new UsernamePasswordAuthenticationToken(
                 userId, null, List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER"))));
     }
+    @Test
+    void createReviewRejectsNullProductId_TC_EP_11() throws Exception {
+        mockMvc.perform(post("/api/reviews")
+                        .with(customer(42L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"productId\":null,\"orderId\":1,\"rating\":5}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("productId: Vui lòng chọn sản phẩm"));
+
+        verify(reviewService, never()).createReview(any(), any());
+    }
+
+    @Test
+    void createReviewRejectsNullOrderId_TC_EP_12() throws Exception {
+        mockMvc.perform(post("/api/reviews")
+                        .with(customer(42L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"productId\":10,\"orderId\":null,\"rating\":5}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("orderId: Vui lòng chọn đơn hàng"));
+
+        verify(reviewService, never()).createReview(any(), any());
+    }
 }
