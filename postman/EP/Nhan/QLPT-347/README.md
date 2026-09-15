@@ -4,6 +4,7 @@
 
 Thư mục này chứa bộ kiểm thử hộp đen theo kỹ thuật **Equivalence Partitioning (EP)** cho task QLPT-347 và ba subtask:
 
+- **QLPT-347:** phân lớp tồn kho và bộ lọc giá của Product theo trạng thái stock, tham số có/không có và kiểu dữ liệu.
 - **QLPT-350:** phân lớp `quantity` của Cart theo kiểu dữ liệu, giá trị tối thiểu và tồn kho.
 - **QLPT-351:** phân lớp `value`, `type`, `minOrderValue` và điều kiện đơn tối thiểu của Promotion.
 - **QLPT-352:** phân lớp `maxUses`, `maxUsesPerUser`, quan hệ giữa hai giới hạn và trạng thái còn/hết lượt.
@@ -11,16 +12,17 @@ Thư mục này chứa bộ kiểm thử hộp đen theo kỹ thuật **Equivale
 
 ## File sử dụng
 
-- `QLPT-347.postman_collection.json`: collection có 5 request Setup và 37 testcase EP.
+- `QLPT-347.postman_collection.json`: collection có 5 request Setup và 46 testcase EP.
 - `QLPT-347-EP-Test-Cases.xlsx`: bảng thiết kế và kết quả testcase theo format báo cáo chung của nhóm.
 - Tái sử dụng environment local tại `postman/BVA/Nhan/QLPT-282/QLPT-282.postman_environment.json`; không tạo thêm environment trùng lặp.
 
 ## Cấu trúc collection
 
 1. `Setup` - kiểm tra backend, đăng nhập Customer/Admin và xác nhận đúng tài khoản test.
-2. `QLPT-350 - Cart quantity` - 10 testcase.
-3. `QLPT-351 - Promotion value and minimum` - 13 testcase.
-4. `QLPT-352 - Promotion usage limits` - 14 testcase.
+2. `QLPT-347 - Product stock and price filters` - 9 testcase.
+3. `QLPT-350 - Cart quantity` - 10 testcase.
+4. `QLPT-351 - Promotion value and minimum` - 13 testcase.
+5. `QLPT-352 - Promotion usage limits` - 14 testcase.
 
 Mỗi testcase chọn **một giá trị đại diện** cho một lớp tương đương. Ví dụ, lớp hợp lệ của `quantity` là số nguyên từ `1` đến tồn kho `S`; giá trị `5` đại diện cho lớp này. Các lớp `quantity < 1`, `quantity > S`, `null` và số không nguyên được kiểm thử bằng các request riêng.
 
@@ -52,7 +54,7 @@ Sau khi chụp đủ minh chứng, đặt ba biến về `false`.
 3. Chọn environment **QLPT-282 LOCAL**.
 4. Giữ đúng thứ tự folder, đặt `Iterations = 1`, không chọn data file.
 5. Bấm **Run QLPT-347...** và không chạy song song một collection khác trên cùng fixture.
-6. Kết quả hoàn chỉnh phải có đủ 5 request Setup và 37 testcase EP, `Errors = 0`. Một testcase chỉ được ghi `PASS` khi toàn bộ assertion của request đó đều pass.
+6. Kết quả hoàn chỉnh phải có đủ 5 request Setup và 46 testcase EP, `Errors = 0`. Một testcase chỉ được ghi `PASS` khi toàn bộ assertion của request đó đều pass.
 
 Nếu Setup thất bại thì dừng, sửa môi trường rồi chạy lại từ đầu. Không dùng kết quả các request phía sau khi token, fixture hoặc backend chưa hợp lệ.
 
@@ -74,22 +76,24 @@ Chỉ điền `Bug ID` sau khi:
 ## Minh chứng cần chụp cho Jira
 
 1. Ảnh Collection Runner nhìn rõ tên collection, environment, tổng số test, Passed, Failed và Errors.
-2. Ảnh một ca hợp lệ và một ca không hợp lệ của QLPT-350, có TC ID và Test Results.
-3. Ảnh một ca hợp lệ và một ca không hợp lệ của QLPT-351, có HTTP status và assertions.
-4. Ảnh một ca còn lượt và một ca hết lượt của QLPT-352.
-5. Ảnh Excel cho thấy TC ID, lớp tương đương, Expected, Actual và Status đã điền.
+2. Ảnh một ca Product hợp lệ và một ca sai kiểu, có TC ID, HTTP status và Test Results.
+3. Ảnh một ca hợp lệ và một ca không hợp lệ của QLPT-350, có TC ID và Test Results.
+4. Ảnh một ca hợp lệ và một ca không hợp lệ của QLPT-351, có HTTP status và assertions.
+5. Ảnh một ca còn lượt và một ca hết lượt của QLPT-352.
+6. Ảnh Excel cho thấy TC ID, lớp tương đương, Expected, Actual và Status đã điền.
 
 Không chụp token, mật khẩu hoặc nội dung file `.env`.
 
 ## Kết quả thực thi ngày 15/09/2026
 
 - Môi trường: API local `http://localhost:8081`, MySQL và Redis local.
-- Phạm vi chạy: 5 request Setup và toàn bộ 37 testcase EP.
-- Kết quả: 42 request hoàn tất, 237/237 assertions PASS, 0 FAIL, 0 error.
+- Phạm vi chạy: 5 request Setup và toàn bộ 46 testcase EP.
+- Kết quả: 51 request chính hoàn tất, 260/260 assertions PASS, 0 FAIL, 0 error. Newman có thể hiển thị tổng request HTTP lớn hơn vì các script dùng `pm.sendRequest` để chuẩn bị và đối chiếu fixture.
+- QLPT-347 Product stock/price filters: 9/9 testcase PASS.
 - QLPT-350 Cart quantity: 10/10 testcase PASS.
 - QLPT-351 Promotion value/minimum: 13/13 testcase PASS.
 - QLPT-352 Promotion usage limits: 14/14 testcase PASS.
-- HTTP thực tế của cả 37 testcase khớp với cột `Expected HTTP Status`.
+- HTTP thực tế của cả 46 testcase khớp với cột `Expected HTTP Status`.
 - Không có Actual khác Expected sau lần chạy này, vì vậy không ghi nhận bug mới cho QLPT-353.
 
 File Excel đã được cập nhật ba cột `Actual HTTP Status`, `Actual Result` và
