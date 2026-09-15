@@ -18,7 +18,6 @@ import com.greenjuicehub.backend.repository.ProductVariantRepository;
 import com.greenjuicehub.backend.repository.SizeRepository;
 import com.greenjuicehub.backend.repository.TagDefinitionRepository;
 import com.greenjuicehub.backend.service.product.impl.ProductServiceImpl;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -28,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
@@ -83,13 +83,16 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void getProductsUsesDedicatedQueryForAscendingPrice() {
+    void getProductsUsesSpecificationForAscendingPrice() {
         ProductFilterRequest request = new ProductFilterRequest();
         request.setSortBy("price_asc");
+        request.setPage(1);
+        request.setSize(6);
         Product product = Product.builder().id(11L).build();
         ProductSummaryResponse summary = ProductSummaryResponse.builder().id(11L).build();
 
-        when(productRepository.findAllOrderByMinPriceAsc(any(Pageable.class)))
+        when(productRepository.findAllWithPriceSort(
+                any(Specification.class), any(Pageable.class), eq(Sort.Direction.ASC)))
                 .thenReturn(new PageImpl<>(List.of(product)));
         when(variantRepository.findAllByProductIdAndIsActiveTrueOrderBySortOrderAsc(11L))
                 .thenReturn(List.of());
@@ -98,7 +101,27 @@ class ProductServiceImplTest {
 
         assertThat(productService.getProducts(request).getContent()).containsExactly(summary);
 
-        verify(productRepository).findAllOrderByMinPriceAsc(any(Pageable.class));
+        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+        verify(productRepository).findAllWithPriceSort(
+                any(Specification.class), pageableCaptor.capture(), eq(Sort.Direction.ASC));
+        assertThat(pageableCaptor.getValue().getPageNumber()).isEqualTo(1);
+        assertThat(pageableCaptor.getValue().getPageSize()).isEqualTo(6);
+        verify(productRepository, never()).findAll(any(Specification.class), any(Pageable.class));
+    }
+
+    @Test
+    void getProductsUsesSpecificationForDescendingPrice() {
+        ProductFilterRequest request = new ProductFilterRequest();
+        request.setSortBy("price_desc");
+
+        when(productRepository.findAllWithPriceSort(
+                any(Specification.class), any(Pageable.class), eq(Sort.Direction.DESC)))
+                .thenReturn(Page.empty());
+
+        productService.getProducts(request);
+
+        verify(productRepository).findAllWithPriceSort(
+                any(Specification.class), any(Pageable.class), eq(Sort.Direction.DESC));
         verify(productRepository, never()).findAll(any(Specification.class), any(Pageable.class));
     }
 
@@ -154,20 +177,19 @@ class ProductServiceImplTest {
         assertThat(result.getFirst().getSlug()).isEqualTo("nuoc-ep");
     }
 
-    @Disabled("BUG: price_asc/price_desc dùng native query không nhận Specification nên bỏ qua bộ lọc")
     @Test
     void priceSortShouldHonorCategoryFilter() {
         ProductFilterRequest request = new ProductFilterRequest();
         request.setCategoryId(3L);
         request.setSortBy("price_asc");
-        when(productRepository.findAll(any(Specification.class), any(Pageable.class)))
-                .thenReturn(Page.empty());
-        when(productRepository.findAllOrderByMinPriceAsc(any(Pageable.class)))
+        when(productRepository.findAllWithPriceSort(
+                any(Specification.class), any(Pageable.class), eq(Sort.Direction.ASC)))
                 .thenReturn(Page.empty());
 
         productService.getProducts(request);
 
-        verify(productRepository).findAll(any(Specification.class), any(Pageable.class));
-        verify(productRepository, never()).findAllOrderByMinPriceAsc(any(Pageable.class));
+        verify(productRepository).findAllWithPriceSort(
+                any(Specification.class), any(Pageable.class), eq(Sort.Direction.ASC));
+        verify(productRepository, never()).findAll(any(Specification.class), any(Pageable.class));
     }
 }
