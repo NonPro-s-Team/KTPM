@@ -21,9 +21,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AdminReviewServiceImpl implements IAdminReviewService {
 
-    ReviewRepository reviewRepository;
-    ReviewMapper reviewMapper;
-    ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
+    private final ReviewMapper reviewMapper;
+    private final ProductRepository productRepository;
 
     // ── Admin / Staff ─────────────────────────────────────────────────────────
 

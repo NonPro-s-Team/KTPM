@@ -19,7 +19,9 @@ public class SavePolicyRequest {
     @NotBlank(message = "Nội dung không được để trống")
     private String content;
 
-    private Integer sortOrder = 0;
+    @NotNull(message = "Thứ tự không được để trống")
+    private Integer sortOrder ;
 
-    private Boolean isActive = true;
+    @NotNull(message = "Trạng thái không được để trống")
+    private Boolean isActive ;
 }
