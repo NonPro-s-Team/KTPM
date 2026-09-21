@@ -16,3 +16,9 @@ Chạy cho Policy
 .\mvnw.cmd clean test "-Dtest=PolicyControllerMockMvcIntegrationTest, PolicyServiceImplTest"
 .\mvnw.cmd jacoco:report
 start target/site/jacoco/index.html
+
+Chạy cho Banner
+.\mvnw.cmd clean test "-Dtest=BannerControllerMockMvcIntegrationTest, BannerServiceImplTest"
+.\mvnw.cmd jacoco:report
+start target/site/jacoco/index.html
+
