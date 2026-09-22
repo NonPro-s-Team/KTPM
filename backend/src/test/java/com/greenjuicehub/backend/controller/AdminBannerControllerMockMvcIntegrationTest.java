@@ -51,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import({GlobalExceptionHandler.class, ControllerMockMvcTestSecurityConfiguration.class})
 @ActiveProfiles("test")
 @WithMockUser(roles = "ADMIN")
-class BannerControllerMockMvcIntegrationTest {
+class AdminBannerControllerMockMvcIntegrationTest {
 
     @Autowired private MockMvc mockMvc;
 

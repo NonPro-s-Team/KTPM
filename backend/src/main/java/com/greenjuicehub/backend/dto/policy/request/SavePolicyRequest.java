@@ -17,6 +17,7 @@ public class SavePolicyRequest {
     private String title;
 
     @NotBlank(message = "Nội dung không được để trống")
+    @Size(max=10000)
     private String content;
 
     @NotNull(message = "Thứ tự không được để trống")

@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class BannerServiceImplTest {
+class AdminBannerServiceImplTest {
 
     @Mock
     private BannerRepository bannerRepository;
