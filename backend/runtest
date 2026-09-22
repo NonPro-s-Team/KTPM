@@ -13,6 +13,12 @@ Chạy cho Contact
 start target/site/jacoco/index.html
 
 Chạy cho Policy
-.\mvnw.cmd clean test "-Dtest=PolicyControllerMockMvcIntegrationTest, PolicyServiceImplTest"
+.\mvnw.cmd clean test "-Dtest=AdminPolicyControllerMockMvcIntegrationTest, AdminPolicyServiceImplTest"
 .\mvnw.cmd jacoco:report
 start target/site/jacoco/index.html
+
+Chạy cho Banner
+.\mvnw.cmd clean test "-Dtest=AdminBannerControllerMockMvcIntegrationTest, AdminBannerServiceImplTest"
+.\mvnw.cmd jacoco:report
+start target/site/jacoco/index.html
+
